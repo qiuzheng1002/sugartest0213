@@ -30,7 +30,7 @@ for (var i = 0; i < rows.length; i++) {
 	tr.append('<td>' + row.trans.qty + '</td>');
 	tr.append('<td>' + row.trans.balance + '</td>');
 	tr.append('<td>' + row.trans.memo + '</td>');
-	tr.append('<td class="text-right"><button type="button" class="btn btn-xs" data-toggle="modal" data-target="#delete_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
+	tr.append('<td class="text-right"><button type="button" class="btn btn-xs" id="delete_data_address" data-toggle="modal" data-target="#delete_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
 }
 
 // 入庫・出庫処理
@@ -63,10 +63,20 @@ $(function(){
 	}, 1000);
 });
 
-//条件削除
+
+
+//削除する行の設定
+var dd_address="";
+$(function(){
+	$(document).on("click","#delete_data_address",function() {
+		dd_address = $(this).parent().parent();
+		console.log(dd_address);
+	});
+});
+//データ削除
 $(function(){
 	$(document).on("click","#destroy_data",function() {
-		$(this).parent().parent().remove();
+		$(dd_address).remove();
 	});
 });
 
