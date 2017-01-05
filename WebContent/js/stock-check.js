@@ -18,7 +18,6 @@ $('#detail').text(row.item.detail);
 $('#price').text(numberWithCommas(row.item.price));
 var balance = row.stock.balance; // 入出庫で利用
 $('#balance').text(balance);
-$('#leadtime').text(row.item.leadtime + '日');
 
 // トランザクション読み込み
 var rows = alasql('SELECT * FROM trans WHERE stock = ?', [ id ]);
@@ -42,12 +41,3 @@ $('#update').on('click', function() {
 	alasql('INSERT INTO trans VALUES(?,?,?,?,?,?)', [ trans_id, id, date, qty, balance + qty, memo ]);
 	window.location.assign('stock.html?id=' + id);
 });
-
-//日付入力：カレンダー表示
-$(function(){
-	$("#selected_date").datepicker({
-		firstDay: 0,
-		dateFormat: "yyyy-mm-dd"
-	});
-});
-

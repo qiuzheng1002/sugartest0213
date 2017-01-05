@@ -22,11 +22,11 @@ DB.load = function() {
 
 	// アイテム
 	alasql('DROP TABLE IF EXISTS item;');
-	alasql('CREATE TABLE item(id INT IDENTITY, code STRING, kind INT, detail STRING, maker STRING, price INT, unit STRING);');
+	alasql('CREATE TABLE item(id INT IDENTITY, code STRING, kind INT, detail STRING, maker STRING, price INT, unit STRING, leadtime INT);');
 	var pitem = alasql.promise('SELECT MATRIX * FROM CSV("data/ITEM-ITEM.csv", {headers: true})').then(function(items) {
 		for (var i = 0; i < items.length; i++) {
 			var item = items[i];
-			alasql('INSERT INTO item VALUES(?,?,?,?,?,?,?);', item);
+			alasql('INSERT INTO item VALUES(?,?,?,?,?,?,?,?);', item);
 		}
 	});
 
