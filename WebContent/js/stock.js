@@ -30,7 +30,7 @@ for (var i = 0; i < rows.length; i++) {
 	tr.append('<td>' + row.trans.qty + '</td>');
 	tr.append('<td>' + row.trans.balance + '</td>');
 	tr.append('<td>' + row.trans.memo + '</td>');
-	tr.append('<td class="text-right"><button type="button" class="btn btn-xs" id="destroy_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
+	tr.append('<td class="text-right"><button type="button" class="btn btn-xs" data-toggle="modal" data-target="#delete_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
 }
 
 // 入庫・出庫処理
@@ -69,3 +69,4 @@ $(function(){
 		$(this).parent().parent().remove();
 	});
 });
+

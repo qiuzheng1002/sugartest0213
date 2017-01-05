@@ -188,6 +188,22 @@
 				<tbody id="tbody-transs"></tbody>
 			</table>
 		</div>
+		
+		<!-- モーダル・ダイアログ -->
+		<div class="modal fade" id="delete_data" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h3 class="modal-title">警告</h3>
+					</div>
+					<div class="modal-body">データを削除すると在庫管理業務に重大な影響を及ぼす可能性があります。</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default btm-sm" data-dismiss="modal">キャンセル</button>
+						<button type="button" class="btn btn-primary btm-sm" id="destroy_data">ok</button>
+					</div>
+				</div>
+			</div>
+		</div>
 		<script src="js/stock.js"></script>
 	</body>
 </html>
