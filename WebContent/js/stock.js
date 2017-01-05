@@ -30,6 +30,7 @@ for (var i = 0; i < rows.length; i++) {
 	tr.append('<td>' + row.trans.qty + '</td>');
 	tr.append('<td>' + row.trans.balance + '</td>');
 	tr.append('<td>' + row.trans.memo + '</td>');
+	tr.append('<td class="text-right"><button type="button" class="btn btn-xs" id="destroy_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
 }
 
 // 入庫・出庫処理
@@ -43,15 +44,28 @@ $('#update').on('click', function() {
 	window.location.assign('stock.html?id=' + id);
 });
 
-//本日の日付：自動入力
+//本日の日付を自動入力
 $(function(){
 	setInterval(function(){
 		var time = $.now();
 		var dateObj = new Date(time);
 		var y = dateObj.getFullYear();
 		var m = dateObj.getMonth() + 1;
+			if(m<10){m = "0" + m};
 		var d = dateObj.getDate();
-		$("#selected_date").appendTo('value = "' + y + '-' + m + '-' + d + '"');
+			if(d<10){d = "0" + d};
+		var h = dateObj.getHours();
+			if(h<10){h = "0" + h};
+		var min = dateObj.getMinutes();
+			if(min<10){min = "0" + min};
+		var select_d = y + '-' + m + '-' + d + '_' + h + ':' + min;
+		$("#selected_date").attr("value", select_d);
 	}, 1000);
 });
 
+//条件削除
+$(function(){
+	$(document).on("click","#destroy_data",function() {
+		$(this).parent().parent().remove();
+	});
+});
