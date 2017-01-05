@@ -51,13 +51,13 @@ $(function(){
 		var dateObj = new Date(time);
 		var y = dateObj.getFullYear();
 		var m = dateObj.getMonth() + 1;
-			if(m<10){m = "0" + m};
+			if(m<10){m = "0" + m}
 		var d = dateObj.getDate();
-			if(d<10){d = "0" + d};
+			if(d<10){d = "0" + d}
 		var h = dateObj.getHours();
-			if(h<10){h = "0" + h};
+			if(h<10){h = "0" + h}
 		var min = dateObj.getMinutes();
-			if(min<10){min = "0" + min};
+			if(min<10){min = "0" + min}
 		var select_d = y + '-' + m + '-' + d + '_' + h + ':' + min;
 		$("#selected_date").attr("value", select_d);
 	}, 1000);
@@ -77,6 +77,7 @@ $(function(){
 $(function(){
 	$(document).on("click","#destroy_data",function() {
 		$(dd_address).remove();
+		dd_address = "";
 	});
 });
 
