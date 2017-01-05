@@ -43,11 +43,15 @@ $('#update').on('click', function() {
 	window.location.assign('stock.html?id=' + id);
 });
 
-//日付入力：カレンダー表示
+//本日の日付：自動入力
 $(function(){
-	$("#selected_date").datepicker({
-		firstDay: 0,
-		dateFormat: "yyyy-mm-dd"
-	});
+	setInterval(function(){
+		var time = $.now();
+		var dateObj = new Date(time);
+		var y = dateObj.getFullYear();
+		var m = dateObj.getMonth() + 1;
+		var d = dateObj.getDate();
+		$("#selected_date").appendTo('value = "' + y + '-' + m + '-' + d + '"');
+	}, 1000);
 });
 
