@@ -120,8 +120,8 @@
 					<div class="form">
 						<input type="hidden" name="id">
 						<div class="form-group">
-							<label>日付</label>
-							<input type="text" class="form-control" name="date" id="selected_date" value="" placeholder="yyyy-mm-dd_hh:mm (半角英数字)">
+							<label>日時</label>
+							<input type="text" class="form-control" name="date" id="selected_date" value="" placeholder="yyyy-mm-dd hh:mm (半角英数字)">
 
 <!-- 	
 							<div class="dropdown">
@@ -166,7 +166,7 @@
 							<label>コメント</label>
 							<textarea type="text" class="form-control" name="memo" placeholder="必ずコメントを入れてください"></textarea>
 						</div>
-						<button type="submit" class="btn btn-success" id="update">
+						<button type="submit" class="btn btn-success btm-sm" id="update">
 							<span class="glyphicon glyphicon-puls" aria-hidden="true"></span> データ追加
 						</button>
 					</div>
@@ -174,8 +174,8 @@
 			</div>
 
 		<div class="container">
-			<h4>変更履歴</h4>
-			<button type="submit" class="btn btn-success pull-right" id="update9999999999">
+			<div class="well well-sm" id="henko_title">変更履歴</div>
+			<button type="submit" class="btn btn-success btm-xs pull-right" id="update9999999999">
 				<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> 保存
 			</button>
 			<table class="table table-hover">

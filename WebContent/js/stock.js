@@ -58,7 +58,7 @@ $(function(){
 			if(h<10){h = "0" + h}
 		var min = dateObj.getMinutes();
 			if(min<10){min = "0" + min}
-		var select_d = y + '-' + m + '-' + d + '_' + h + ':' + min;
+		var select_d = y + '-' + m + '-' + d + ' ' + h + ':' + min;
 		$("#selected_date").attr("value", select_d);
 	}, 1000);
 });
@@ -70,7 +70,6 @@ var dd_address="";
 $(function(){
 	$(document).on("click","#delete_data_address",function() {
 		dd_address = $(this).parent().parent();
-		console.log(dd_address);
 	});
 });
 //データ削除
