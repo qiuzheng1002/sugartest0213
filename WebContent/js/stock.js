@@ -27,24 +27,55 @@ for (var i = 0; i < rows.length; i++) {
 	var row = rows[i];
 	var tr = $('<tr>').appendTo(tbody);
 	tr.append('<td>' + row.trans.date + '</td>');
-	if (row.trans.order_wh == 0){
-		tr.append('<td id="zero_white">' + row.trans.order_wh + '</td>');
-		$('#zero_white').css("color","red");}
+	if (row.trans.order_wh === 0){
+		tr.append('<td style="color: #FFFFFF;">' + row.trans.order_wh + '</td>');}
 	else {
-		tr.append('<td>' + row.trans.order_wh + '</td>');}	
-	tr.append('<td>' + row.trans.in_wh + '</td>');
-	tr.append('<td>' + row.trans.out_wh + '</td>');
+		tr.append('<td>' + row.trans.order_wh + '</td>');}
+	if (row.trans.in_wh === 0){
+		tr.append('<td style="color: #FFFFFF;">' + row.trans.in_wh + '</td>');}
+	else {
+		tr.append('<td>' + row.trans.in_wh + '</td>');}
+	if (row.trans.out_wh === 0){
+		tr.append('<td style="color: #FFFFFF;">' + row.trans.out_wh + '</td>');}
+	else {
+		tr.append('<td>' + row.trans.out_wh + '</td>');}
 	tr.append('<td>' + row.trans.memo + '</td>');
 	tr.append('<td class="text-right"><button type="button" class="btn btn-xs" id="delete_data_address" data-toggle="modal" data-target="#delete_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
 }
 
 
-// 入庫処理
+// 受注処理
 $('#update_order').on('click', function() {
 	var date = $('input[name="date"]').val();
 	var order_wh = parseInt($('input[name="order_wh"]').val());
 	var in_wh = 0;
 	var out_wh = 0;
+	var memo = $('input[name="memo"]').val();
+	alasql('UPDATE stock SET balance = ? WHERE id = ?', [ balance + order_wh, id ]);
+	var trans_id = alasql('SELECT MAX(id) + 1 as id FROM trans')[0].id;
+	alasql('INSERT INTO trans VALUES(?,?,?,?,?,?,?)', [ trans_id, id, date, order_wh, in_wh, out_wh, memo ]);
+	window.location.assign('stock.html?id=' + id);
+});
+
+//入庫処理
+$('#update_in').on('click', function() {
+	var date = $('input[name="date"]').val();
+	var order_wh = 0;
+	var in_wh = parseInt($('input[name="in_wh"]').val());
+	var out_wh = 0;
+	var memo = $('input[name="memo"]').val();
+	alasql('UPDATE stock SET balance = ? WHERE id = ?', [ balance + order_wh, id ]);
+	var trans_id = alasql('SELECT MAX(id) + 1 as id FROM trans')[0].id;
+	alasql('INSERT INTO trans VALUES(?,?,?,?,?,?,?)', [ trans_id, id, date, order_wh, in_wh, out_wh, memo ]);
+	window.location.assign('stock.html?id=' + id);
+});
+
+//出庫処理
+$('#update_out').on('click', function() {
+	var date = $('input[name="date"]').val();
+	var order_wh = 0;
+	var in_wh = 0;
+	var out_wh = parseInt($('input[name="out_wh"]').val());
 	var memo = $('input[name="memo"]').val();
 	alasql('UPDATE stock SET balance = ? WHERE id = ?', [ balance + order_wh, id ]);
 	var trans_id = alasql('SELECT MAX(id) + 1 as id FROM trans')[0].id;
