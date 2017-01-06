@@ -28,7 +28,8 @@ for (var i = 0; i < rows.length; i++) {
 	var tr = $('<tr>').appendTo(tbody);
 	tr.append('<td>' + row.trans.date + '</td>');
 	if (row.trans.order_wh == 0){
-		tr.append('<td id="zero_white">' + row.trans.order_wh + '</td>');}
+		tr.append('<td id="zero_white">' + row.trans.order_wh + '</td>');
+		$('#zero_white').css("color","red");}
 	else {
 		tr.append('<td>' + row.trans.order_wh + '</td>');}	
 	tr.append('<td>' + row.trans.in_wh + '</td>');
@@ -36,6 +37,7 @@ for (var i = 0; i < rows.length; i++) {
 	tr.append('<td>' + row.trans.memo + '</td>');
 	tr.append('<td class="text-right"><button type="button" class="btn btn-xs" id="delete_data_address" data-toggle="modal" data-target="#delete_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
 }
+
 
 // 入庫処理
 $('#update_order').on('click', function() {
