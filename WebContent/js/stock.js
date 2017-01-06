@@ -27,8 +27,8 @@ for (var i = 0; i < rows.length; i++) {
 	var row = rows[i];
 	var tr = $('<tr>').appendTo(tbody);
 	tr.append('<td>' + row.trans.date + '</td>');
-	tr.append('<td>' + row.trans.qty + '</td>');
 	tr.append('<td></td>');
+	tr.append('<td>' + row.trans.qty + '</td>');
 	tr.append('<td>' + row.trans.balance + '</td>');
 	tr.append('<td>' + row.trans.memo + '</td>');
 	tr.append('<td class="text-right"><button type="button" class="btn btn-xs" id="delete_data_address" data-toggle="modal" data-target="#delete_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
@@ -66,17 +66,29 @@ $(function(){
 
 
 
-//削除する行の設定
+//変更履歴：削除する行の設定
 var dd_address="";
 $(function(){
 	$(document).on("click","#delete_data_address",function() {
 		dd_address = $(this).parent().parent();
 	});
 });
-//データ削除
+//変更履歴：データ削除
 $(function(){
 	$(document).on("click","#destroy_data",function() {
+		var tableid = document.getElementById('rireki_table');
 		var dd_address_rows = dd_address.index(this.rowIndex);
+		var delete_date = tableid.rows[dd_address_rows].cells[1].innerText;
+		var delete_order = tableid.rows[dd_address_rows].cells[2].innerText;
+		var delete_in = tableid.rows[dd_address_rows].cells[3].innerText;
+		var delete_out = tableid.rows[dd_address_rows].cells[4].innerText;
+		var delete_company = tableid.rows[dd_address_rows].cells[5].innerText;
+		console.log(delete_date);
+		console.log(delete_order);
+		console.log(delete_in);
+		console.log(delete_out);
+		console.log(delete_company);
+
 		var date = $('input[name="date"]').val();
 		var qty = parseInt($('input[name="qty"]').val());
 		var memo = $('textarea[name="memo"]').val();
