@@ -46,11 +46,12 @@ for (var i = 0; i < rows.length; i++) {
 
 // 受注処理
 $('#update_order').on('click', function() {
-	var date = $('input[name="date"]').val();
+	var date = $('input[name="date1"]').val();
+	
 	var order_wh = parseInt($('input[name="order_wh"]').val());
 	var in_wh = 0;
 	var out_wh = 0;
-	var memo = $('input[name="memo"]').val();
+	var memo = $('input[name="memo1"]').val();
 	alasql('UPDATE stock SET balance = ? WHERE id = ?', [ balance + order_wh, id ]);
 	var trans_id = alasql('SELECT MAX(id) + 1 as id FROM trans')[0].id;
 	alasql('INSERT INTO trans VALUES(?,?,?,?,?,?,?)', [ trans_id, id, date, order_wh, in_wh, out_wh, memo ]);
@@ -59,11 +60,11 @@ $('#update_order').on('click', function() {
 
 //入庫処理
 $('#update_in').on('click', function() {
-	var date = $('input[name="date"]').val();
+	var date = $('input[name="date2"]').val();
 	var order_wh = 0;
 	var in_wh = parseInt($('input[name="in_wh"]').val());
 	var out_wh = 0;
-	var memo = $('input[name="memo"]').val();
+	var memo = $('input[name="memo2"]').val();
 	alasql('UPDATE stock SET balance = ? WHERE id = ?', [ balance + order_wh, id ]);
 	var trans_id = alasql('SELECT MAX(id) + 1 as id FROM trans')[0].id;
 	alasql('INSERT INTO trans VALUES(?,?,?,?,?,?,?)', [ trans_id, id, date, order_wh, in_wh, out_wh, memo ]);
@@ -72,11 +73,11 @@ $('#update_in').on('click', function() {
 
 //出庫処理
 $('#update_out').on('click', function() {
-	var date = $('input[name="date"]').val();
+	var date = $('input[name="date3"]').val();
 	var order_wh = 0;
 	var in_wh = 0;
 	var out_wh = parseInt($('input[name="out_wh"]').val());
-	var memo = $('input[name="memo"]').val();
+	var memo = $('input[name="memo3"]').val();
 	alasql('UPDATE stock SET balance = ? WHERE id = ?', [ balance + order_wh, id ]);
 	var trans_id = alasql('SELECT MAX(id) + 1 as id FROM trans')[0].id;
 	alasql('INSERT INTO trans VALUES(?,?,?,?,?,?,?)', [ trans_id, id, date, order_wh, in_wh, out_wh, memo ]);
@@ -84,22 +85,22 @@ $('#update_out').on('click', function() {
 });
 
 //本日の日付を自動入力
-$(function(){
-	setInterval(function(){
-		var time = $.now();
-		var dateObj = new Date(time);
-		var y = dateObj.getFullYear();
-		var m = dateObj.getMonth() + 1;
-			if(m<10){m = "0" + m}
-		var d = dateObj.getDate();
-			if(d<10){d = "0" + d}
-		var h = dateObj.getHours();
-			if(h<10){h = "0" + h}
-		var min = dateObj.getMinutes();
-			if(min<10){min = "0" + min}
-		var select_d = y + '-' + m + '-' + d + ' ' + h + ':' + min;
-		$("#selected_date").attr("value", select_d);
-	}, 1000);
+setInterval(function(){
+	var time = $.now();
+	var dateObj = new Date(time);
+	var y = dateObj.getFullYear();
+	var m = dateObj.getMonth() + 1;
+		if(m<10){m = "0" + m}
+	var d = dateObj.getDate();
+		if(d<10){d = "0" + d}
+	var h = dateObj.getHours();
+		if(h<10){h = "0" + h}
+	var min = dateObj.getMinutes();
+		if(min<10){min = "0" + min}
+	var select_d = y + '-' + m + '-' + d + ' ' + h + ':' + min;
+	$("#selected_date1").attr("value", select_d);
+	$("#selected_date2").attr("value", select_d);
+	$("#selected_date3").attr("value", select_d);
 });
 
 
