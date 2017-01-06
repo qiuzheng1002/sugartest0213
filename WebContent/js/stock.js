@@ -77,12 +77,12 @@ $(function(){
 $(function(){
 	$(document).on("click","#destroy_data",function() {
 		var tableid = document.getElementById('rireki_table');
-		var dd_address_rows = dd_address.index(this.rowIndex);
-		var delete_date = tableid.rows[dd_address_rows].cells[1].innerText;
-		var delete_order = tableid.rows[dd_address_rows].cells[2].innerText;
-		var delete_in = tableid.rows[dd_address_rows].cells[3].innerText;
-		var delete_out = tableid.rows[dd_address_rows].cells[4].innerText;
-		var delete_company = tableid.rows[dd_address_rows].cells[5].innerText;
+		var dd_address_rows = dd_address.index(this.rowIndex) + 1;
+		var delete_date = tableid.rows[dd_address_rows].cells[0].innerText;
+		var delete_order = tableid.rows[dd_address_rows].cells[1].innerText;
+		var delete_in = tableid.rows[dd_address_rows].cells[2].innerText;
+		var delete_out = tableid.rows[dd_address_rows].cells[3].innerText;
+		var delete_company = tableid.rows[dd_address_rows].cells[4].innerText;
 		console.log(delete_date);
 		console.log(delete_order);
 		console.log(delete_in);
