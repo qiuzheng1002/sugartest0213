@@ -27,14 +27,14 @@ for (var i = 0; i < rows.length; i++) {
 	var row = rows[i];
 	var tr = $('<tr>').appendTo(tbody);
 	tr.append('<td>' + row.trans.date + '</td>');
-	tr.append('<td></td>');
-	tr.append('<td>' + row.trans.qty + '</td>');
-	tr.append('<td>' + row.trans.balance + '</td>');
+	tr.append('<td>' + row.trans.order_wh + '</td>');
+	tr.append('<td>' + row.trans.in_wh + '</td>');
+	tr.append('<td>' + row.trans.out_wh + '</td>');
 	tr.append('<td>' + row.trans.memo + '</td>');
 	tr.append('<td class="text-right"><button type="button" class="btn btn-xs" id="delete_data_address" data-toggle="modal" data-target="#delete_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
 }
 
-// 入庫・出庫処理
+// 入庫処理
 $('#update').on('click', function() {
 	var date = $('input[name="date"]').val();
 	var qty = parseInt($('input[name="qty"]').val());
@@ -79,14 +79,14 @@ $(function(){
 		var tableid = document.getElementById('rireki_table');
 		var dd_address_rows = dd_address.index(this.rowIndex) + 1;
 		var delete_date = tableid.rows[dd_address_rows].cells[0].innerText;
-		var delete_order = tableid.rows[dd_address_rows].cells[1].innerText;
-		var delete_in = tableid.rows[dd_address_rows].cells[2].innerText;
-		var delete_out = tableid.rows[dd_address_rows].cells[3].innerText;
+		var delete_order_wh = tableid.rows[dd_address_rows].cells[1].innerText;
+		var delete_in_wh = tableid.rows[dd_address_rows].cells[2].innerText;
+		var delete_out_wh = tableid.rows[dd_address_rows].cells[3].innerText;
 		var delete_company = tableid.rows[dd_address_rows].cells[4].innerText;
 		console.log(delete_date);
-		console.log(delete_order);
-		console.log(delete_in);
-		console.log(delete_out);
+		console.log(delete_order_wh);
+		console.log(delete_in_wh);
+		console.log(delete_out_wh);
 		console.log(delete_company);
 
 		var date = $('input[name="date"]').val();
