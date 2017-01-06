@@ -27,7 +27,10 @@ for (var i = 0; i < rows.length; i++) {
 	var row = rows[i];
 	var tr = $('<tr>').appendTo(tbody);
 	tr.append('<td>' + row.trans.date + '</td>');
-	tr.append('<td>' + row.trans.order_wh + '</td>');
+	if (row.trans.order_wh == 0){
+		tr.append('<td id="zero_white">' + row.trans.order_wh + '</td>');}
+	else {
+		tr.append('<td>' + row.trans.order_wh + '</td>');}	
 	tr.append('<td>' + row.trans.in_wh + '</td>');
 	tr.append('<td>' + row.trans.out_wh + '</td>');
 	tr.append('<td>' + row.trans.memo + '</td>');
@@ -35,13 +38,15 @@ for (var i = 0; i < rows.length; i++) {
 }
 
 // 入庫処理
-$('#update').on('click', function() {
+$('#update_order').on('click', function() {
 	var date = $('input[name="date"]').val();
-	var qty = parseInt($('input[name="qty"]').val());
-	var memo = $('textarea[name="memo"]').val();
-	alasql('UPDATE stock SET balance = ? WHERE id = ?', [ balance + qty, id ]);
+	var order_wh = parseInt($('input[name="order_wh"]').val());
+	var in_wh = 0;
+	var out_wh = 0;
+	var memo = $('input[name="memo"]').val();
+	alasql('UPDATE stock SET balance = ? WHERE id = ?', [ balance + order_wh, id ]);
 	var trans_id = alasql('SELECT MAX(id) + 1 as id FROM trans')[0].id;
-	alasql('INSERT INTO trans VALUES(?,?,?,?,?,?)', [ trans_id, id, date, qty, balance + qty, memo ]);
+	alasql('INSERT INTO trans VALUES(?,?,?,?,?,?,?)', [ trans_id, id, date, order_wh, in_wh, out_wh, memo ]);
 	window.location.assign('stock.html?id=' + id);
 });
 
@@ -88,9 +93,10 @@ $(function(){
 		console.log(delete_in_wh);
 		console.log(delete_out_wh);
 		console.log(delete_company);
-		alasql('DELETE FROM trans WHERE date =' + delete_date + 'AND order_wh =' + delete_order_wh + 'AND in_wh =' + delete_in_wh + 'AND out_wh =' + delete_out_wh);
-		$(dd_address).remove();
+		alasql('DELETE FROM trans WHERE date = "' + delete_date + '" AND order_wh = ' + delete_order_wh + ' AND in_wh = ' + delete_in_wh + ' AND out_wh = "' + delete_out_wh + '"');
+/*		$(dd_address).remove(); */
 		dd_address = "";
+		window.location.assign('stock.html?id=' + id);
 	});
 });
 
