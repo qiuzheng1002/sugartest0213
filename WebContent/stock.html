@@ -167,37 +167,47 @@
 							<textarea type="text" class="form-control" name="memo" placeholder="必ずコメントを入れてください"></textarea>
 						</div>
 						<button type="submit" class="btn btn-success btm-sm" id="update">
-							<span class="glyphicon glyphicon-puls" aria-hidden="true"></span> データ追加
+							<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> データ追加
 						</button>
 					</div>
 				</div>
 			</div>
 
 		<div class="container">
-			<div class="well well-sm" id="henko_title">変更履歴</div>
-			<button type="submit" class="btn btn-success btm-xs pull-right" id="update9999999999">
-				<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> 保存
-			</button>
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th>日時</th>
-						<th>増減数</th>
-						<th>在庫数</th>
-						<th>コメント</th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody id="tbody-transs"></tbody>
-			</table>
+			<div class="panel panel-default">
+				<div class="panel-heading">変更履歴</div>
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>日時</th>
+							<th>受注数</th>
+							<th>入庫数</th>
+							<th>出庫数</th>
+							<th>取引先</th>
+							<th></th>
+<!--							<th><button type="submit" class="btn btn-success btm-xs pull-right" id="update9999999999">
+								<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> 保存</button></th> -->
+						</tr>
+					</thead>
+					<tbody id="tbody-transs"></tbody>
+				</table>
+			</div>
 		</div>
-		
-		<!-- モーダル・ダイアログ -->
+
+		<div class="container">
+			<div class="panel panel-default">
+				<div class="panel-heading">在庫状況</div>
+
+			</div>
+		</div>
+
+
+<!-- モーダル・ダイアログ -->
 		<div class="modal fade" id="delete_data" tabindex="-1">
 			<div class="modal-dialog modal-sm">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h3 class="modal-title">警告</h3>
+						<h3 id="modal-title">警告</h3>
 					</div>
 					<div class="modal-body">データを削除すると在庫管理業務に<br>重大な影響を及ぼす可能性があります。<br>(削除ボタンを押すと削除が完了します。)</div>
 					<div class="modal-footer">

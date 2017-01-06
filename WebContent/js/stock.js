@@ -28,6 +28,7 @@ for (var i = 0; i < rows.length; i++) {
 	var tr = $('<tr>').appendTo(tbody);
 	tr.append('<td>' + row.trans.date + '</td>');
 	tr.append('<td>' + row.trans.qty + '</td>');
+	tr.append('<td></td>');
 	tr.append('<td>' + row.trans.balance + '</td>');
 	tr.append('<td>' + row.trans.memo + '</td>');
 	tr.append('<td class="text-right"><button type="button" class="btn btn-xs" id="delete_data_address" data-toggle="modal" data-target="#delete_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
@@ -75,6 +76,14 @@ $(function(){
 //データ削除
 $(function(){
 	$(document).on("click","#destroy_data",function() {
+		var dd_address_rows = dd_address.index(this.rowIndex);
+		var date = $('input[name="date"]').val();
+		var qty = parseInt($('input[name="qty"]').val());
+		var memo = $('textarea[name="memo"]').val();
+		alasql('UPDATE stock SET balance = ? WHERE id = ?', [ balance + qty, id ]);
+		var trans_id = alasql('SELECT MAX(id) + 1 as id FROM trans')[0].id;
+		alasql('INSERT INTO trans VALUES(?,?,?,?,?,?)', [ trans_id, id, date, qty, balance + qty, memo ]);
+		window.location.assign('stock.html?id=' + id);
 		$(dd_address).remove();
 		dd_address = "";
 	});

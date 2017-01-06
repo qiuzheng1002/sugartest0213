@@ -1,9 +1,5 @@
 @charset "UTF-8";
 
-.modal-title{
+#modal-title{
 	color: red;
-}
-
-#henko_title{
-	font-size: 15px
 }
