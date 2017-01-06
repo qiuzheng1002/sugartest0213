@@ -3,3 +3,7 @@
 #modal-title{
 	color: red;
 }
+
+#rireki_table [tr td = "0"]{
+	color: #FFFFFF;
+}

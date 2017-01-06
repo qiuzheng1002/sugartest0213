@@ -88,14 +88,7 @@ $(function(){
 		console.log(delete_in_wh);
 		console.log(delete_out_wh);
 		console.log(delete_company);
-
-		var date = $('input[name="date"]').val();
-		var qty = parseInt($('input[name="qty"]').val());
-		var memo = $('textarea[name="memo"]').val();
-		alasql('UPDATE stock SET balance = ? WHERE id = ?', [ balance + qty, id ]);
-		var trans_id = alasql('SELECT MAX(id) + 1 as id FROM trans')[0].id;
-		alasql('INSERT INTO trans VALUES(?,?,?,?,?,?)', [ trans_id, id, date, qty, balance + qty, memo ]);
-		window.location.assign('stock.html?id=' + id);
+		alasql('DELETE FROM trans WHERE date =' + delete_date + 'AND order_wh =' + delete_order_wh + 'AND in_wh =' + delete_in_wh + 'AND out_wh =' + delete_out_wh);
 		$(dd_address).remove();
 		dd_address = "";
 	});
