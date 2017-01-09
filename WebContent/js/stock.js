@@ -47,9 +47,20 @@ for (var i = 0; i < rows.length; i++) {
 // 受注処理
 $('#update_order').on('click', function() {
 	var date = $('input[name="date1"]').val();
-//ここから
 	var date_check = Date.parse(date);
 	var order_wh = parseInt($('input[name="order_wh"]').val());
+	var order_wh2 = $('input[name="order_wh"]').val();
+	var order_wh_check = order_wh - order_wh2;
+		if (order_wh_check == 0){
+			continue;
+		}
+		else {
+			$("#number-form").animate({opacity: 0.4},50);
+			$("#number-form").animate({opacity: 1.0},50);
+			$("#number-form").animate({opacity: 0.4},50);
+			$("#number-form").animate({opacity: 1.0},50);
+			break;
+		}
 	var in_wh = 0;
 	var out_wh = 0;
 	var memo = $('input[name="memo1"]').val();
