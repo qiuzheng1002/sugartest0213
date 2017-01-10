@@ -44,7 +44,7 @@ for (var i = 0; i < rows.length; i++) {
 }
 
 
-// 受注処理
+//受注処理
 $('#update_order').on('click', function() {
 	var date = $('input[name="date1"]').val();
 	var length_check = date.length;
@@ -54,12 +54,20 @@ $('#update_order').on('click', function() {
 	var bar2_check = date.charAt(7);
 	var date_check = date.slice(8,10);
 	var millisec_check = Date.parse(date);
-	var lastdate = "";
-		lastdate.setMonth(date.getMonth() + 1);
+	if (month_check == 1 || month_check == 3 || month_check == 5 || month_check == 7 || month_check == 8 || month_check == 10 || month_check == 12){
+		var lastdate_check = 31;
+		var lastmonth_check = month_check;
+	}
+	else {
+	var lastdate = new Date(date);
+	    console.log(lastdate);
+		lastdate.setMonth(lastdate.getMonth() + 1);
 		console.log(lastdate);
 		lastdate.setDate(0);
 		console.log(lastdate);
-	var lastdate_check = lastdate.slice(5,7);
+	var lastdate_check = lastdate.getDate();
+	var lastmonth_check = lastdate.getMonth() + 1;
+	}
 	console.log(length_check);
 	console.log(year_check);
 	console.log(bar1_check);
@@ -68,8 +76,9 @@ $('#update_order').on('click', function() {
 	console.log(date_check);
 	console.log(millisec_check);
 	console.log(lastdate_check);
-	
-	if (length_check == 16 && year_check >= 2000 && year_check <= y+1 && bar1_check == "-" && month_check >= 1 && month_check <=12 && bar2_check == "-" && date_check >=1 && date_check <=31 && millisec_check != "NaN"){
+	console.log(lastmonth_check);
+
+	if (length_check == 16 && year_check >= 2000 && year_check <= y+1 && bar1_check == "-" && month_check >= 1 && month_check <=12 && bar2_check == "-" && date_check >=1 && date_check <=31 && millisec_check != "NaN" && lastdate_check >= date_check && month_check == lastmonth_check){
 		$("#order-form_date").css("color","black");
 		var order_wh = parseInt($('input[name="order_wh"]').val());
 		var order_wh2 = $('input[name="order_wh"]').val();
