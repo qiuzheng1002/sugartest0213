@@ -51,23 +51,29 @@ $('#update_order').on('click', function() {
 	var order_wh = parseInt($('input[name="order_wh"]').val());
 	var order_wh2 = $('input[name="order_wh"]').val();
 	var order_wh_check = order_wh - order_wh2;
-		if (order_wh_check == 0){
-			continue;
+	if (order_wh_check === 0){
+		if (order_wh > 0 && order_wh < 999999){
+		var in_wh = 0;
+		var out_wh = 0;
+		var memo = $('input[name="memo1"]').val();
+		alasql('UPDATE stock SET balance = ? WHERE id = ?', [ balance + order_wh, id ]);
+		var trans_id = alasql('SELECT MAX(id) + 1 as id FROM trans')[0].id;
+		alasql('INSERT INTO trans VALUES(?,?,?,?,?,?,?)', [ trans_id, id, date, order_wh, in_wh, out_wh, memo ]);
+		window.location.assign('stock.html?id=' + id);
 		}
 		else {
 			$("#number-form").animate({opacity: 0.4},50);
 			$("#number-form").animate({opacity: 1.0},50);
 			$("#number-form").animate({opacity: 0.4},50);
 			$("#number-form").animate({opacity: 1.0},50);
-			break;
 		}
-	var in_wh = 0;
-	var out_wh = 0;
-	var memo = $('input[name="memo1"]').val();
-	alasql('UPDATE stock SET balance = ? WHERE id = ?', [ balance + order_wh, id ]);
-	var trans_id = alasql('SELECT MAX(id) + 1 as id FROM trans')[0].id;
-	alasql('INSERT INTO trans VALUES(?,?,?,?,?,?,?)', [ trans_id, id, date, order_wh, in_wh, out_wh, memo ]);
-	window.location.assign('stock.html?id=' + id);
+	}
+	else {
+		$("#number-form").animate({opacity: 0.4},50);
+		$("#number-form").animate({opacity: 1.0},50);
+		$("#number-form").animate({opacity: 0.4},50);
+		$("#number-form").animate({opacity: 1.0},50);
+	}
 });
 
 //入庫処理
