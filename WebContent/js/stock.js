@@ -47,35 +47,57 @@ for (var i = 0; i < rows.length; i++) {
 // 受注処理
 $('#update_order').on('click', function() {
 	var date = $('input[name="date1"]').val();
-	var date_check = Date.parse(date);
+	var length_check = date.length;
+	var year_check = date.slice(0,4);
+	var bar1_check = date.charAt(4);
+	var month_check = date.slice(5,7);
+	var bar2_check = date.charAt(7);
+	var date_check = date.slice(8,10);
+	var millisec_check = Date.parse(date);
+	var lastdate = "";
+		lastdate.setMonth(date.getMonth() + 1);
+		console.log(lastdate);
+		lastdate.setDate(0);
+		console.log(lastdate);
+	var lastdate_check = lastdate.slice(5,7);
+	console.log(length_check);
+	console.log(year_check);
+	console.log(bar1_check);
+	console.log(month_check);
+	console.log(bar2_check);
+	console.log(date_check);
+	console.log(millisec_check);
+	console.log(lastdate_check);
 	
-	var order_wh = parseInt($('input[name="order_wh"]').val());
-	var order_wh2 = $('input[name="order_wh"]').val();
-	var order_wh_check = order_wh - order_wh2;
-	if (order_wh_check === 0){
-		if (order_wh > 0 && order_wh < 1000000){
-		var in_wh = 0;
-		var out_wh = 0;
-		var memo = $('input[name="memo1"]').val();
-		alasql('UPDATE stock SET balance = ? WHERE id = ?', [ balance + order_wh, id ]);
-		var trans_id = alasql('SELECT MAX(id) + 1 as id FROM trans')[0].id;
-		alasql('INSERT INTO trans VALUES(?,?,?,?,?,?,?)', [ trans_id, id, date, order_wh, in_wh, out_wh, memo ]);
-		window.location.assign('stock.html?id=' + id);
+	if (length_check == 16 && year_check >= 2000 && year_check <= y+1 && bar1_check == "-" && month_check >= 1 && month_check <=12 && bar2_check == "-" && date_check >=1 && date_check <=31 && millisec_check != "NaN"){
+		$("#order-form_date").css("color","black");
+		var order_wh = parseInt($('input[name="order_wh"]').val());
+		var order_wh2 = $('input[name="order_wh"]').val();
+		var order_wh_check = order_wh - order_wh2;
+		if (order_wh_check === 0 && order_wh > 0 && order_wh < 1000000){
+			$("#order-form_number").css("color","black");
+			var in_wh = 0;
+			var out_wh = 0;
+			var memo = $('input[name="memo1"]').val();
+			alasql('UPDATE stock SET balance = ? WHERE id = ?', [ balance + order_wh, id ]);
+			var trans_id = alasql('SELECT MAX(id) + 1 as id FROM trans')[0].id;
+			alasql('INSERT INTO trans VALUES(?,?,?,?,?,?,?)', [ trans_id, id, date, order_wh, in_wh, out_wh, memo ]);
+			window.location.assign('stock.html?id=' + id);
 		}
 		else {
-			$("#order-form").css("color","red");
-			$("#order-form").animate({opacity: 0.4},50);
-			$("#order-form").animate({opacity: 1.0},50);
-			$("#order-form").animate({opacity: 0.4},50);
-			$("#order-form").animate({opacity: 1.0},50);
+			$("#order-form_number").css("color","red");
+			$("#order-form_number").animate({opacity: 0.4},50);
+			$("#order-form_number").animate({opacity: 1.0},50);
+			$("#order-form_number").animate({opacity: 0.4},50);
+			$("#order-form_number").animate({opacity: 1.0},50);
 		}
 	}
-	else {
-		$("#order-form").css("color","red");
-		$("#order-form").animate({opacity: 0.4},50);
-		$("#order-form").animate({opacity: 1.0},50);
-		$("#order-form").animate({opacity: 0.4},50);
-		$("#order-form").animate({opacity: 1.0},50);
+	else{
+		$("#order-form_date").css("color","red");
+		$("#order-form_date").animate({opacity: 0.4},50);
+		$("#order-form_date").animate({opacity: 1.0},50);
+		$("#order-form_date").animate({opacity: 0.4},50);
+		$("#order-form_date").animate({opacity: 1.0},50);
 	}
 });
 
@@ -106,10 +128,11 @@ $('#update_out').on('click', function() {
 });
 
 //本日の日付を自動入力
+var y = 0;
 setInterval(function(){
 	var time = $.now();
 	var dateObj = new Date(time);
-	var y = dateObj.getFullYear();
+		y = dateObj.getFullYear();
 	var m = dateObj.getMonth() + 1;
 		if(m<10){m = "0" + m}
 	var d = dateObj.getDate();
@@ -123,8 +146,6 @@ setInterval(function(){
 	$("#selected_date2").attr("value", select_d);
 	$("#selected_date3").attr("value", select_d);
 });
-
-
 
 //変更履歴：削除する行の設定
 var dd_address="";
