@@ -60,11 +60,8 @@ $('#update_order').on('click', function() {
 	}
 	else {
 	var lastdate = new Date(date);
-	    console.log(lastdate);
 		lastdate.setMonth(lastdate.getMonth() + 1);
-		console.log(lastdate);
 		lastdate.setDate(0);
-		console.log(lastdate);
 	var lastdate_check = lastdate.getDate();
 	var lastmonth_check = lastdate.getMonth() + 1;
 	}
@@ -138,7 +135,7 @@ $('#update_out').on('click', function() {
 
 //本日の日付を自動入力
 var y = 0;
-setInterval(function(){
+$(function(){
 	var time = $.now();
 	var dateObj = new Date(time);
 		y = dateObj.getFullYear();
@@ -154,6 +151,9 @@ setInterval(function(){
 	$("#selected_date1").attr("value", select_d);
 	$("#selected_date2").attr("value", select_d);
 	$("#selected_date3").attr("value", select_d);
+	
+	var y_limit = dateObj.getFullYear() + 1;
+	$("#order-form_year").append("<span> (2000年～" + y_limit +"年まで指定可)</span>")
 });
 
 //変更履歴：削除する行の設定
