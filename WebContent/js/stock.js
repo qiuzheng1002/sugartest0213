@@ -153,7 +153,7 @@ $(function(){
 	$("#selected_date3").attr("value", select_d);
 	
 	var y_limit = dateObj.getFullYear() + 1;
-	$("#order-form_year").append("<span> (2000年～" + y_limit +"年まで指定可)</span>")
+	$("#order-form_year").append("<span> (登録可能期間 ： 2000-01-01 00:00 ～ " + y_limit +"-12-31 23:59)</span>");
 });
 
 //変更履歴：削除する行の設定
