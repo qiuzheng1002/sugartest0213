@@ -48,11 +48,12 @@ for (var i = 0; i < rows.length; i++) {
 $('#update_order').on('click', function() {
 	var date = $('input[name="date1"]').val();
 	var date_check = Date.parse(date);
+	
 	var order_wh = parseInt($('input[name="order_wh"]').val());
 	var order_wh2 = $('input[name="order_wh"]').val();
 	var order_wh_check = order_wh - order_wh2;
 	if (order_wh_check === 0){
-		if (order_wh > 0 && order_wh < 999999){
+		if (order_wh > 0 && order_wh < 1000000){
 		var in_wh = 0;
 		var out_wh = 0;
 		var memo = $('input[name="memo1"]').val();
@@ -62,17 +63,19 @@ $('#update_order').on('click', function() {
 		window.location.assign('stock.html?id=' + id);
 		}
 		else {
-			$("#number-form").animate({opacity: 0.4},50);
-			$("#number-form").animate({opacity: 1.0},50);
-			$("#number-form").animate({opacity: 0.4},50);
-			$("#number-form").animate({opacity: 1.0},50);
+			$("#order-form").css("color","red");
+			$("#order-form").animate({opacity: 0.4},50);
+			$("#order-form").animate({opacity: 1.0},50);
+			$("#order-form").animate({opacity: 0.4},50);
+			$("#order-form").animate({opacity: 1.0},50);
 		}
 	}
 	else {
-		$("#number-form").animate({opacity: 0.4},50);
-		$("#number-form").animate({opacity: 1.0},50);
-		$("#number-form").animate({opacity: 0.4},50);
-		$("#number-form").animate({opacity: 1.0},50);
+		$("#order-form").css("color","red");
+		$("#order-form").animate({opacity: 0.4},50);
+		$("#order-form").animate({opacity: 1.0},50);
+		$("#order-form").animate({opacity: 0.4},50);
+		$("#order-form").animate({opacity: 1.0},50);
 	}
 });
 
