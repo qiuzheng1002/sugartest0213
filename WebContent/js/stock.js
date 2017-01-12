@@ -363,7 +363,9 @@ $(function(){
 		console.log(delete_in_wh);
 		console.log(delete_out_wh);
 		console.log(delete_company);
-		alasql('DELETE FROM trans WHERE date = "' + delete_date + '" AND order_wh = ' + delete_order_wh + ' AND in_wh = ' + delete_in_wh + ' AND out_wh = "' + delete_out_wh + '"');
+		var abc = alasql('SELECT id FROM trans WHERE date = "' + delete_date + '" AND order_wh = ' + delete_order_wh + ' AND in_wh = ' + delete_in_wh + ' AND out_wh = "' + delete_out_wh + '"');
+		console.log(abc)
+		//		alasql('DELETE FROM trans WHERE date = "' + delete_date + '" AND order_wh = ' + delete_order_wh + ' AND in_wh = ' + delete_in_wh + ' AND out_wh = "' + delete_out_wh + '"');
 /*		$(dd_address).remove(); */
 		dd_address = "";
 		window.location.assign('stock.html?id=' + id);
