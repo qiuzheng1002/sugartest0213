@@ -358,15 +358,8 @@ $(function(){
 		var delete_in_wh = tableid.rows[dd_address_rows].cells[2].innerText;
 		var delete_out_wh = tableid.rows[dd_address_rows].cells[3].innerText;
 		var delete_company = tableid.rows[dd_address_rows].cells[4].innerText;
-		console.log(delete_date);
-		console.log(delete_order_wh);
-		console.log(delete_in_wh);
-		console.log(delete_out_wh);
-		console.log(delete_company);
-		var abc = alasql('SELECT id FROM trans WHERE date = "' + delete_date + '" AND order_wh = ' + delete_order_wh + ' AND in_wh = ' + delete_in_wh + ' AND out_wh = "' + delete_out_wh + '"');
-		console.log(abc)
-		//		alasql('DELETE FROM trans WHERE date = "' + delete_date + '" AND order_wh = ' + delete_order_wh + ' AND in_wh = ' + delete_in_wh + ' AND out_wh = "' + delete_out_wh + '"');
-/*		$(dd_address).remove(); */
+		var delete_words = "WHERE date = '" + delete_date + "' AND order_wh = " + delete_order_wh + " AND in_wh = " + delete_in_wh + " AND out_wh = " + delete_out_wh + " AND memo = '" + delete_company + "'";
+		var delete_row = alasql('SELECT id FROM trans ' + delete_words)[0];
 		dd_address = "";
 		window.location.assign('stock.html?id=' + id);
 	});
