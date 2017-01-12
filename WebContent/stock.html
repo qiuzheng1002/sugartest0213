@@ -116,8 +116,9 @@
 				</li>
 			</ul>
 				</div>
-<!-- 受注タブ  -->				
-			<div class="tab-content">				
+<!-- タブ(計5つ)  -->				
+			<div class="tab-content">
+<!-- 受注タブ  -->
 				<div class="tab-pane fade" id="Order">
 					<div class="panel-body">
 						<input type="hidden" name="id">
@@ -130,8 +131,8 @@
 							<input type="number" class="form-control" name="order_wh" value="" placeholder="半角数字(1～999,999)で入力してください">
 						</div>
 						<div class="form-group">
-							<label>お得意様名</label>
-							<input type="text" class="form-control" name="memo1" placeholder="リストに無い場合は直接入力してください">
+							<label>取引先</label>
+							<input type="text" class="form-control" name="memo1" placeholder="取引先名を入力してください">
 						</div>
 						<button type="submit" class="btn btn-success btm-sm" id="update_order">
 							<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 受注データ登録
@@ -142,17 +143,17 @@
 				<div class="tab-pane fade" id="Buy">
 					<div class="panel-body">
 						<input type="hidden" name="id">
-						<div class="form-group">
-							<label>日時</label>
+						<div class="form-group" id="in-form_date">
+							<label id="in-form_year">日時</label>
 							<input type="text" class="form-control" name="date2" id="selected_date2" value="" placeholder="yyyy-mm-dd hh:mm (半角英数字)">
 						</div>
-						<div class="form-group">
+						<div class="form-group" id="in-form_number">
 							<label>入庫数</label>
 							<input type="number" class="form-control" name="in_wh" value="" placeholder="半角数字(1～999,999)で入力してください">
 						</div>
 						<div class="form-group">
-							<label>仕入先名</label>
-							<input type="text" class="form-control" name="memo2" placeholder="リストに無い場合は直接入力してください">
+							<label>取引先</label>
+							<input type="text" class="form-control" name="memo2" placeholder="取引先名を入力してください">
 						</div>
 						<button type="submit" class="btn btn-success btm-sm" id="update_in">
 							<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 入庫データ登録
@@ -163,27 +164,64 @@
 				<div class="tab-pane fade" id="Sell">
 					<div class="panel-body">
 						<input type="hidden" name="id">
-						<div class="form-group">
-							<label>日時</label>
+						<div class="form-group" id="out-form_date">
+							<label id="out-form_year">日時</label>
 							<input type="text" class="form-control" name="date3" id="selected_date3" value="" placeholder="yyyy-mm-dd hh:mm (半角英数字)">
 						</div>
-						<div class="form-group">
+						<div class="form-group" id="out-form_number">
 							<label>出庫数</label>
 							<input type="number" class="form-control" name="out_wh" value="" placeholder="半角数字(1～999,999)で入力してください">
 						</div>
 						<div class="form-group">
-							<label>お得意様名</label>
-							<input type="text" class="form-control" name="memo3" placeholder="リストに無い場合は直接入力してください">
+							<label>取引先</label>
+							<input type="text" class="form-control" name="memo3" placeholder="取引先名を入力してください">
 						</div>
 						<button type="submit" class="btn btn-success btm-sm" id="update_out">
 							<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 出庫データ登録
 						</button>
 					</div>
-
-
+				</div>
+<!-- 返品タブ  -->
+				<div class="tab-pane fade" id="Return">
+					<div class="panel-body">
+						<input type="hidden" name="id">
+						<div class="form-group" id="return-form_date">
+							<label id="return-form_year">日時</label>
+							<input type="text" class="form-control" name="date4" id="selected_date4" value="" placeholder="yyyy-mm-dd hh:mm (半角英数字)">
+						</div>
+						<div class="form-group" id="return-form_number">
+							<label>返品数</label>
+							<input type="number" class="form-control" name="return_wh" value="" placeholder="半角数字(1～999,999)で入力してください">
+						</div>
+						<div class="form-group">
+							<label>取引先</label>
+							<input type="text" class="form-control" name="memo4" placeholder="取引先名を入力してください">
+						</div>
+						<button type="submit" class="btn btn-success btm-sm" id="update_return">
+							<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 返品データ登録
+						</button>
+					</div>
+				</div>
+<!-- 棚卸しタブ  -->
+				<div class="tab-pane fade" id="Check">
+					<div class="panel-body">
+						<input type="hidden" name="id">
+						<div class="form-group" id="check-form_date">
+							<label id="check-form_year">日時</label>
+							<input type="text" class="form-control" name="date5" id="selected_date5" value="" placeholder="yyyy-mm-dd hh:mm (半角英数字)">
+						</div>
+						<div class="form-group" id="check-form_number">
+							<label>棚卸し調整数 (超過分は「+(プラス)」、不足分は「-(マイナス)」で入力)</label>
+							<input type="number" class="form-control" name="check_wh" value="" placeholder="半角数字(-999,999～999,999)で入力してください">
+						</div>
+						<button type="submit" class="btn btn-success btm-sm" id="update_check">
+							<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 棚卸しデータ登録
+						</button>
+					</div>
 				</div>
 			</div>
-
+		</div>
+		
 		<div class="container">
 			<div class="panel panel-default">
 				<div class="panel-heading">変更履歴</div>
@@ -226,6 +264,7 @@
 				</div>
 			</div>
 		</div>
+		
 		<script src="js/stock.js"></script>
 	</body>
 </html>
