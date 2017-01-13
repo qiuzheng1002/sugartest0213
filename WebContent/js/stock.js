@@ -44,6 +44,10 @@ for (var i = 0; i < rows.length; i++) {
 }
 
 
+var tbody_zaiko = $('#tbody-zaiko_table');
+var order_total = alasql('SELECT SUM(order_wh) FROM rows');
+console.log(order_total);
+
 //受注処理
 $('#update_order').on('click', function() {
 	var date = $('input[name="date1"]').val();
