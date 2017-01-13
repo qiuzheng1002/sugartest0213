@@ -43,10 +43,22 @@ for (var i = 0; i < rows.length; i++) {
 	tr.append('<td class="text-right"><button type="button" class="btn btn-xs" id="delete_data_address" data-toggle="modal" data-target="#delete_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
 }
 
-
+//在庫数読み込み
+var order_total = alasql('SELECT SUM(order_wh) FROM trans WHERE stock = ?', [ id ])[0];
+var in_total = alasql('SELECT SUM(in_wh) FROM trans WHERE stock = ?', [ id ])[0];
+var out_total = alasql('SELECT SUM(out_wh) FROM trans WHERE stock = ?', [ id ])[0];
+var order_total_j = order_total["SUM(order_wh)"];
+var in_total_j = in_total["SUM(in_wh)"];
+var out_total_j = out_total["SUM(out_wh)"];
+var yet_out_j = order_total_j - out_total_j;
+var zaiko_j = in_total_j - out_total_j;
 var tbody_zaiko = $('#tbody-zaiko_table');
-var order_total = alasql('SELECT SUM(order_wh) FROM rows');
-console.log(order_total);
+var tr = $('<tr>').appendTo(tbody_zaiko);
+	tr.append('<td>' + zaiko_j + '</td>');
+	tr.append('<td>' + order_total_j + '</td>');
+	tr.append('<td>' + in_total_j + '</td>');
+	tr.append('<td>' + out_total_j + '</td>');
+	tr.append('<td>' + yet_out_j + '</td>');
 
 //受注処理
 $('#update_order').on('click', function() {
