@@ -15,9 +15,7 @@ $('#whouse').text(row.whouse.name);
 $('#code').text(row.item.code);
 $('#maker').text(row.item.maker);
 $('#detail').text(row.item.detail);
-$('#price').text(numberWithCommas(row.item.price));
-var balance = row.stock.balance; // 入出庫で利用
-$('#balance').text(balance);
+$('#price').text(numberWithCommas(row.item.price) + '円');
 $('#leadtime').text(row.item.leadtime + '日');
 $('#lack').text(row.item.lack + '%');
 

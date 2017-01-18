@@ -9,7 +9,6 @@ DB.init = function() {
 DB.load = function() {
 	alasql.options.joinstar = 'overwrite';
 
-	//test sakujo
 	// 分類
 	alasql('DROP TABLE IF EXISTS kind;');
 	alasql('CREATE TABLE kind(id INT IDENTITY, text STRING);');
