@@ -19,6 +19,7 @@ $('#price').text(numberWithCommas(row.item.price));
 var balance = row.stock.balance; // 入出庫で利用
 $('#balance').text(balance);
 $('#leadtime').text(row.item.leadtime + '日');
+$('#lack').text(row.item.lack + '%');
 
 // トランザクション読み込み
 var rows = alasql('SELECT * FROM trans WHERE stock = ?', [ id ]);

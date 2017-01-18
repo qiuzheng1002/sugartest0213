@@ -1,2 +1,10 @@
 @charset "UTF-8";
 
+tbody #tbody-transs{
+	overflow-y : scroll;
+	height : 150px;
+}
+
+td.th{
+	text-align: left
+}
