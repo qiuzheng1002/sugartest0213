@@ -61,9 +61,31 @@ DB.load = function() {
 					alasql('INSERT INTO trans VALUES(?,?,?,?,?,?,?);', trans);
 				}
 			});
-
+	
+	// 入庫ステータス
+	alasql('DROP TABLE IF EXISTS itemin;');
+	alasql('CREATE TABLE itemin(id INT IDENTITY, stock INT, date DATE, in_wh INT, memo STRING, state INT);');
+	var pitemin = alasql.promise('SELECT MATRIX * FROM CSV("data/ITEM-IN.csv", {headers: true})').then(
+			function(itemins) {
+				for (var i = 0; i < itemins.length; i++) {
+					var itemin = itemins[i];
+					alasql('INSERT INTO itemin VALUES(?,?,?,?,?,?);', itemin);
+				}
+			});
+	
+	// 出庫ステータス
+	alasql('DROP TABLE IF EXISTS itemout;');
+	alasql('CREATE TABLE itemout(id INT IDENTITY, stock INT, date DATE, out_wh INT, memo STRING, state INT, deadline DATE);');
+	var pitemout = alasql.promise('SELECT MATRIX * FROM CSV("data/ITEM-OUT.csv", {headers: true})').then(
+			function(itemouts) {
+				for (var i = 0; i < itemouts.length; i++) {
+					var itemout = itemouts[i];
+					alasql('INSERT INTO itemout VALUES(?,?,?,?,?,?,?);', itemout);
+				}
+			});
+	
 	// リロード
-	Promise.all([ pkind, pitem, pwhouse, pstock, ptrans ]).then(function() {
+	Promise.all([ pkind, pitem, pwhouse, pstock, ptrans, pitemin, pitemout ]).then(function() {
 		window.location.reload(true);
 	});
 };
@@ -103,6 +125,8 @@ try {
 	alasql('SELECT * FROM whouse WHERE id = 1;');
 	alasql('SELECT * FROM stock WHERE id = 1;');
 	alasql('SELECT * FROM trans WHERE id = 1;');
+	alasql('SELECT * FROM itemin WHERE id = 1;');	
+	alasql('SELECT * FROM itemout WHERE id = 1;');
 } catch (e) {
 	alasql('CREATE localStorage DATABASE STK;');
 	alasql('ATTACH localStorage DATABASE STK;');

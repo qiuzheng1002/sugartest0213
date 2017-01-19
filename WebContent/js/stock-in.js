@@ -1,3 +1,5 @@
+/*
+
 // ID取得
 var id = parseInt($.url().param('id'));
 $("input[name=id]").val(id);
@@ -45,3 +47,4 @@ for (var i = 0; i < rows.length; i++) {
 }
 
 
+*/

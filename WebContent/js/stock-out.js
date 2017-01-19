@@ -2,6 +2,23 @@
 var id = parseInt($.url().param('id'));
 $("input[name=id]").val(id);
 
+//出庫情報読み込み
+var rows = alasql('SELECT * FROM itemout WHERE stock = ?', [ id ]);
+var tbody = $('#tbody-shukko_table');
+for (var i = 0; i < rows.length; i++) {
+	var row = rows[i];
+	var tr = $('<tr>').appendTo(tbody);
+	tr.append('<td>' + row.itemout.date + '</td>');
+	tr.append('<td>' + row.itemout.memo + '</td>');
+	tr.append('<td>' + row.itemout.order_wh + '</td>');
+	tr.append('<td>' + row.itemout.deadline + '</td>');
+	tr.append('<td>' + row.itemout.state + '</td>');}
+	tr.append('<td class="text-right"><button type="button" class="btn btn-xs" id="delete_data_address" data-toggle="modal" data-target="#delete_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
+
+
+/*
+
+
 // 商品情報読み込み
 var sql = 'SELECT * \
 	FROM stock \
@@ -16,8 +33,6 @@ $('#code').text(row.item.code);
 $('#maker').text(row.item.maker);
 $('#detail').text(row.item.detail);
 $('#price').text(numberWithCommas(row.item.price));
-var balance = row.stock.balance; // 入出庫で利用
-$('#balance').text(balance);
 $('#leadtime').text(row.item.leadtime + '日');
 $('#lack').text(row.item.lack + '%');
 
@@ -44,4 +59,4 @@ for (var i = 0; i < rows.length; i++) {
 	tr.append('<td class="text-right"><button type="button" class="btn btn-xs" id="delete_data_address" data-toggle="modal" data-target="#delete_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
 }
 
-
+*/
