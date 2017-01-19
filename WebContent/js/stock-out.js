@@ -2,6 +2,14 @@
 var id = parseInt($.url().param('id'));
 $("input[name=id]").val(id);
 
+//商品情報読み込み
+var sql = 'SELECT * \
+	FROM stock \
+	JOIN whouse ON whouse.id = stock.whouse \
+	JOIN item ON item.id = stock.item \
+	JOIN kind ON kind.id = item.kind \
+	WHERE stock.id = ?';
+
 //出庫情報読み込み
 var rows = alasql('SELECT * FROM itemout WHERE stock = ?', [ id ]);
 var tbody = $('#tbody-shukko_table');
@@ -12,8 +20,11 @@ for (var i = 0; i < rows.length; i++) {
 	tr.append('<td>' + row.itemout.memo + '</td>');
 	tr.append('<td>' + row.itemout.order_wh + '</td>');
 	tr.append('<td>' + row.itemout.deadline + '</td>');
-	tr.append('<td>' + row.itemout.state + '</td>');}
+	tr.append('<td>' + row.itemout.state + '</td>');
 	tr.append('<td class="text-right"><button type="button" class="btn btn-xs" id="delete_data_address" data-toggle="modal" data-target="#delete_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
+}
+
+
 
 
 /*
