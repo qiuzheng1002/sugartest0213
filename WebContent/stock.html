@@ -91,7 +91,7 @@
 						<th>メーカー</th><td id="maker"></td>
 					</tr>
 					<tr>
-						<th>商品名</th><td id="detail"></td>
+						<th>品番</th><td id="detail"></td>
 					</tr>
 					<tr>
 						<th>価格</th><td id="price"></td>
@@ -231,63 +231,69 @@
 			</div>
 		</div>
 
-<!-- 在庫状況 -->
+<!-- 在庫関連 -->
 		<div class="container">
+<!-- 在庫状況 -->
 			<div class="panel panel-default">
 				<div class="panel-heading" id="zaiko_shosai">在庫状況
 				</div>
-				<table class="table" id="zaiko_table">
+				<table class="table">
 					<thead>
 						<tr>
 							<th>在庫数</th>
-							<th>倉庫在庫(実在庫)</th>
-							<th style="color: #FF8040;">入庫予定在庫</th>
-							<th style="color: #0000FF;">出庫予定在庫</th>
+							<th>(内)倉庫在庫(実在庫)</th>
+							<th>安全在庫数</th>
+							<th>過不足</th>
+							<th>ステータス</th>
 							<th></th>
 						</tr>
 					</thead>
-					<tbody id="tbody-zaiko_table"></tbody>
+					<tbody id="tbody-zaiko_state"></tbody>
 				</table>
 			</div>
-		</div>
 
+<!-- 入庫済み累計 -->
+			<div class="panel panel-default">
+				<div class="panel-heading">(1) 入庫済み累計</div>
+				<div id="nyuuko_total"></div>
+			</div>
+			
+<!-- 出庫済み累計 -->
+			<div class="panel panel-default">
+				<div class="panel-heading">(2) 出庫済み累計</div>
+				<div id="shukko_total"></div>
+			</div>
 
 <!-- 発注・入庫状況 -->
-		<div class="container">
 			<div class="panel panel-default">
-				<div class="panel-heading" id="nyuuko_shosai">発注・入庫状況</div>
-				<table class="table" id="nyuuko_table">
+				<div class="panel-heading" id="nyuuko_shosai">(3) 発注・入庫手配中</div>
+				<table class="table">
 					<thead>
 						<tr>
-							<th style="color: #FF8040;">入庫予定在庫</th>
-							<th>発注済み合計</th>
-							<th>入庫済み合計</th>
-							<th>未発注合計</th>
+							<th>未発注(不足在庫数)</th>
+							<th>発注済み(入庫待ち数)</th>
 							<th></th>
 						</tr>
 					</thead>
-					<tbody id="tbody-nyuuko_table"></tbody>
+					<tbody id="tbody-nyuuko_state"></tbody>
 				</table>
 			</div>
-		</div>
 
 <!-- 受注・出庫状況 -->
-		<div class="container">
 			<div class="panel panel-default">
-				<div class="panel-heading" id="shukko_shosai">受注・出庫状況</div>
-				<table class="table" id="shukko_table">
+				<div class="panel-heading" id="shukko_shosai">(4) 受注・出庫手配中</div>
+				<table class="table">
 					<thead>
 						<tr>
-							<th style="color: #0000FF;">出庫予定在庫</th>
-							<th>受注済み合計</th>
-							<th>出庫済み合計</th>
+							<th>受注済み(納期未回答)</th>
+							<th>納期確定済み</th>
 							<th></th>
 						</tr>
 					</thead>
-					<tbody id="tbody-shukko_table"></tbody>
+					<tbody id="tbody-shukko_state"></tbody>
 				</table>
 			</div>
-		</div>
+		</div><!-- container -->
 		
 <!-- 変更履歴  -->
 		<div class="container">

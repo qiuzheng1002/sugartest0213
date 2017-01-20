@@ -45,8 +45,58 @@ for (var i = 0; i < rows.length; i++) {
 	tr.append('<td>' + row.trans.memo + '</td>');
 	tr.append('<td class="text-right"><button type="button" class="btn btn-xs" id="delete_data_address" data-toggle="modal" data-target="#delete_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
 }
-//変更
-//在庫数読み込み
+
+//入庫数読み込み
+var in_11_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 1 AND state = 1', [ id ])[0];
+var in_11 = in_11_sql["SUM(num)"]; //未発注
+var in_12_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 1 AND state = 2', [ id ])[0];
+var in_12 = in_12_sql["SUM(num)"]; //発注済
+var in_13_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 1 AND state = 3', [ id ])[0];
+var in_13 = in_13_sql["SUM(num)"]; //入庫済み
+
+//出庫数読み込み
+var out_24_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 2 AND state = 4', [ id ])[0];
+var out_24 = out_24_sql["SUM(num)"]; //受注済み
+var out_25_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 2 AND state = 5', [ id ])[0];
+var out_25 = out_25_sql["SUM(num)"]; //納期回答済み
+var out_26_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 2 AND state = 6', [ id ])[0];
+var out_26 = out_26_sql["SUM(num)"]; //出庫済み
+
+//在庫数吐き出し
+var warehouse_stock = in_13 - out_26; //倉庫内在庫
+var mikomi_stock = warehouse_stock + in_11 + in_12 - out_24 - out_25; //見込み在庫
+var safe_stock = 40000; //安全在庫数
+var diff_stock = mikomi_stock - safe_stock; //見込み在庫 - 安全在庫
+var tbody_zaiko_state = $('#tbody-zaiko_state');
+var tr = $('<tr>').appendTo(tbody_zaiko_state);
+	tr.append('<td>' + mikomi_stock + '</td>');
+	tr.append('<td>' + warehouse_stock + '</td>');
+	tr.append('<td>' + safe_stock + '</td>');
+	tr.append('<td>' + diff_stock + '</td>');
+	tr.append('<td> <div class="progress"><div class="progress-bar progress-bar-warning" role="progressbar" style="width: 60%;">60%</div></div> </td>');
+
+//入庫済み累積
+$("#nyuuko_total").append(in_13);
+
+//出庫済み累積
+$("#shukko_total").append(out_26);
+
+//発注・入庫手配中
+var tbody_nyuuko_state = $('#tbody-nyuuko_state');
+var tr = $('<tr>').appendTo(tbody_nyuuko_state);
+tr.append('<td>' + in_11 + '</td>');
+tr.append('<td>' + in_12 + '</td>');
+
+//受注・出庫手配中
+var tbody_shukko_state = $('#tbody-shukko_state');
+var tr = $('<tr>').appendTo(tbody_shukko_state);
+tr.append('<td>' + out_24 + '</td>');
+tr.append('<td>' + out_25 + '</td>');
+
+
+
+
+/* ボツ
 var order_total = alasql('SELECT SUM(order_wh) FROM trans WHERE stock = ?', [ id ])[0];
 var in_total = alasql('SELECT SUM(in_wh) FROM trans WHERE stock = ?', [ id ])[0];
 var out_total = alasql('SELECT SUM(out_wh) FROM trans WHERE stock = ?', [ id ])[0];
@@ -62,6 +112,8 @@ var tr = $('<tr>').appendTo(tbody_zaiko);
 	tr.append('<td>' + in_total_j + '</td>');
 	tr.append('<td>' + out_total_j + '</td>');
 	tr.append('<td>' + yet_out_j + '</td>');
+*/
+
 	//変更
 //受注処理
 $('#update_order').on('click', function() {

@@ -58,7 +58,7 @@ DB.load = function() {
 			function(transs) {
 				for (var i = 0; i < transs.length; i++) {
 					var trans = transs[i];
-					alasql('INSERT INTO trans VALUES(?,?,?,?,?,?,?);', trans);
+					alasql('INSERT INTO trans VALUES(?,?,?,?,?,?,?,?);', trans);
 				}
 			});
 
