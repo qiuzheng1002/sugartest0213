@@ -1,6 +1,9 @@
 // ID取得
 var id = parseInt($.url().param('id'));
 $("input[name=id]").val(id);
+$("#zaiko_shosai").append("<a href = stock-check.html?id=" + id + ">在庫数の詳細はこちら</a>");
+$("#nyuuko_shosai").append("<a href = stock-in.html?id=" + id + ">発注・入庫データの登録・詳細はこちら</a>");
+$("#shukko_shosai").append("<a href = stock-out.html?id=" + id + ">受注・出庫データの登録、詳細はこちら</a>");
 
 // 商品情報読み込み
 var sql = 'SELECT * \
@@ -19,6 +22,7 @@ $('#price').text(numberWithCommas(row.item.price) + '円');
 $('#leadtime').text(row.item.leadtime + '日');
 $('#lack').text(row.item.lack + '%');
 
+//変更
 // トランザクション読み込み
 var rows = alasql('SELECT * FROM trans WHERE stock = ?', [ id ]);
 var tbody = $('#tbody-transs');
@@ -41,7 +45,7 @@ for (var i = 0; i < rows.length; i++) {
 	tr.append('<td>' + row.trans.memo + '</td>');
 	tr.append('<td class="text-right"><button type="button" class="btn btn-xs" id="delete_data_address" data-toggle="modal" data-target="#delete_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
 }
-
+//変更
 //在庫数読み込み
 var order_total = alasql('SELECT SUM(order_wh) FROM trans WHERE stock = ?', [ id ])[0];
 var in_total = alasql('SELECT SUM(in_wh) FROM trans WHERE stock = ?', [ id ])[0];
@@ -58,7 +62,7 @@ var tr = $('<tr>').appendTo(tbody_zaiko);
 	tr.append('<td>' + in_total_j + '</td>');
 	tr.append('<td>' + out_total_j + '</td>');
 	tr.append('<td>' + yet_out_j + '</td>');
-
+	//変更
 //受注処理
 $('#update_order').on('click', function() {
 	var date = $('input[name="date1"]').val();
@@ -112,7 +116,7 @@ $('#update_order').on('click', function() {
 		$("#order-form_date").animate({opacity: 1.0},50);
 	}
 });
-
+//変更
 //入庫処理
 $('#update_in').on('click', function() {
 	var date = $('input[name="date2"]').val();
@@ -165,7 +169,7 @@ $('#update_in').on('click', function() {
 		$("#in-form_date").animate({opacity: 1.0},50);
 	}
 });
-
+//変更
 //出庫処理
 $('#update_out').on('click', function() {
 	var date = $('input[name="date3"]').val();
@@ -218,7 +222,7 @@ $('#update_out').on('click', function() {
 		$("#out-form_date").animate({opacity: 1.0},50);
 	}
 });
-
+//変更
 //返品処理
 $('#update_return').on('click', function() {
 	var date = $('input[name="date4"]').val();
@@ -272,7 +276,7 @@ $('#update_return').on('click', function() {
 		$("#return-form_date").animate({opacity: 1.0},50);
 	}
 });
-
+//変更
 //棚卸し処理
 $('#update_check').on('click', function() {
 	var date = $('input[name="date5"]').val();

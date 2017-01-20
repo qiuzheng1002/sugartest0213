@@ -1,28 +1,9 @@
-/*
-
 // ID取得
 var id = parseInt($.url().param('id'));
 $("input[name=id]").val(id);
 
-// 商品情報読み込み
-var sql = 'SELECT * \
-	FROM stock \
-	JOIN whouse ON whouse.id = stock.whouse \
-	JOIN item ON item.id = stock.item \
-	JOIN kind ON kind.id = item.kind \
-	WHERE stock.id = ?';
-var row = alasql(sql, [ id ])[0];
-$('#image').attr('src', 'img/' + row.item.id + '.jpg');
-$('#whouse').text(row.whouse.name);
-$('#code').text(row.item.code);
-$('#maker').text(row.item.maker);
-$('#detail').text(row.item.detail);
-$('#price').text(numberWithCommas(row.item.price));
-var balance = row.stock.balance; // 入出庫で利用
-$('#balance').text(balance);
-$('#leadtime').text(row.item.leadtime + '日');
-$('#lack').text(row.item.lack + '%');
 
+//変更
 // トランザクション読み込み
 var rows = alasql('SELECT * FROM trans WHERE stock = ?', [ id ]);
 var tbody = $('#tbody-transs');
@@ -45,6 +26,3 @@ for (var i = 0; i < rows.length; i++) {
 	tr.append('<td>' + row.trans.memo + '</td>');
 	tr.append('<td class="text-right"><button type="button" class="btn btn-xs" id="delete_data_address" data-toggle="modal" data-target="#delete_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
 }
-
-
-*/

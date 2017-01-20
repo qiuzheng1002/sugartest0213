@@ -234,15 +234,16 @@
 <!-- 在庫状況 -->
 		<div class="container">
 			<div class="panel panel-default">
-				<div class="panel-heading">在庫状況</div>
+				<div class="panel-heading" id="zaiko_shosai">在庫状況
+				</div>
 				<table class="table" id="zaiko_table">
 					<thead>
 						<tr>
 							<th>在庫数</th>
-							<th>受注数</th>
-							<th>入庫数</th>
-							<th>出庫数</th>
-							<th>未出庫数</th>
+							<th>倉庫在庫(実在庫)</th>
+							<th style="color: #FF8040;">入庫予定在庫</th>
+							<th style="color: #0000FF;">出庫予定在庫</th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody id="tbody-zaiko_table"></tbody>
@@ -250,6 +251,44 @@
 			</div>
 		</div>
 
+
+<!-- 発注・入庫状況 -->
+		<div class="container">
+			<div class="panel panel-default">
+				<div class="panel-heading" id="nyuuko_shosai">発注・入庫状況</div>
+				<table class="table" id="nyuuko_table">
+					<thead>
+						<tr>
+							<th style="color: #FF8040;">入庫予定在庫</th>
+							<th>発注済み合計</th>
+							<th>入庫済み合計</th>
+							<th>未発注合計</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody id="tbody-nyuuko_table"></tbody>
+				</table>
+			</div>
+		</div>
+
+<!-- 受注・出庫状況 -->
+		<div class="container">
+			<div class="panel panel-default">
+				<div class="panel-heading" id="shukko_shosai">受注・出庫状況</div>
+				<table class="table" id="shukko_table">
+					<thead>
+						<tr>
+							<th style="color: #0000FF;">出庫予定在庫</th>
+							<th>受注済み合計</th>
+							<th>出庫済み合計</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody id="tbody-shukko_table"></tbody>
+				</table>
+			</div>
+		</div>
+		
 <!-- 変更履歴  -->
 		<div class="container">
 			<div class="panel panel-default">

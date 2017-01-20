@@ -68,10 +68,41 @@
 		</nav>
 
 		<div class="container">
-		
-		<div id=hensa></div>
-		
-		
+<!-- リスト -->
+			<div class="panel panel-default">
+				<div class="panel-heading">安全在庫数 設定条件</div>
+				<table class="table table-hover">
+					<tbody>
+						<tr>
+							<th>リードタイム</th><td id="leadtime"></td>
+						</tr>
+						<tr>
+							<th>許容欠品率</th><td id="lack"></td>
+						</tr>
+						<tr>
+							<th>標準偏差(直近3ヶ月出荷実績)</th><td id="hensa"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>	
+
+<!-- 安全在庫数 -->
+			<div class="panel panel-default">
+				<div class="panel-heading">安全在庫数</div>
+			</div>
+
+<!-- 現在の在庫数 -->
+			<div class="panel panel-default">
+				<div class="panel-heading">現在の在庫数</div>
+			</div>
+
+<hr>
+
+<!-- 回帰分析 -->
+			<div class="panel panel-default">
+				<div class="panel-heading">回帰分析</div>
+			</div>
+
 		</div>
 		<script src="js/stock-check.js"></script>
 	</body>

@@ -1,4 +1,6 @@
 
+
+
 //標準偏差
 $(function(){
 
@@ -41,7 +43,5 @@ function floatFormat(number){
 	return Math.round(number * _pow) / _pow;
 }
 var hensa_float = floatFormat(hensa);
-
-$("#hensa").append(hensa);
 $("#hensa").append(hensa_float);
 })
