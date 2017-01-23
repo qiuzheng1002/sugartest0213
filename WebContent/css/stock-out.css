@@ -1,0 +1,11 @@
+@charset "UTF-8";
+
+#order-form_date{
+	float: left;
+	width: 20%;
+}
+
+#order-form_shop{
+	float: right;
+	width: 20%;
+}
