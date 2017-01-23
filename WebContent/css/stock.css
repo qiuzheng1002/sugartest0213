@@ -1,20 +1,26 @@
 @charset "UTF-8";
 
-thead.scrollHead, tbody.scrollBody{
-	display:block;
+#nyuuko_box{
+	float: left;
+	width: 49%;
 }
 
-tbody.scrollBody{
-	overflow-y: scroll;
-	height: 100px;
+#shukko_box{
+	float: right;
+	width: 49%;
 }
 
-td.th{
-	table-layout:fixed;
+#order_box{
+	clear: both;
 }
 
-.no{
-	width:30px;
-	color: #0000ff;
+
+#nyuuko_total{
+	padding: 10px;
+	text-align: center;
 }
 
+#shukko_total{
+	padding: 10px;
+	text-align: center;
+}

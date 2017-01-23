@@ -1,0 +1,30 @@
+@charset "UTF-8";
+
+#nyuuko_total{
+	padding: 100px;
+}
+
+#shukko_total{
+	padding: 100px;
+}
+
+
+
+thead.scrollHead, tbody.scrollBody{
+	display:block;
+}
+
+tbody.scrollBody{
+	overflow-y: scroll;
+	height: 100px;
+}
+
+td.th{
+	table-layout:fixed;
+}
+
+.no{
+	width:30px;
+	color: #0000ff;
+}
+

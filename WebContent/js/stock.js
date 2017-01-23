@@ -2,7 +2,7 @@
 var id = parseInt($.url().param('id'));
 $("input[name=id]").val(id);
 $("#zaiko_shosai").append("<a href = stock-check.html?id=" + id + " style='float:right;'>在庫数の詳細はこちら</a>");
-$("#nyuuko_shosai").append("<a href = stock-in.html?id=" + id + " style='float:right;'>発注・入庫データの登録・詳細はこちら</a>");
+$("#nyuuko_shosai").append("<a href = stock-in.html?id=" + id + " style='float:right;'>発注・入庫データの登録、詳細はこちら</a>");
 $("#shukko_shosai").append("<a href = stock-out.html?id=" + id + " style='float:right;'>受注・出庫データの登録、詳細はこちら</a>");
 
 // 商品情報読み込み
@@ -114,26 +114,6 @@ var tr = $('<tr>').appendTo(tbody_shukko_state);
 tr.append('<td>' + out_24 + '</td>');
 tr.append('<td>' + out_25 + '</td>');
 
-
-
-
-/* ボツ
-var order_total = alasql('SELECT SUM(order_wh) FROM trans WHERE stock = ?', [ id ])[0];
-var in_total = alasql('SELECT SUM(in_wh) FROM trans WHERE stock = ?', [ id ])[0];
-var out_total = alasql('SELECT SUM(out_wh) FROM trans WHERE stock = ?', [ id ])[0];
-var order_total_j = order_total["SUM(order_wh)"];
-var in_total_j = in_total["SUM(in_wh)"];
-var out_total_j = out_total["SUM(out_wh)"];
-var yet_out_j = order_total_j - out_total_j;
-var zaiko_j = in_total_j - out_total_j;
-var tbody_zaiko = $('#tbody-zaiko_table');
-var tr = $('<tr>').appendTo(tbody_zaiko);
-	tr.append('<td>' + zaiko_j + '</td>');
-	tr.append('<td>' + order_total_j + '</td>');
-	tr.append('<td>' + in_total_j + '</td>');
-	tr.append('<td>' + out_total_j + '</td>');
-	tr.append('<td>' + yet_out_j + '</td>');
-*/
 
 	//変更
 //受注処理
@@ -295,6 +275,7 @@ $('#update_out').on('click', function() {
 		$("#out-form_date").animate({opacity: 1.0},50);
 	}
 });
+
 //変更
 //返品処理
 $('#update_return').on('click', function() {
@@ -404,7 +385,7 @@ $('#update_check').on('click', function() {
 	}
 });
 
-//要移設
+//要移設 移設後は削除
 //本日の日付を自動入力
 var y = 0;
 $(function(){

@@ -168,8 +168,8 @@ $('#update_order').on('click', function() {
 		console.log(deadline);
 		console.log(num);
 		console.log(shop);
-	alasql('INSERT INTO trans VALUES(?,?,?,?,?,?,?)', [ trans_id, id, purpose, state, date, deadline, num, shop]);
-	window.location.assign('stock.html?id=' + id);
+	alasql('INSERT INTO trans VALUES(?,?,?,?,?,?,?,?)', [ trans_id, id, purpose, state, date, deadline, num, shop]);
+	window.location.assign('stock-out.html?id=' + id);
 	}
 	
 	//全条件クリアしていることをチェック (納期確定済み)
@@ -186,7 +186,7 @@ $('#update_order').on('click', function() {
 		console.log(num);
 		console.log(shop);
 	alasql('INSERT INTO trans VALUES(?,?,?,?,?,?,?,?)', [ trans_id, id, purpose, state, date, deadline, num, shop]);
-	window.location.assign('stock.html?id=' + id);
+	window.location.assign('stock-out.html?id=' + id);
 	}
 });
 
