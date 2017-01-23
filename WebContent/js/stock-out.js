@@ -185,7 +185,7 @@ $('#update_order').on('click', function() {
 		console.log(deadline);
 		console.log(num);
 		console.log(shop);
-	alasql('INSERT INTO trans VALUES(?,?,?,?,?,?,?)', [ trans_id, id, purpose, state, date, deadline, num, shop]);
+	alasql('INSERT INTO trans VALUES(?,?,?,?,?,?,?,?)', [ trans_id, id, purpose, state, date, deadline, num, shop]);
 	window.location.assign('stock.html?id=' + id);
 	}
 });
