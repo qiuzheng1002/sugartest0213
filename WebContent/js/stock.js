@@ -1,9 +1,9 @@
 // ID取得
 var id = parseInt($.url().param('id'));
 $("input[name=id]").val(id);
-$("#zaiko_shosai").append("<a href = stock-check.html?id=" + id + ">在庫数の詳細はこちら</a>");
-$("#nyuuko_shosai").append("<a href = stock-in.html?id=" + id + ">発注・入庫データの登録・詳細はこちら</a>");
-$("#shukko_shosai").append("<a href = stock-out.html?id=" + id + ">受注・出庫データの登録、詳細はこちら</a>");
+$("#zaiko_shosai").append("<a href = stock-check.html?id=" + id + " style='float:right;'>在庫数の詳細はこちら</a>");
+$("#nyuuko_shosai").append("<a href = stock-in.html?id=" + id + " style='float:right;'>発注・入庫データの登録・詳細はこちら</a>");
+$("#shukko_shosai").append("<a href = stock-out.html?id=" + id + " style='float:right;'>受注・出庫データの登録、詳細はこちら</a>");
 
 // 商品情報読み込み
 var sql = 'SELECT * \
@@ -18,11 +18,11 @@ $('#whouse').text(row.whouse.name);
 $('#code').text(row.item.code);
 $('#maker').text(row.item.maker);
 $('#detail').text(row.item.detail);
-$('#price').text(numberWithCommas(row.item.price) + '円');
-$('#leadtime').text(row.item.leadtime + '日');
-$('#lack').text(row.item.lack + '%');
+$('#price').text(numberWithCommas(row.item.price) + ' 円');
+$('#leadtime').text(row.item.leadtime + ' 日');
+$('#lack').text(row.item.lack + ' %');
 
-//変更
+/* 一覧表：ボツ
 // トランザクション読み込み
 var rows = alasql('SELECT * FROM trans WHERE stock = ?', [ id ]);
 var tbody = $('#tbody-transs');
@@ -45,6 +45,7 @@ for (var i = 0; i < rows.length; i++) {
 	tr.append('<td>' + row.trans.memo + '</td>');
 	tr.append('<td class="text-right"><button type="button" class="btn btn-xs" id="delete_data_address" data-toggle="modal" data-target="#delete_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
 }
+*/
 
 //入庫数読み込み
 var in_11_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 1 AND state = 1', [ id ])[0];
@@ -65,16 +66,36 @@ var out_26 = out_26_sql["SUM(num)"]; //出庫済み
 //在庫数吐き出し
 var warehouse_stock = in_13 - out_26; //倉庫内在庫
 var mikomi_stock = warehouse_stock + in_11 + in_12 - out_24 - out_25; //見込み在庫
-var safe_stock = 40000; //安全在庫数
+var safe_stock = 17000; //安全在庫数
 var diff_stock = mikomi_stock - safe_stock; //見込み在庫 - 安全在庫
+var percent_stock = mikomi_stock / safe_stock * 100; //ステータス(%)
+function floatFormat(number){
+	var _pow = Math.pow(10, 0);
+	return Math.round(number * _pow) / _pow;
+}
+var percent_stock_float = floatFormat(percent_stock); //ステータス(%)四捨五入
 var tbody_zaiko_state = $('#tbody-zaiko_state');
 var tr = $('<tr>').appendTo(tbody_zaiko_state);
 	tr.append('<td>' + mikomi_stock + '</td>');
 	tr.append('<td>' + warehouse_stock + '</td>');
 	tr.append('<td>' + safe_stock + '</td>');
 	tr.append('<td>' + diff_stock + '</td>');
-	tr.append('<td> <div class="progress"><div class="progress-bar progress-bar-warning" role="progressbar" style="width: 60%;">60%</div></div> </td>');
-
+	if (percent_stock_float > 130){ //在庫131%～：赤
+	tr.append('<td> <div class="progress"><div class="progress-bar progress-bar-danger" role="progressbar" style="width: 100%;">' + percent_stock_float + '%</div></div> </td>');
+	}
+	else if (percent_stock_float <= 130 && percent_stock_float > 110){ //在庫111～130：黄
+		tr.append('<td> <div class="progress"><div class="progress-bar progress-bar-warning" role="progressbar" style="width: 100%;">' + percent_stock_float + '%</div></div> </td>');
+		}
+	else if (percent_stock_float <= 110 && percent_stock_float >= 100){ //在庫100～110：緑
+		tr.append('<td> <div class="progress"><div class="progress-bar progress-bar-success" role="progressbar" style="width: 100%;">' + percent_stock_float + '%</div></div> </td>');
+		}
+	else if (percent_stock_float < 100 && percent_stock_float >= 50){ //在庫50～99：黄
+		tr.append('<td> <div class="progress"><div class="progress-bar progress-bar-warning" role="progressbar" style="width: ' + percent_stock_float + '%;">' + percent_stock_float + '%</div></div> </td>');
+		}
+	else { //在庫～49：赤
+		tr.append('<td> <div class="progress"><div class="progress-bar progress-bar-danger" role="progressbar" style="width: ' + percent_stock_float + '%;">' + percent_stock_float + '%</div></div> </td>');
+		}
+	
 //入庫済み累積
 $("#nyuuko_total").append(in_13);
 

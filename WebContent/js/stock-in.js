@@ -2,7 +2,6 @@
 var id = parseInt($.url().param('id'));
 $("input[name=id]").val(id);
 
-
 //変更
 // トランザクション読み込み
 var rows = alasql('SELECT * FROM trans WHERE stock = ?', [ id ]);
