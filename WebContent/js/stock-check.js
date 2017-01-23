@@ -1,4 +1,17 @@
+// ID取得
+var id = parseInt($.url().param('id'));
+$("input[name=id]").val(id);
 
+// 商品情報読み込み
+var sql = 'SELECT * \
+	FROM stock \
+	JOIN whouse ON whouse.id = stock.whouse \
+	JOIN item ON item.id = stock.item \
+	JOIN kind ON kind.id = item.kind \
+	WHERE stock.id = ?';
+var row = alasql(sql, [ id ])[0];
+$('#leadtime').text(row.item.leadtime + ' 日');
+$('#lack').text(row.item.lack + ' %');
 
 
 //標準偏差
