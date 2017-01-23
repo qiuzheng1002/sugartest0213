@@ -404,6 +404,7 @@ $('#update_check').on('click', function() {
 	}
 });
 
+//要移設
 //本日の日付を自動入力
 var y = 0;
 $(function(){
