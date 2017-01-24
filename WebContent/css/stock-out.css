@@ -1,5 +1,9 @@
 @charset "UTF-8";
 
+.index-out_css{
+	background-color: #acffff;
+}
+
 #order-form_date{
 	float: left;
 	width: 48%;
