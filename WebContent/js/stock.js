@@ -2,8 +2,8 @@
 var id = parseInt($.url().param('id'));
 $("input[name=id]").val(id);
 $("#zaiko_shosai").append("<a href = stock-check.html?id=" + id + " style='float:right;'>在庫数の詳細はこちら</a>");
-$("#nyuuko_shosai").append("<a href = stock-in.html?id=" + id + " style='float:right;'>発注・入庫データの登録、詳細はこちら</a>");
-$("#shukko_shosai").append("<a href = stock-out.html?id=" + id + " style='float:right;'>受注・出庫データの登録、詳細はこちら</a>");
+$("#nyuuko_shosai").append("<a href = stock-in.html?id=" + id + " style='float:right;'>データの登録・詳細はこちら</a>");
+$("#shukko_shosai").append("<a href = stock-out.html?id=" + id + " style='float:right;'>データの登録・詳細はこちら</a>");
 
 // 商品情報読み込み
 var sql = 'SELECT * \
@@ -21,31 +21,6 @@ $('#detail').text(row.item.detail);
 $('#price').text(numberWithCommas(row.item.price) + ' 円');
 $('#leadtime').text(row.item.leadtime + ' 日');
 $('#lack').text(row.item.lack + ' %');
-
-/* 一覧表：ボツ
-// トランザクション読み込み
-var rows = alasql('SELECT * FROM trans WHERE stock = ?', [ id ]);
-var tbody = $('#tbody-transs');
-for (var i = 0; i < rows.length; i++) {
-	var row = rows[i];
-	var tr = $('<tr>').appendTo(tbody);
-	tr.append('<td>' + row.trans.date + '</td>');
-	if (row.trans.order_wh === 0){
-		tr.append('<td style="color: #FFFFFF;">' + row.trans.order_wh + '</td>');}
-	else {
-		tr.append('<td>' + row.trans.order_wh + '</td>');}
-	if (row.trans.in_wh === 0){
-		tr.append('<td style="color: #FFFFFF;">' + row.trans.in_wh + '</td>');}
-	else {
-		tr.append('<td>' + row.trans.in_wh + '</td>');}
-	if (row.trans.out_wh === 0){
-		tr.append('<td style="color: #FFFFFF;">' + row.trans.out_wh + '</td>');}
-	else {
-		tr.append('<td>' + row.trans.out_wh + '</td>');}
-	tr.append('<td>' + row.trans.memo + '</td>');
-	tr.append('<td class="text-right"><button type="button" class="btn btn-xs" id="delete_data_address" data-toggle="modal" data-target="#delete_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
-}
-*/
 
 //入庫数読み込み
 var in_11_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 1 AND state = 1', [ id ])[0];
@@ -76,10 +51,10 @@ function floatFormat(number){
 var percent_stock_float = floatFormat(percent_stock); //ステータス(%)四捨五入
 var tbody_zaiko_state = $('#tbody-zaiko_state');
 var tr = $('<tr>').appendTo(tbody_zaiko_state);
-	tr.append('<td>' + mikomi_stock + '</td>');
-	tr.append('<td>' + warehouse_stock + '</td>');
-	tr.append('<td>' + safe_stock + '</td>');
-	tr.append('<td>' + diff_stock + '</td>');
+	tr.append('<td>' + numberWithCommas(mikomi_stock) + '</td>');
+	tr.append('<td>' + numberWithCommas(warehouse_stock) + '</td>');
+	tr.append('<td>' + numberWithCommas(safe_stock) + '</td>');
+	tr.append('<td>' + numberWithCommas(diff_stock) + '</td>');
 	if (percent_stock_float > 130){ //在庫131%～：赤
 	tr.append('<td> <div class="progress"><div class="progress-bar progress-bar-danger" role="progressbar" style="width: 100%;">' + percent_stock_float + '%</div></div> </td>');
 	}
@@ -97,78 +72,28 @@ var tr = $('<tr>').appendTo(tbody_zaiko_state);
 		}
 	
 //入庫済み累積
-$("#nyuuko_total").append(in_13);
+$("#nyuuko_total").append(numberWithCommas(in_13));
 
 //出庫済み累積
-$("#shukko_total").append(out_26);
+$("#shukko_total").append(numberWithCommas(out_26));
 
 //発注・入庫手配中
+var nyuuko_state_total = in_11 + in_12;
 var tbody_nyuuko_state = $('#tbody-nyuuko_state');
 var tr = $('<tr>').appendTo(tbody_nyuuko_state);
-tr.append('<td>' + in_11 + '</td>');
-tr.append('<td>' + in_12 + '</td>');
+tr.append('<td>' + numberWithCommas(nyuuko_state_total) + '</td>');
+tr.append('<td>' + numberWithCommas(in_11) + '</td>');
+tr.append('<td>' + numberWithCommas(in_12) + '</td>');
 
 //受注・出庫手配中
+var shukko_state_total = out_24 + out_25;
 var tbody_shukko_state = $('#tbody-shukko_state');
 var tr = $('<tr>').appendTo(tbody_shukko_state);
-tr.append('<td>' + out_24 + '</td>');
-tr.append('<td>' + out_25 + '</td>');
+tr.append('<td>' + numberWithCommas(shukko_state_total) + '</td>');
+tr.append('<td>' + numberWithCommas(out_24) + '</td>');
+tr.append('<td>' + numberWithCommas(out_25) + '</td>');
 
 
-	//変更
-//受注処理
-$('#update_order').on('click', function() {
-	var date = $('input[name="date1"]').val();
-	var length_check = date.length;
-	var year_check = date.slice(0,4);
-	var bar1_check = date.charAt(4);
-	var month_check = date.slice(5,7);
-	var bar2_check = date.charAt(7);
-	var date_check = date.slice(8,10);
-	var millisec_check = Date.parse(date);
-	if (month_check == 1 || month_check == 3 || month_check == 5 || month_check == 7 || month_check == 8 || month_check == 10 || month_check == 12){
-		var lastdate_check = 31;
-		var lastmonth_check = month_check;
-	}
-	else {
-		var lastdate = new Date(date);
-			lastdate.setMonth(lastdate.getMonth() + 1);
-			lastdate.setDate(0);
-		var lastdate_check = lastdate.getDate();
-		var lastmonth_check = lastdate.getMonth() + 1;
-	}
-
-	if (length_check == 16 && year_check >= 2010 && year_check <= y+1 && bar1_check == "-" && month_check >= 1 && month_check <=12 && bar2_check == "-" && date_check >=1 && date_check <=31 && millisec_check != "NaN" && lastdate_check >= date_check && month_check == lastmonth_check){
-		$("#order-form_date").css("color","black");
-		var order_wh = parseInt($('input[name="order_wh"]').val());
-		var order_wh2 = $('input[name="order_wh"]').val();
-		var order_wh_check = order_wh - order_wh2;
-		if (order_wh_check === 0 && order_wh > 0 && order_wh < 1000000){
-			$("#order-form_number").css("color","black");
-			var in_wh = 0;
-			var out_wh = 0;
-			var memo = $('input[name="memo1"]').val();
-			alasql('UPDATE stock SET balance = ? WHERE id = ?', [ balance + order_wh, id ]);
-			var trans_id = alasql('SELECT MAX(id) + 1 as id FROM trans')[0].id;
-			alasql('INSERT INTO trans VALUES(?,?,?,?,?,?,?)', [ trans_id, id, date, order_wh, in_wh, out_wh, memo ]);
-			window.location.assign('stock.html?id=' + id);
-		}
-		else {
-			$("#order-form_number").css("color","red");
-			$("#order-form_number").animate({opacity: 0.4},50);
-			$("#order-form_number").animate({opacity: 1.0},50);
-			$("#order-form_number").animate({opacity: 0.4},50);
-			$("#order-form_number").animate({opacity: 1.0},50);
-		}
-	}
-	else{
-		$("#order-form_date").css("color","red");
-		$("#order-form_date").animate({opacity: 0.4},50);
-		$("#order-form_date").animate({opacity: 1.0},50);
-		$("#order-form_date").animate({opacity: 0.4},50);
-		$("#order-form_date").animate({opacity: 1.0},50);
-	}
-});
 //変更
 //入庫処理
 $('#update_in').on('click', function() {

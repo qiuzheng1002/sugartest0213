@@ -13,7 +13,7 @@ for (var i = 0; i < rows.length; i++) {
 		var tr = $('<tr>').appendTo(tbody);
 		tr.append('<td>' + row.trans.date + '</td>');
 		tr.append('<td>' + row.trans.shop + '</td>');
-		tr.append('<td>' + row.trans.num + '</td>');	
+		tr.append('<td>' + numberWithCommas(row.trans.num) + '</td>');	
 		tr.append('<td>' + row.trans.deadline + '</td>');
 		if (state_check == 4){
 			tr.append('<td>' + '<span class="label label-danger">受注済み</span>' + '</td>');
@@ -178,14 +178,6 @@ $('#update_order').on('click', function() {
 	var purpose = 2;
 	var state = 4
 	var trans_id = alasql('SELECT MAX(id) + 1 as id FROM trans')[0].id;
-		console.log(trans_id);
-		console.log(id);
-		console.log(purpose);
-		console.log(state);
-		console.log(date);
-		console.log(deadline);
-		console.log(num);
-		console.log(shop);
 	alasql('INSERT INTO trans VALUES(?,?,?,?,?,?,?,?)', [ trans_id, id, purpose, state, date, deadline, num, shop]);
 	window.location.assign('stock-out.html?id=' + id);
 	}
@@ -195,14 +187,6 @@ $('#update_order').on('click', function() {
 	var purpose = 2;
 	var state = 5
 	var trans_id = alasql('SELECT MAX(id) + 1 as id FROM trans')[0].id;
-		console.log(trans_id);
-		console.log(id);
-		console.log(purpose);
-		console.log(state);
-		console.log(date);
-		console.log(deadline);
-		console.log(num);
-		console.log(shop);
 	alasql('INSERT INTO trans VALUES(?,?,?,?,?,?,?,?)', [ trans_id, id, purpose, state, date, deadline, num, shop]);
 	window.location.assign('stock-out.html?id=' + id);
 	}
@@ -226,15 +210,6 @@ $(function(){
 	$("#selected_date1").attr("value", selected_date);
 	var selected_deadline = y + '-' + m + '-' + d + ' 00:00';
 	$("#selected_deadline1").attr("value", selected_deadline);
-	
-	/*
-	var y_limit = dateObj.getFullYear() + 1;
-	$("#order-form_year").append("<span> (登録可能期間 ： 2010-01-01 00:00 ～ " + y_limit +"-12-31 23:59)</span>");
-	$("#in-form_year").append("<span> (登録可能期間 ： 2010-01-01 00:00 ～ " + y_limit +"-12-31 23:59)</span>");
-	$("#out-form_year").append("<span> (登録可能期間 ： 2010-01-01 00:00 ～ " + y_limit +"-12-31 23:59)</span>");
-	$("#return-form_year").append("<span> (登録可能期間 ： 2010-01-01 00:00 ～ " + y_limit +"-12-31 23:59)</span>");
-	$("#check-form_year").append("<span> (登録可能期間 ： 2010-01-01 00:00 ～ " + y_limit +"-12-31 23:59)</span>");
-*/
 });
 
 

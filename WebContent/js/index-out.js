@@ -43,15 +43,13 @@ var stocks = alasql(sql, [ q3 + '%' ]);
 var tbody = $('#tbody-stocks');
 for (var i = 0; i < stocks.length; i++) {
 	var stock = stocks[i];
-	var tr = $('<tr data-href="stock.html?id=' + stock.stock.id + '"></tr>');
+	var tr = $('<tr data-href="stock-out.html?id=' + stock.stock.id + '"></tr>');
 	tr.append('<td>' + stock.whouse.name + '</td>');
 	tr.append('<td>' + stock.kind.text + '</td>');
 	tr.append('<td>' + stock.item.code + '</td>');
 	tr.append('<td>' + stock.item.maker + '</td>');
 	tr.append('<td>' + stock.item.detail + '</td>');
-	tr.append('<td style="text-align: right;">' + numberWithCommas(stock.item.price) + '</td>');
-	tr.append('<td style="text-align: right;">' + stock.stock.balance + '</td>');
-	tr.append('<td>' + stock.item.unit + '</td>');
+	tr.append('<td style="text-align: right;">' + numberWithCommas(stock.item.price) + '</td>');//未出庫数にする
 	tr.appendTo(tbody);
 }
 

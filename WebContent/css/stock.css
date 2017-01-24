@@ -1,5 +1,9 @@
 @charset "UTF-8";
 
+#zaiko_state_table th, td{
+	text-align: center;
+}
+
 #nyuuko_box{
 	float: left;
 	width: 49%;
@@ -11,9 +15,14 @@
 }
 
 #order_box{
-	clear: both;
+	float: left;
+	width: 49%;
 }
 
+#order_in_box{
+	float: right;
+	width: 49%;
+}
 
 #nyuuko_total{
 	padding: 10px;
@@ -22,5 +31,13 @@
 
 #shukko_total{
 	padding: 10px;
+	text-align: center;
+}
+
+#nyuuko_table th, td{
+	text-align: center;
+}
+
+#shukko_table th, td{
 	text-align: center;
 }

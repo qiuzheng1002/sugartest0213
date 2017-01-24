@@ -246,7 +246,7 @@
 			<div class="panel panel-default">
 				<div class="panel-heading" id="zaiko_shosai">在庫状況
 				</div>
-				<table class="table">
+				<table class="table" id="zaiko_state_table">
 					<thead>
 						<tr>
 							<th>在庫数</th>
@@ -254,7 +254,6 @@
 							<th>安全在庫数</th>
 							<th>過不足</th>
 							<th>ステータス</th>
-							<th></th>
 						</tr>
 					</thead>
 					<tbody id="tbody-zaiko_state"></tbody>
@@ -276,12 +275,12 @@
 <!-- 発注・入庫状況 -->
 			<div class="panel panel-default" id="order_box">
 				<div class="panel-heading" id="nyuuko_shosai">(3) 発注・入庫手配中</div>
-				<table class="table">
+				<table class="table" id="nyuuko_table">
 					<thead>
 						<tr>
-							<th>未発注(不足在庫数)</th>
-							<th>発注済み(入庫待ち数)</th>
-							<th></th>
+							<th style="font-size:16px;">total</th>
+							<th style="font-size:12px; color:gray;">(未発注)</th>
+							<th style="font-size:12px; color:gray;">(発注済み)</th>
 						</tr>
 					</thead>
 					<tbody id="tbody-nyuuko_state"></tbody>
@@ -289,41 +288,20 @@
 			</div>
 
 <!-- 受注・出庫状況 -->
-			<div class="panel panel-default">
+			<div class="panel panel-default" id="order_in_box">
 				<div class="panel-heading" id="shukko_shosai">(4) 受注・出庫手配中</div>
-				<table class="table">
+				<table class="table" id="shukko_table">
 					<thead>
 						<tr>
-							<th>受注済み(納期未回答)</th>
-							<th>納期確定済み</th>
-							<th></th>
+							<th style="font-size:16px;">total</th>
+							<th style="font-size:12px; color:gray;">(受注済み)</th>
+							<th style="font-size:12px; color:gray;">(納期確定済み)</th>
 						</tr>
 					</thead>
 					<tbody id="tbody-shukko_state"></tbody>
 				</table>
 			</div>
 		</div><!-- container -->
-		
-<!-- 変更履歴  削除予定
-		<div class="container">
-			<div class="panel panel-default">
-				<div class="panel-heading">変更履歴</div>
-				<table class="table table-hover" id="rireki_table">
-					<thead>
-						<tr>
-							<th>日時</th>
-							<th>受注数</th>
-							<th>入庫数</th>
-							<th>出庫数</th>
-							<th>取引先</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody id="tbody-transs"></tbody>
-				</table>
-			</div>
-		</div>
--->
 
 <!-- モーダル・ダイアログ -->
 		<div class="modal fade" id="delete_data" tabindex="-1">
