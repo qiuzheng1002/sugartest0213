@@ -2,10 +2,19 @@
 
 #order-form_date{
 	float: left;
-	width: 20%;
+	width: 48%;
 }
 
 #order-form_shop{
-	float: right;
-	width: 20%;
+	width: 48%;
 }
+
+#order-form_number{
+	float: left;
+	width: 48%;
+}
+
+#order-form_deadline{
+	width: 48%;
+}
+

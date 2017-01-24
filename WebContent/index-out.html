@@ -68,46 +68,49 @@
 		</nav>
 
 		<div class="container">
+			<form action="index.html" class="form-inline text-center">
+				<div class="form-group">
+					<label>倉庫</label>
+					<select name="q1" class="form-control">
+						<option value="0">すべて</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label>分類</label>
+					<select name="q2" class="form-control">
+						<option value="0">すべて</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label>コード</label>
+					<input name="q3" type="text" class="form-control" placeholder="前方一致">
+				</div>
+				<button type="submit" class="btn btn-primary">
+					<span class="glyphicon glyphicon-search"></span> 検索
+				</button>
+			</form>
+			<hr>
 
+			<div class="clearfix" style="margin: 10px 0;">
+				<a href="stock-form.html" class="btn btn-sm btn-success pull-right"><span class="glyphicon glyphicon-plus"></span> 新規</a>
+			</div>
 
-			<!-- Abstract -->
-			<table class="table table-hover">
-				<tbody>
+			<table class="table table-hover table-condensed">
+				<thead>
 					<tr>
-						<th>倉庫</th><td id="whouse"></td>
+						<th>倉庫</th>
+						<th>分類</th>
+						<th>コード</th>
+						<th>メーカー</th>
+						<th>詳細</th>
+						<th>金額</th>
+						<th>残量</th>
+						<th>単位</th>
 					</tr>
-					<tr>
-						<th>コード</th><td id="code"></td>
-					</tr>
-					<tr>
-						<th>メーカー</th><td id="maker"></td>
-					</tr>
-					<tr>
-						<th>詳細</th><td id="detail"></td>
-					</tr>
-					<tr>
-						<th>価格</th><td id="price"></td>
-					</tr>
-					<tr>
-						<th>残量</th><td id="balance"></td>
-					</tr>
-					<tr>
-						<th>リードタイム</th><td id="leadtime"><a id="form-emp" class="btn btn-sm btn-primary pull-right"><span class="glyphicon glyphicon-pencil"></span> 編集</a></td>
-					</tr>
-					<tr>
-						<th>許容欠品率</th><td id="lack"></td>
-					</tr>
-				</tbody>
+				</thead>
+				<tbody id="tbody-stocks"></tbody>
 			</table>
-
 		</div>
-
-
-
-
-
-
-		
-		<script src="js/item-info.js"></script>
+		<script src="js/index-out.js"></script>
 	</body>
 </html>

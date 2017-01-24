@@ -28,7 +28,7 @@ for (var i = 0; i < rows.length; i++) {
 	}
 }
 
-//受注データ0件の処理
+// 受注データ0件の処理
 var table_length = syukko_process_table.rows.length;
 if (table_length == 1){
 	var tr = $('<tr>').appendTo(tbody);
@@ -38,6 +38,14 @@ if (table_length == 1){
 	tr.append('<td>-</td>');
 	tr.append('<td>-</td>');
 }
+
+// 取引先入力補助
+var shop_rows = alasql('SELECT DISTINCT shop FROM trans');
+for (var i = 0; i < shop_rows.length; i++) {
+	var shop_row = shop_rows[i];
+	$('<option value = "' + shop_row.shop + '">').appendTo('#shops');
+}
+
 
 //受注データ登録ボタン
 $('#update_order').on('click', function() {
@@ -65,15 +73,17 @@ $('#update_order').on('click', function() {
 	//日付が正しいことをチェック
 	var date_ok = 0;
 	if (length_check == 16 && year_check >= 2010 && year_check <= y+1 && bar1_check == "-" && month_check >= 1 && month_check <=12 && bar2_check == "-" && date_check >=1 && date_check <=31 && millisec_check != "NaN" && lastdate_check >= date_check && month_check == lastmonth_check){
-		$("#order-form_date").css("color","black");
+		$("#order-form_date_span").css("color","black");
+		$("#selected_date1").css("color","black");
 		date_ok = 1;
 	}
 	else{
-		$("#order-form_date").css("color","red");
-		$("#order-form_date").animate({opacity: 0.4},50);
-		$("#order-form_date").animate({opacity: 1.0},50);
-		$("#order-form_date").animate({opacity: 0.4},50);
-		$("#order-form_date").animate({opacity: 1.0},50);
+		$("#selected_date1").css("color","red");
+		$("#order-form_date_span").css("color","red");
+		$("#order-form_date_span").animate({opacity: 0.4},50);
+		$("#order-form_date_span").animate({opacity: 1.0},50);
+		$("#order-form_date_span").animate({opacity: 0.4},50);
+		$("#order-form_date_span").animate({opacity: 1.0},50);
 		date_ok = 0;
 	}
 	
@@ -81,15 +91,17 @@ $('#update_order').on('click', function() {
 	var shop_ok = 0;
 	var shop = $('input[name="shop1"]').val();
 	if (shop == ""){
-		$("#order-form_shop").css("color","red");
-		$("#order-form_shop").animate({opacity: 0.4},50);
-		$("#order-form_shop").animate({opacity: 1.0},50);
-		$("#order-form_shop").animate({opacity: 0.4},50);
-		$("#order-form_shop").animate({opacity: 1.0},50);
+		$("#selected_shop1").css("color","red");
+		$("#order-form_shop_span").css("color","red");
+		$("#order-form_shop_span").animate({opacity: 0.4},50);
+		$("#order-form_shop_span").animate({opacity: 1.0},50);
+		$("#order-form_shop_span").animate({opacity: 0.4},50);
+		$("#order-form_shop_span").animate({opacity: 1.0},50);
 		shop_ok = 0;
 	}
 	else{
-		$("#order-form_shop").css("color","black");
+		$("#selected_shop1").css("color","black");
+		$("#order-form_shop_span").css("color","black");
 		shop_ok = 1;
 	}
 	
@@ -99,15 +111,17 @@ $('#update_order').on('click', function() {
 	var num2 = $('input[name="number1"]').val();
 	var num_check = num - num2; //整数ならばゼロ
 	if (num_check === 0 && num > 0 && num < 1000000){
-		$("#order-form_number").css("color","black");
+		$("#selected_number1").css("color","black");
+		$("#order-form_number_span").css("color","black");
 		num_ok = 1;
 	}
 	else {
-		$("#order-form_number").css("color","red");
-		$("#order-form_number").animate({opacity: 0.4},50);
-		$("#order-form_number").animate({opacity: 1.0},50);
-		$("#order-form_number").animate({opacity: 0.4},50);
-		$("#order-form_number").animate({opacity: 1.0},50);
+		$("#selected_number1").css("color","red");
+		$("#order-form_number_span").css("color","red");
+		$("#order-form_number_span").animate({opacity: 0.4},50);
+		$("#order-form_number_span").animate({opacity: 1.0},50);
+		$("#order-form_number_span").animate({opacity: 0.4},50);
+		$("#order-form_number_span").animate({opacity: 1.0},50);
 		num_ok = 0;
 	}
 	
@@ -115,6 +129,8 @@ $('#update_order').on('click', function() {
 	var deadline_ok = 0;
 	var deadline_checkbox = document.getElementById("deadline_checkbox");
 	if (deadline_checkbox.checked){
+		$("#order-form_deadline_span").css("color","black");
+		$("#selected_deadline1").css("color","black");
 		var deadline = "0000-00-00 00:00"
 		deadline_ok = 2;
 	}
@@ -142,15 +158,17 @@ $('#update_order').on('click', function() {
 		
 		//納期日付が正しいことをチェック
 		if (length_check2 == 16 && year_check2 >= 2010 && year_check2 <= y+1 && bar1_check2 == "-" && month_check2 >= 1 && month_check2 <=12 && bar2_check2 == "-" && date_check2 >=1 && date_check2 <=31 && millisec_check2 != "NaN" && lastdate_check2 >= date_check2 && month_check2 == lastmonth_check2){
-			$("#order-form_deadline").css("color","black");
+			$("#order-form_deadline_span").css("color","black");
+			$("#selected_deadline1").css("color","black");
 			deadline_ok = 1;
 		}
 		else{
-			$("#order-form_deadline").css("color","red");
-			$("#order-form_deadline").animate({opacity: 0.4},50);
-			$("#order-form_deadline").animate({opacity: 1.0},50);
-			$("#order-form_deadline").animate({opacity: 0.4},50);
-			$("#order-form_deadline").animate({opacity: 1.0},50);
+			$("#order-form_deadline_span").css("color","red");
+			$("#selected_deadline1").css("color","red");
+			$("#order-form_deadline_span").animate({opacity: 0.4},50);
+			$("#order-form_deadline_span").animate({opacity: 1.0},50);
+			$("#order-form_deadline_span").animate({opacity: 0.4},50);
+			$("#order-form_deadline_span").animate({opacity: 1.0},50);
 			deadline_ok = 0;
 		}
 	}
@@ -219,3 +237,8 @@ $(function(){
 */
 });
 
+
+//ツールチップ
+$(function () {
+	$('[data-toggle="tooltip"]').tooltip();
+});
