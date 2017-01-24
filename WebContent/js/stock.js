@@ -1,7 +1,7 @@
 // ID取得
 var id = parseInt($.url().param('id'));
 $("input[name=id]").val(id);
-$("#zaiko_shosai").append("<a href = stock-check.html?id=" + id + " style='float:right;'>在庫数の詳細はこちら</a>");
+$("#zaiko_shosai").append("<a href = stock-check.html?id=" + id + " style='float:right;'>データの詳細はこちら</a>");
 $("#nyuuko_shosai").append("<a href = stock-in.html?id=" + id + " style='float:right;'>データの登録・詳細はこちら</a>");
 $("#shukko_shosai").append("<a href = stock-out.html?id=" + id + " style='float:right;'>データの登録・詳細はこちら</a>");
 
