@@ -216,7 +216,6 @@ $(function(){
 $(function(){
 	$(document).on("click","#fix_data_address",function() {
 		var fix_data_address = $(this).parent().parent();
-		console.log(fix_data_address);
 		var tableid = document.getElementById('syukko_process_table');
 		var fd_address_rows = fix_data_address.index(this.rowIndex) + 1;
 		var fix_date = tableid.rows[fd_address_rows].cells[0].innerText;
@@ -235,18 +234,12 @@ $(function(){
 			var fix_state = 4;
 		}
 		var fix_words = "WHERE date = '" + fix_date + "' AND shop = '" + fix_shop + "' AND num = " + fix_num + " AND deadline = '" + fix_deadline + "' AND state = " + fix_state ;
-		var fix_row_id = alasql('SELECT id FROM trans ' + fix_words)[0]; //編集するデータのidを割り出す (条件だけで検索すると、同じ条件が複数あった場合にバグる)
+		var fix_row_id_obj = alasql('SELECT id FROM trans ' + fix_words)[0]; //編集するデータのidを割り出す (条件だけで検索すると、同じ条件が複数あった場合にバグる)
+		var fix_row_id = fix_row_id_obj["id"];
 		fix_data_address = "";
-		window.location.assign('stock-out.html?id=' + fix_row_id);
+		window.location.assign('stock-out-fix.html?id=' + fix_row_id);
 	});
 });
-
-
-
-
-
-
-
 
 //履歴データ削除
 var delete_data_address=""; 
