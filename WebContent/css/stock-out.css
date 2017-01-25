@@ -6,19 +6,23 @@
 
 #order-form_date{
 	float: left;
-	width: 48%;
+	width: 47%;
+	margin-right: 2%;
+	margin-bottom: 2%;
 }
 
 #order-form_shop{
-	width: 48%;
+	width: 47%;
+	margin-bottom: 2%;
 }
 
 #order-form_number{
 	float: left;
-	width: 48%;
+	width: 47%;
+	margin-right: 2%
 }
 
 #order-form_deadline{
-	width: 48%;
+	width: 47%;
 }
 
