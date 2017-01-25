@@ -28,7 +28,7 @@ for (var i = 0; i < rows.length; i++) {
 	tr.append('<td></td>');
 	}
 }
-
+	
 // 受注データ0件の処理
 var table_length = syukko_process_table.rows.length;
 if (table_length == 1){
