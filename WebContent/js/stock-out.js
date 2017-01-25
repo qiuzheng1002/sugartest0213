@@ -16,15 +16,16 @@ for (var i = 0; i < rows.length; i++) {
 		tr.append('<td>' + numberWithCommas(row.trans.num) + '</td>');	
 		tr.append('<td>' + row.trans.deadline + '</td>');
 		if (state_check == 4){
-			tr.append('<td>' + '<span class="label label-danger" style="font-size:86%;">受注済み</span>' + '</td>');
+			tr.append('<td>' + '<button class="btn btn-danger btn-xs">受注済み</button>' + '</td>');
 		}
 		else if (state_check == 5){
-			tr.append('<td>' + '<span class="label label-warning" style="font-size:86%;">納期回答済み</span>' + '</td>');
+			tr.append('<td>' + '<button class="btn btn-warning btn-xs">納期確定済み</button>' + '</td>');
 		}
 		else if (state_check == 6){
-			tr.append('<td>' + '<span class="label label-success" style="font-size:86%;">出庫済み</span>' + '</td>');
+			tr.append('<td>' + '<button class="btn btn-success btn-xs">出庫済み</button>' + '</td>');
 		}
 	tr.append('<td class="text-right"><button type="button" class="btn btn-xs" id="delete_data_address" data-toggle="modal" data-target="#delete_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
+	tr.append('<td></td>');
 	}
 }
 

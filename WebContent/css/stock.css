@@ -1,5 +1,9 @@
 @charset "UTF-8";
 
+.index_css{
+	background-color: #acffff;
+}
+
 #zaiko_state_table th, td{
 	text-align: center;
 }
