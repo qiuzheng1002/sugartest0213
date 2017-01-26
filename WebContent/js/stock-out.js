@@ -11,24 +11,23 @@ for (var i = 0; i < rows.length; i++) {
 	var state_check = row.trans.state;
 	if (purpose_check == 2){
 		var tr = $('<tr>').appendTo(tbody);
-		tr.append('<td>' + row.trans.date + '</td>');
-		tr.append('<td>' + row.trans.shop + '</td>');
-		tr.append('<td>' + numberWithCommas(row.trans.num) + '</td>');	
-		tr.append('<td>' + row.trans.deadline + '</td>');
+		tr.append('<td class="table_date">' + row.trans.date + '</td>');
+		tr.append('<td class="table_shop">' + row.trans.shop + '</td>');
+		tr.append('<td class="table_num">' + numberWithCommas(row.trans.num) + '</td>');	
+		tr.append('<td class="table_deadline">' + row.trans.deadline + '</td>');
 		if (state_check == 4){
-			tr.append('<td>' + '<button class="btn btn-danger btn-xs" id="fix_data_address">受注済み</button>' + '</td>');
+			tr.append('<td class="table_state">' + '<button class="btn btn-danger btn-xs" id="fix_data_address">受注済み</button>' + '</td>');
 		}
 		else if (state_check == 5){
-			tr.append('<td>' + '<button class="btn btn-warning btn-xs" id="fix_data_address">納期確定済み</button>' + '</td>');
+			tr.append('<td class="table_state">' + '<button class="btn btn-warning btn-xs" id="fix_data_address">納期確定済み</button>' + '</td>');
 		}
 		else if (state_check == 6){
-			tr.append('<td>' + '<button class="btn btn-success btn-xs" id="fix_data_address">出庫済み</button>' + '</td>');
+			tr.append('<td class="table_state">' + '<button class="btn btn-success btn-xs" id="fix_data_address">出庫済み</button>' + '</td>');
 		}
-	tr.append('<td class="text-right"><button type="button" class="btn btn-xs" id="delete_data_address" data-toggle="modal" data-target="#delete_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
-	tr.append('<td></td>');
+	tr.append('<td class="table_btn"><button type="button" class="btn btn-xs" id="delete_data_address" data-toggle="modal" data-target="#delete_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
 	}
 }
-	
+
 // 受注データ0件の処理
 var table_length = syukko_process_table.rows.length;
 if (table_length == 1){

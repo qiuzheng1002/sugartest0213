@@ -41,7 +41,7 @@ var out_26 = out_26_sql["SUM(num)"]; //出庫済み
 //在庫数吐き出し
 var warehouse_stock = in_13 - out_26; //倉庫内在庫
 var mikomi_stock = warehouse_stock + in_11 + in_12 - out_24 - out_25; //見込み在庫
-var safe_stock = 17000; //安全在庫数
+var safe_stock = 16000; //安全在庫数
 var diff_stock = mikomi_stock - safe_stock; //見込み在庫 - 安全在庫
 var percent_stock = mikomi_stock / safe_stock * 100; //ステータス(%)
 function floatFormat(number){
@@ -67,7 +67,7 @@ var tr = $('<tr>').appendTo(tbody_zaiko_state);
 	else if (percent_stock_float < 100 && percent_stock_float >= 50){ //在庫50～99：黄
 		tr.append('<td> <div class="progress"><div class="progress-bar progress-bar-warning" role="progressbar" style="width: ' + percent_stock_float + '%;">' + percent_stock_float + '%</div></div> </td>');
 		}
-	else { //在庫～49：赤
+	else if (percent_stock_float < 50 && percent_stock_float >= 0){ //在庫0～49：赤
 		tr.append('<td> <div class="progress"><div class="progress-bar progress-bar-danger" role="progressbar" style="width: ' + percent_stock_float + '%;">' + percent_stock_float + '%</div></div> </td>');
 		}
 	
