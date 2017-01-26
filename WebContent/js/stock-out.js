@@ -29,14 +29,15 @@ for (var i = 0; i < rows.length; i++) {
 }
 
 // 受注データ0件の処理
-var table_length = syukko_process_table.rows.length;
+var table_length = shukko_process_table.rows.length;
 if (table_length == 1){
 	var tr = $('<tr>').appendTo(tbody);
-	tr.append('<td>受注データ未登録</td>');
-	tr.append('<td>-</td>');
-	tr.append('<td>-</td>');
-	tr.append('<td>-</td>');
-	tr.append('<td>-</td>');
+	tr.append('<td class="table_date">受注データなし</td>');
+	tr.append('<td class="table_shop">-</td>');
+	tr.append('<td class="table_num">-</td>');
+	tr.append('<td class="table_deadline">-</td>');
+	tr.append('<td class="table_state">-</td>');	
+	tr.append('<td class="table_btn"></td>');
 }
 
 // 取引先入力補助
@@ -226,10 +227,10 @@ $(function(){
 		if (fix_state_num == "出庫済み"){
 			var fix_state = 6;
 		}
-		else if (delete_state_num == "納期確定済み"){
+		else if (fix_state_num == "納期確定済み"){
 			var fix_state = 5;
 		}
-		else if (delete_state_num == "受注済み"){
+		else if (fix_state_num == "受注済み"){
 			var fix_state = 4;
 		}
 		var fix_words = "WHERE date = '" + fix_date + "' AND shop = '" + fix_shop + "' AND num = " + fix_num + " AND deadline = '" + fix_deadline + "' AND state = " + fix_state ;

@@ -37,12 +37,31 @@ sql += q1 ? 'AND whouse.id = ' + q1 + ' ' : '';
 sql += q2 ? 'AND kind.id = ' + q2 + ' ' : '';
 
 // SQL実行
-var stocks = alasql(sql, [ q3 + '%' ]);
+var stocks_wh = alasql(sql, [ q3 + '%' ]);
+/*
+console.log(stocks_wh);
+var stocks = [];
+for (var i = 0; i < stocks_wh.length; i++) {
+	var stock_wh = stocks_wh[i];
+		stocks.push([stock_wh.whouse.name, stock_wh.kind.text]);
+		
+		
+	tr.append('<td>' + stock_wh.kind.text + '</td>');
+	tr.append('<td>' + stock_wh.item.code + '</td>');
+	tr.append('<td>' + stock_wh.item.maker + '</td>');
+	tr.append('<td>' + stock_wh.item.detail + '</td>');
+	tr.append('<td style="text-align: right;">' + numberWithCommas(stock_wh.item.price) + '</td>');
+	tr.append('<td style="text-align: right;">' + stock_wh.stock.balance + '</td>');
+	tr.append('<td>' + stock_wh.item.unit + '</td>');
+	
+}
+console.log(stocks);
+*/
 
 // HTML作成
 var tbody = $('#tbody-stocks');
-for (var i = 0; i < stocks.length; i++) {
-	var stock = stocks[i];
+for (var i = 0; i < stocks_wh.length; i++) {
+	var stock = stocks_wh[i];
 	var tr = $('<tr data-href="stock.html?id=' + stock.stock.id + '"></tr>');
 	tr.append('<td>' + stock.whouse.name + '</td>');
 	tr.append('<td>' + stock.kind.text + '</td>');

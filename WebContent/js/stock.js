@@ -12,6 +12,8 @@ var sql = 'SELECT * \
 	JOIN item ON item.id = stock.item \
 	JOIN kind ON kind.id = item.kind \
 	WHERE stock.id = ?';
+
+
 var row = alasql(sql, [ id ])[0];
 $('#image').attr('src', 'img/' + row.item.id + '.jpg');
 $('#whouse').text(row.whouse.name);
@@ -39,8 +41,8 @@ var out_26_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose 
 var out_26 = out_26_sql["SUM(num)"]; //出庫済み
 
 //在庫数吐き出し
-var warehouse_stock = in_13 - out_26; //倉庫内在庫
-var mikomi_stock = warehouse_stock + in_11 + in_12 - out_24 - out_25; //見込み在庫
+var warehouse_stock = in_13 - out_26; //在庫数(倉庫内在庫)
+var mikomi_stock = warehouse_stock + in_11 + in_12 - out_24 - out_25; //理論在庫
 var safe_stock = 16000; //安全在庫数
 var diff_stock = mikomi_stock - safe_stock; //見込み在庫 - 安全在庫
 var percent_stock = mikomi_stock / safe_stock * 100; //ステータス(%)
@@ -51,8 +53,8 @@ function floatFormat(number){
 var percent_stock_float = floatFormat(percent_stock); //ステータス(%)四捨五入
 var tbody_zaiko_state = $('#tbody-zaiko_state');
 var tr = $('<tr>').appendTo(tbody_zaiko_state);
-	tr.append('<td>' + numberWithCommas(mikomi_stock) + '</td>');
 	tr.append('<td>' + numberWithCommas(warehouse_stock) + '</td>');
+	tr.append('<td>' + numberWithCommas(mikomi_stock) + '</td>');
 	tr.append('<td>' + numberWithCommas(safe_stock) + '</td>');
 	tr.append('<td>' + numberWithCommas(diff_stock) + '</td>');
 	if (percent_stock_float > 130){ //在庫131%～：赤
@@ -67,8 +69,14 @@ var tr = $('<tr>').appendTo(tbody_zaiko_state);
 	else if (percent_stock_float < 100 && percent_stock_float >= 50){ //在庫50～99：黄
 		tr.append('<td> <div class="progress"><div class="progress-bar progress-bar-warning" role="progressbar" style="width: ' + percent_stock_float + '%;">' + percent_stock_float + '%</div></div> </td>');
 		}
-	else if (percent_stock_float < 50 && percent_stock_float >= 0){ //在庫0～49：赤
+	else if (percent_stock_float < 50 && percent_stock_float >= 10){ //在庫10～49：赤
 		tr.append('<td> <div class="progress"><div class="progress-bar progress-bar-danger" role="progressbar" style="width: ' + percent_stock_float + '%;">' + percent_stock_float + '%</div></div> </td>');
+		}
+	else if (percent_stock_float < 10 && percent_stock_float >= 0){ //在庫0～10：赤(バーの%を見やすくするため)
+		tr.append('<td> <div class="progress"><div class="progress-bar progress-bar-danger" role="progressbar" style="width: 10%;">' + percent_stock_float + '%</div></div> </td>');
+		}
+	else if (percent_stock_float < 0){ //在庫0未満(マイナス)：しましま赤(理論在庫でマイナスになり得る)
+		tr.append('<td> <div class="progress"><div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar" style="width: 100%;">至急発注</div></div> </td>');
 		}
 	
 //入庫済み累積

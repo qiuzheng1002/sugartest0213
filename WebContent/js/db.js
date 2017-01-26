@@ -45,12 +45,18 @@ DB.load = function() {
 	alasql('CREATE TABLE stock(id INT IDENTITY, item INT, whouse INT, balance INT);');
 	var pstock = alasql.promise('SELECT MATRIX * FROM CSV("data/STOCK-STOCK.csv", {headers: true})').then(
 			function(stocks) {
+				console.log(stocks);
+				var whouse_classes = [1,2,3,4];
+				stocks.sort(function(x,y){
+					return whouse_classes.indexOf([x][2]) - whouse_classes.indexOf([y][2]);
+				})
+				console.log(stocks);
 				for (var i = 0; i < stocks.length; i++) {
 					var stock = stocks[i];
 					alasql('INSERT INTO stock VALUES(?,?,?,?);', stock);
 				}
 			});
-
+	
 	// トランザクション
 	alasql('DROP TABLE IF EXISTS trans;');
 	alasql('CREATE TABLE trans(id INT IDENTITY, stock INT, purpose INT, state INT, date DATE, deadline DATE, num INT, shop STRING);');
