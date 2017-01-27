@@ -39,21 +39,6 @@ sql += q2 ? 'AND kind.id = ' + q2 + ' ' : '';
 // SQL実行
 var stocks = alasql(sql, [ q3 + '%' ]);
 
-/* HTML作成
-var tbody = $('#tbody-stocks');
-for (var i = 0; i < stocks.length; i++) {
-	var stock = stocks[i];
-	var tr = $('<tr data-href="stock-out.html?id=' + stock.stock.id + '"></tr>');
-	tr.append('<td>' + stock.whouse.name + '</td>');
-	tr.append('<td class="hidden">' + stock.kind.text + '</td>');
-	tr.append('<td class="hidden">' + stock.item.code + '</td>');
-	tr.append('<td>' + stock.item.maker + '</td>');
-	tr.append('<td>' + stock.item.detail + '</td>');
-	tr.append('<td style="text-align: right;">' + numberWithCommas(stock.item.price) + '</td>');
-	tr.appendTo(tbody);
-}
-*/
-
 //受注・出庫データ読み込み
 var rows = alasql('SELECT * FROM trans \
 	JOIN stock ON stock.id = trans.stock \
@@ -62,6 +47,7 @@ var rows = alasql('SELECT * FROM trans \
 	JOIN kind ON kind.id = item.kind \
 	WHERE trans.purpose = 2 AND trans.state = 4 OR trans.state = 5');
 
+//未出庫リスト作成
 var tbody = $('#tbody-mi_shukko');
 for (var i = 0; i < rows.length; i++) {
 	var row = rows[i];
