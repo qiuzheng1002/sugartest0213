@@ -24,7 +24,7 @@ for (var i = 0; i < rows.length; i++) {
 		else if (state_check == 6){
 			tr.append('<td class="table_state">' + '<button class="btn btn-success btn-xs" id="fix_data_address">出庫済み</button>' + '</td>');
 		}
-	tr.append('<td class="table_btn"><button type="button" class="btn btn-xs" id="delete_data_address" data-toggle="modal" data-target="#delete_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
+	tr.append('<td class="table_btn"><button type="button" class="btn btn-xs" id="delete_data_address" name="' + + '" data-toggle="modal" data-target="#delete_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
 	}
 }
 
@@ -51,13 +51,39 @@ for (var i = 0; i < shop_rows.length; i++) {
 $('#update_order').on('click', function() {
 	//受注日日付チェック準備
 	var date = $('input[name="date1"]').val();
-	var length_check = date.length;
-	var year_check = date.slice(0,4);
-	var bar1_check = date.charAt(4);
-	var month_check = date.slice(5,7);
-	var bar2_check = date.charAt(7);
-	var date_check = date.slice(8,10);
-	var millisec_check = Date.parse(date);
+	var length_check = date.length; //長さ16桁
+	var year_check = date.slice(0,4); //年
+	var bar1_check = date.charAt(4); //ハイフン
+	var month_check = date.slice(5,7); //月
+	var bar2_check = date.charAt(7); //ハイフン
+	var date_check = date.slice(8,10); //日
+	var space_check = date.charAt(10); //スペース
+	var hour10_check = date.charAt(11); //時間10の位
+	var hour01_check = date.charAt(12); //時間1の位
+	var hour_check = 0;
+		if (hour10_check == 0 || hour10_check == 1){
+			if (hour01_check >=0 && hour01_check <=9){hour_check = 1} //00～19時
+			else{hour_check = 0}
+		}
+		else if (hour10_check == 2){
+			if (hour01_check >=0 && hour01_check <=3){hour_check = 1}//20～23時	
+			else{hour_check = 0}
+		}
+		else{
+			hour_check = 0;
+		}
+	var colon_check = date.charAt(13); //コロン
+	var minute_check = 0;
+	var minute10_check = date.charAt(14); //分10の位
+	var minute01_check = date.charAt(15); //分1の位
+		if (minute10_check >= 0 && minute10_check <= 5){ //0～5
+			if (minute01_check >=0 && minute01_check <=9){minute_check = 1} //0～9
+			else{minute_check = 0}
+		}
+		else{
+			minute_check = 0;
+		}
+	var millisec_check = Date.parse(date); //ミリ秒
 	if (month_check == 1 || month_check == 3 || month_check == 5 || month_check == 7 || month_check == 8 || month_check == 10 || month_check == 12){
 		var lastdate_check = 31; //1 3 5 7 8 10 12月の最終日は31日
 		var lastmonth_check = month_check;
@@ -70,9 +96,9 @@ $('#update_order').on('click', function() {
 		var lastmonth_check = lastdate.getMonth() + 1;
 	}
 	
-	//日付が正しいことをチェック
+	//日時が正しいことをチェック
 	var date_ok = 0;
-	if (length_check == 16 && year_check >= 2010 && year_check <= y+1 && bar1_check == "-" && month_check >= 1 && month_check <=12 && bar2_check == "-" && date_check >=1 && date_check <=31 && millisec_check != "NaN" && lastdate_check >= date_check && month_check == lastmonth_check){
+	if (length_check == 16 && year_check >= 2010 && year_check <= y+1 && bar1_check == "-" && month_check >= 1 && month_check <=12 && bar2_check == "-" && date_check >=1 && date_check <=31 && space_check ==" " && hour_check == 1 && colon_check ==":" && minute_check == 1 && millisec_check != "NaN" && lastdate_check >= date_check && month_check == lastmonth_check){
 		$("#order-form_date_span").css("color","black");
 		$("#selected_date1").css("color","black");
 		date_ok = 1;
@@ -90,7 +116,9 @@ $('#update_order').on('click', function() {
 	//取引先が入力されていることをチェック
 	var shop_ok = 0;
 	var shop = $('input[name="shop1"]').val();
-	if (shop == ""){
+	var shop_num = shop.split(/[\uD800-\udbff][\uDC00-\uDFFF]/g).length - 1; //サロゲートペアチェック
+	var shop_length = shop.length - shop_num;
+	if (shop_length == 0 || shop_length > 10){ //0文字 or 11文字以上の場合アウト
 		$("#selected_shop1").css("color","red");
 		$("#order-form_shop_span").css("color","red");
 		$("#order-form_shop_span").animate({opacity: 0.4},50);
@@ -137,12 +165,38 @@ $('#update_order').on('click', function() {
 	else{
 		//納期日付チェック準備
 		var deadline = $('input[name="deadline1"]').val();
-		var length_check2 = deadline.length;
-		var year_check2 = deadline.slice(0,4);
-		var bar1_check2 = deadline.charAt(4);
-		var month_check2 = deadline.slice(5,7);
-		var bar2_check2 = deadline.charAt(7);
-		var date_check2 = deadline.slice(8,10);
+		var length_check2 = deadline.length; //長さ16桁
+		var year_check2 = deadline.slice(0,4); //年
+		var bar1_check2 = deadline.charAt(4); //ハイフン
+		var month_check2 = deadline.slice(5,7); //月
+		var bar2_check2 = deadline.charAt(7); //ハイフン
+		var date_check2 = deadline.slice(8,10); //日
+		var space_check2 = date.charAt(10); //スペース
+		var hour10_check2 = date.charAt(11); //時間10の位
+		var hour01_check2 = date.charAt(12); //時間1の位
+		var hour_check2 = 0;
+			if (hour10_check2 == 0 || hour10_check2 == 1){
+				if (hour01_check2 >=0 && hour01_check2 <=9){hour_check2 = 1} //00～19時
+				else{hour_check2 = 0}
+			}
+			else if (hour10_check2 == 2){
+				if (hour01_check2 >=0 && hour01_check2 <=3){hour_check2 = 1}//20～23時	
+				else{hour_check2 = 0}
+			}
+			else{
+				hour_check2 = 0;
+			}
+		var colon_check2 = date.charAt(13); //コロン
+		var minute_check2 = 0;
+		var minute10_check2 = date.charAt(14); //分10の位
+		var minute01_check2 = date.charAt(15); //分1の位
+			if (minute10_check2 >= 0 && minute10_check2 <= 5){ //0～5
+				if (minute01_check2 >=0 && minute01_check2 <=9){minute_check2 = 1} //0～9
+				else{minute_check2 = 0}
+			}
+			else{
+				minute_check2 = 0;
+			}
 		var millisec_check2 = Date.parse(deadline);
 		if (month_check2 == 1 || month_check2 == 3 || month_check2 == 5 || month_check2 == 7 || month_check2 == 8 || month_check2 == 10 || month_check2 == 12){
 			var lastdate_check2 = 31; //1 3 5 7 8 10 12月の最終日は31日
@@ -157,7 +211,7 @@ $('#update_order').on('click', function() {
 		}
 		
 		//納期日付が正しいことをチェック
-		if (length_check2 == 16 && year_check2 >= 2010 && year_check2 <= y+1 && bar1_check2 == "-" && month_check2 >= 1 && month_check2 <=12 && bar2_check2 == "-" && date_check2 >=1 && date_check2 <=31 && millisec_check2 != "NaN" && lastdate_check2 >= date_check2 && month_check2 == lastmonth_check2){
+		if (length_check2 == 16 && year_check2 >= 2010 && year_check2 <= y+1 && bar1_check2 == "-" && month_check2 >= 1 && month_check2 <=12 && bar2_check2 == "-" && date_check2 >=1 && date_check2 <=31 && space_check2 ==" " && hour_check2 == 1 && colon_check2 ==":" && minute_check2 == 1 && millisec_check2 != "NaN" && lastdate_check2 >= date_check2 && month_check2 == lastmonth_check2){
 			$("#order-form_deadline_span").css("color","black");
 			$("#selected_deadline1").css("color","black");
 			deadline_ok = 1;
@@ -216,7 +270,7 @@ $(function(){
 $(function(){
 	$(document).on("click","#fix_data_address",function() {
 		var fix_data_address = $(this).parent().parent();
-		var tableid = document.getElementById('syukko_process_table');
+		var tableid = document.getElementById('shukko_process_table');
 		var fd_address_rows = fix_data_address.index(this.rowIndex) + 1;
 		var fix_date = tableid.rows[fd_address_rows].cells[0].innerText;
 		var fix_shop = tableid.rows[fd_address_rows].cells[1].innerText;
@@ -250,7 +304,7 @@ $(function(){ //削除箇所を先に指定 (モーダルダイアログでparen
 });
 $(function(){ //SQL内のデータを削除し、結果的にテーブルから削除
 	$(document).on("click","#destroy_data",function() {
-		var tableid = document.getElementById('syukko_process_table');
+		var tableid = document.getElementById('shukko_process_table');
 		var dd_address_rows = delete_data_address.index(this.rowIndex) + 1;
 		var delete_date = tableid.rows[dd_address_rows].cells[0].innerText;
 		var delete_shop = tableid.rows[dd_address_rows].cells[1].innerText;
