@@ -6,13 +6,11 @@ $("#nyuuko_shosai").append("<a href = stock-in.html?id=" + id + " style='float:r
 $("#shukko_shosai").append("<a href = stock-out.html?id=" + id + " style='float:right;'>データの登録・詳細はこちら</a>");
 
 // 商品情報読み込み
-var sql = 'SELECT * \
-	FROM stock \
+var sql = 'SELECT * FROM stock \
 	JOIN whouse ON whouse.id = stock.whouse \
 	JOIN item ON item.id = stock.item \
 	JOIN kind ON kind.id = item.kind \
 	WHERE stock.id = ?';
-
 
 var row = alasql(sql, [ id ])[0];
 $('#image').attr('src', 'img/' + row.item.id + '.jpg');
@@ -102,7 +100,7 @@ tr.append('<td>' + numberWithCommas(out_24) + '</td>');
 tr.append('<td>' + numberWithCommas(out_25) + '</td>');
 
 
-//変更
+//移設後削除
 //入庫処理
 $('#update_in').on('click', function() {
 	var date = $('input[name="date2"]').val();
@@ -155,7 +153,7 @@ $('#update_in').on('click', function() {
 		$("#in-form_date").animate({opacity: 1.0},50);
 	}
 });
-//変更
+//移設後削除
 //出庫処理
 $('#update_out').on('click', function() {
 	var date = $('input[name="date3"]').val();
@@ -209,7 +207,7 @@ $('#update_out').on('click', function() {
 	}
 });
 
-//変更
+//移設後削除
 //返品処理
 $('#update_return').on('click', function() {
 	var date = $('input[name="date4"]').val();
@@ -263,7 +261,7 @@ $('#update_return').on('click', function() {
 		$("#return-form_date").animate({opacity: 1.0},50);
 	}
 });
-//変更
+//移設後削除
 //棚卸し処理
 $('#update_check').on('click', function() {
 	var date = $('input[name="date5"]').val();

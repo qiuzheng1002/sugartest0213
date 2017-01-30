@@ -7,7 +7,6 @@ var rows = alasql('SELECT * FROM trans WHERE stock = ?', [ id ]);
 var tbody = $('#tbody-shukko_process_table');
 for (var i = 0; i < rows.length; i++) {
 	var row = rows[i];
-	console.log(row);
 	var purpose_check = row.trans.purpose;
 	var state_check = row.trans.state;
 	if (purpose_check == 2){
@@ -26,9 +25,16 @@ for (var i = 0; i < rows.length; i++) {
 			tr.append('<td class="table_state">' + '<button class="btn btn-success btn-xs" id="fix_data_address" name="' + row.trans.id + '">出庫済み</button>' + '</td>');
 		}
 	tr.append('<td class="table_btn"><button type="button" class="btn btn-xs" id="delete_data_address" name="' + row.trans.id + '" data-toggle="modal" data-target="#delete_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
-	console.log(row.trans.id);
 	}
 }
+
+//パンくずリスト商品名追加
+var bread_rows = alasql('SELECT * FROM stock \
+		JOIN whouse ON whouse.id = stock.whouse \
+		JOIN item ON item.id = stock.item \
+		WHERE stock.id = ?', [ id ])[0];
+var this_bread_name = "(倉庫) " + bread_rows.whouse.name + "　(品番) " + bread_rows.item.maker + " : " + bread_rows.item.detail;
+$('#this_bread').text(this_bread_name);
 
 // 受注データ0件の処理
 var table_length = shukko_process_table.rows.length;
@@ -266,6 +272,22 @@ $(function(){
 	$("#selected_date1").attr("value", selected_date);
 	var selected_deadline = y + '-' + m + '-' + d + ' 00:00';
 	$("#selected_deadline1").attr("value", selected_deadline);
+});
+
+//チェックボックスクリック(出庫済み)
+$(function(){
+	$(document).on("click","#checkbox_set1_state6",function() {
+	var abc = $("#checkbox_set1_state6:checked");
+	console.log(abc);
+		
+		
+	$('#checkbox_set1_state6').replaceWith('<label class="btn btn-default btn-xs active" id="checkbox_set1_state6"><input type="checkbox" autocomplete="off" checked> 出庫済み</label>');
+	
+	
+	$('<label class="btn btn-default" id="btn_state4"><input type="radio" autocomplete="off"> 受注済み</label>').appendTo("#selected_state");
+	$('<label class="btn btn-default" id="btn_state5"><input type="radio" autocomplete="off"> 納期確定済み</label>').appendTo("#selected_state");
+	$('<label class="btn btn-success active" id="btn_state6"><input type="radio" autocomplete="off" checked> 出庫済み</label>').appendTo("#selected_state");
+	});
 });
 
 //履歴データ編集 

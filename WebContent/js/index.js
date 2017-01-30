@@ -78,3 +78,17 @@ for (var i = 0; i < stocks_wh.length; i++) {
 $('tbody > tr').css('cursor', 'pointer').on('click', function() {
 	window.location = $(this).attr('data-href');
 });
+
+// タブhover
+/*
+$(function(){
+	$("ul.sub").hide();
+	$("ul.menu li").hover(function(){
+		$("ul:not(:animated)",this).slideDown("fast");
+	},
+	function(){
+		$("ul",this).slideup("fast");
+	});
+});
+
+*/

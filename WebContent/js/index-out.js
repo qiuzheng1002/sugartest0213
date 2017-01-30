@@ -26,8 +26,7 @@ var q3 = $.url().param('q3') || '';
 $('input[name="q3"]').val(q3);
 
 // SQLの生成
-var sql = 'SELECT * \
-	FROM stock \
+var sql = 'SELECT * FROM stock \
 	JOIN whouse ON whouse.id = stock.whouse \
 	JOIN item ON item.id = stock.item \
 	JOIN kind ON kind.id = item.kind \

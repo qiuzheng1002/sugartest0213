@@ -69,3 +69,14 @@ td, th{
 	text-align: center;
 }
 
+#update_order{
+	float: right;
+}
+
+#checkbox_set1{
+	float: right;
+}
+
+.onoff{
+	float: right;
+}

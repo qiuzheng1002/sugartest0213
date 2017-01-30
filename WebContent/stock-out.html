@@ -69,11 +69,21 @@
 		</nav>
 
 		<div class="container">
-		商品名を表示させる
+			<div><!-- パンくずリスト -->
+				<ol class="breadcrumb">
+					<li><a href="index.html">在庫情報</a></li>
+					<li><a href="index-out.html">受注・出庫</a></li>
+					<li class="active" id="this_bread"></li>
+				</ol>
+			</div>
+		
+		
+		
+		
 			<div class="panel panel-default">
 				<div class="panel-heading">受注データ登録
 				<!-- データ登録ボタン -->
-					<button type="submit" class="btn btn-primary btm-sm" id="update_order">
+					<button type="submit" class="btn btn-primary btn-xs" id="update_order">
 						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 登録
 					</button>
 				</div>
@@ -97,9 +107,9 @@
 					</div>
 						<!-- 納期入力フォーム -->
 					<div class="input-group" id="order-form_deadline">
-						<span class="input-group-addon" id="order-form_deadline_span">納期</span>
+						<span class="input-group-addon" id="order-form_deadline_span">&nbsp;&nbsp;納期&nbsp;</span>
 						<div>
-						<input type="text" class="form-control" name="deadline1" id="selected_deadline1" value="" placeholder="yyyy-mm-dd hh:mm (半角英数字)"  data-toggle="tooltip" data-placement="bottom" title="2010～2018年の範囲で入力可">
+							<input type="text" class="form-control" name="deadline1" id="selected_deadline1" value="" placeholder="yyyy-mm-dd hh:mm (半角英数字)"  data-toggle="tooltip" data-placement="bottom" title="2010～2018年の範囲で入力可">
 						</div>
 						<span class="input-group-addon"  data-toggle="tooltip" data-placement="bottom" title="納期未定の場合はチェックしてください"><input type="checkbox" id="deadline_checkbox"> 未定</span>
 					</div>
@@ -108,7 +118,21 @@
 			</div>
 
 			<div class="panel panel-default">
-				<div class="panel-heading">受注・出庫状況 (出庫済み非表示にもできる)</div>
+				<div class="panel-heading">受注・出庫状況
+					<div class="btn-group" data-toggle="buttons" id="checkbox_set1">
+						<label class="btn btn-danger btn-xs active" id="checkbox_set1_state4">
+							<input type="checkbox" autocomplete="off" checked> 受注済み
+						</label>
+						<label class="btn btn-warning btn-xs active" id="checkbox_set1_state5">
+							<input type="checkbox" autocomplete="off" checked> 納期確定済み
+						</label>
+						<label class="btn btn-default btn-xs" id="checkbox_set1_state6">
+							<input type="checkbox" autocomplete="off"> 出庫済み
+						</label>
+					</div>
+				<span class="onoff">(on/off)&nbsp;</span>
+				</div>
+				
 				<table class="table table-hover" id="shukko_process_table">
 					<thead class="thead_scroll">
 						<tr>

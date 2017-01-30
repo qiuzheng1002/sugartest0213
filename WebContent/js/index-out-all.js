@@ -52,7 +52,7 @@ var tbody = $('#tbody-mi_shukko');
 for (var i = 0; i < rows.length; i++) {
 	var row = rows[i];
 	var state_check = row.trans.state;
-	var tr = $('<tr data-href="stock-out.html?id=' + row.trans.stock + '"></tr>');
+	var tr = $('<tr data-href="stock-out-fix.html?id=' + row.trans.id + '"></tr>');
 	tr.append('<td>' + row.whouse.name + '</td>');
 	tr.append('<td class="hidden">' + row.kind.text + '</td>');
 	tr.append('<td class="hidden">' + row.item.code + '</td>');
