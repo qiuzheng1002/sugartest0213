@@ -353,20 +353,8 @@ $(function(){
 		dd_address = $(this).parent().parent();
 	});
 });
-//変更履歴：データ削除
-$(function(){
-	$(document).on("click","#destroy_data",function() {
-		var tableid = document.getElementById('rireki_table');
-		var dd_address_rows = dd_address.index(this.rowIndex) + 1;
-		var delete_date = tableid.rows[dd_address_rows].cells[0].innerText;
-		var delete_order_wh = tableid.rows[dd_address_rows].cells[1].innerText;
-		var delete_in_wh = tableid.rows[dd_address_rows].cells[2].innerText;
-		var delete_out_wh = tableid.rows[dd_address_rows].cells[3].innerText;
-		var delete_company = tableid.rows[dd_address_rows].cells[4].innerText;
-		var delete_words = "WHERE date = '" + delete_date + "' AND order_wh = " + delete_order_wh + " AND in_wh = " + delete_in_wh + " AND out_wh = " + delete_out_wh + " AND memo = '" + delete_company + "'";
-		var delete_row = alasql('DELETE FROM trans ' + delete_words)[0];
-		dd_address = "";
-		window.location.assign('stock.html?id=' + id);
-	});
-});
 
+//パンくずリスト商品名追加
+var bread_rows = alasql(sql, [ id ])[0];
+var this_bread_name = "(倉庫) " + bread_rows.whouse.name + "　(品番) " + bread_rows.item.maker + " : " + bread_rows.item.detail;
+$('#this_bread').text(this_bread_name);

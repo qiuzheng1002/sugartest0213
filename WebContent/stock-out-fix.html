@@ -72,20 +72,15 @@
 		
 			<div><!-- パンくずリスト -->
 				<ol class="breadcrumb">
-					<li><a href="index.html">在庫情報</a></li>
-					<li><a href="index-out.html">受注・出庫</a></li>
+					<li><a href="index.html">在庫情報&nbsp;portal</a></li>
+					<li><a href="index-out.html">[商品別]&nbsp;進捗管理・新規登録</a></li>
 					<li id="this_bread_detail"></li>
 					<li class="active" id="this_bread_shop"></li>
 				</ol>
 			</div>
 
 			<div class="panel panel-default">
-				<div class="panel-heading">受注データ編集
-				<!-- データ登録ボタン -->
-					<button type="submit" class="btn btn-primary btn-xs" id="update_order">
-						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 登録
-					</button>
-				</div>
+				<div class="panel-heading">受注データ編集</div>
 				<div class="container">
 					<input type="hidden" name="id">
 					<br><!-- 受注日入力フォーム -->
@@ -93,33 +88,35 @@
 						<span class="input-group-addon" id="order-form_date_span">受注日</span>
 						<input type="text" class="form-control" name="date1" id="selected_date1" value="" placeholder="yyyy-mm-dd hh:mm (半角英数字)" data-toggle="tooltip" data-placement="top" title="2010～2018年の範囲で入力可">
 					</div>
-					<br>
-						<!-- 取引先入力フォーム -->
+					<br><!-- 取引先入力フォーム -->
 					<div class="input-group" id="order-form_shop">
 						<span class="input-group-addon" id="order-form_shop_span">取引先</span>
 						<input type="text" class="form-control" name="shop1" id="selected_shop1" value="" autocomplete="on" list="shops"  data-toggle="tooltip" data-placement="top" title="プルダウンから選択 or 直接入力 (10文字以内)">
 						<datalist id="shops"></datalist>
 					</div>
-					<br>
-						<!-- 受注数入力フォーム -->
+					<br><!-- 受注数入力フォーム -->
 					<div class="input-group" id="order-form_number">
 						<span class="input-group-addon" id="order-form_number_span">受注数</span>
 						<input type="number" class="form-control" name="number1" id="selected_num1" value="" placeholder="半角数字(1～999999)で入力してください">
 					</div>
-					<br>
-						<!-- 納期入力フォーム -->
+					<br><!-- 納期入力フォーム -->
 					<div class="input-group" id="order-form_deadline">
 						<span class="input-group-addon" id="order-form_deadline_span">&nbsp;&nbsp;納期&nbsp;</span>
 						<div>
 							<input type="text" class="form-control" name="deadline1" id="selected_deadline1" value="" placeholder="yyyy-mm-dd hh:mm (半角英数字)"  data-toggle="tooltip" data-placement="bottom" title="2010～2018年の範囲で入力可">
 						</div>
-						<span class="input-group-addon"  data-toggle="tooltip" data-placement="bottom" title="納期未定の場合はチェックしてください"><input type="checkbox" id="deadline_checkbox"> 未定</span>
+						<span class="input-group-addon" id="checkbox_field" data-toggle="tooltip" data-placement="bottom" title="納期未定の場合はチェックしてください"><input type="checkbox" id="deadline_checkbox"> 未定</span>
 					</div>
-					<br>
+					<br><!-- データ登録ボタン -->
+					<div class="input-group" id="order-form_update">
+						<button type="submit" class="btn btn-primary btn-block" id="update_data">
+						<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;&nbsp;更新
+						</button>
+					</div>
 						<!-- ステータス　ラジオボタン -->
 					<div class="input-group" id="order-form_state">
 						<span class="input-group-addon" id="order-form_state_span">ステータス</span>
-						<div class="btn-group" data-toggle="buttons" id="selected_state"><!-- ラジオボタン挿入 --></div>
+						<div class="btn-group" data-toggle="buttons" id="selected_state"><!-- ラジオボタン挿入.js --></div>
 					</div>
 					<br>
 				</div>

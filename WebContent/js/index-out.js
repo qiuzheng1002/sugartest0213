@@ -25,12 +25,15 @@ $('select[name="q2"]').val(q2);
 var q3 = $.url().param('q3') || '';
 $('input[name="q3"]').val(q3);
 
+
+
 // SQLの生成
-var sql = 'SELECT * FROM stock \
-	JOIN whouse ON whouse.id = stock.whouse \
-	JOIN item ON item.id = stock.item \
-	JOIN kind ON kind.id = item.kind \
-	WHERE item.code LIKE ? ';
+var sql = 'SELECT * FROM trans \
+		JOIN stock ON stock.id = trans.stock \
+		JOIN whouse ON whouse.id = stock.whouse \
+		JOIN item ON item.id = stock.item \
+		JOIN kind ON kind.id = item.kind \
+		WHERE item.code LIKE ? ';
 
 sql += q1 ? 'AND whouse.id = ' + q1 + ' ' : '';
 sql += q2 ? 'AND kind.id = ' + q2 + ' ' : '';

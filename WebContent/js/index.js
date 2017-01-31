@@ -38,7 +38,8 @@ sql += q2 ? 'AND kind.id = ' + q2 + ' ' : '';
 
 // SQL実行
 var stocks_wh = alasql(sql, [ q3 + '%' ]);
-/*
+
+/*削除？
 console.log(stocks_wh);
 var stocks = [];
 for (var i = 0; i < stocks_wh.length; i++) {
@@ -80,15 +81,12 @@ $('tbody > tr').css('cursor', 'pointer').on('click', function() {
 });
 
 // タブhover
-/*
 $(function(){
-	$("ul.sub").hide();
-	$("ul.menu li").hover(function(){
+	$("ul.dropdown-menu").hide();
+	$("li.dropdown").hover(function(){
 		$("ul:not(:animated)",this).slideDown("fast");
 	},
 	function(){
-		$("ul",this).slideup("fast");
+		$("ul",this).slideUp("fast");
 	});
 });
-
-*/

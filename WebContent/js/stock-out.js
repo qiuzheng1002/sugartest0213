@@ -10,7 +10,15 @@ for (var i = 0; i < rows.length; i++) {
 	var purpose_check = row.trans.purpose;
 	var state_check = row.trans.state;
 	if (purpose_check == 2){
-		var tr = $('<tr>').appendTo(tbody);
+		if (state_check == 4){
+		var tr = $('<tr class="table_statecheck_4">').appendTo(tbody);
+		}
+		else if (state_check == 5){
+			var tr = $('<tr class="table_statecheck_5">').appendTo(tbody);
+		}
+		else if (state_check == 6){
+			var tr = $('<tr class="table_statecheck_6">').appendTo(tbody);
+		}
 		tr.append('<td class="table_date">' + row.trans.date + '</td>');
 		tr.append('<td class="table_shop">' + row.trans.shop + '</td>');
 		tr.append('<td class="table_num">' + numberWithCommas(row.trans.num) + '</td>');	
@@ -27,6 +35,7 @@ for (var i = 0; i < rows.length; i++) {
 	tr.append('<td class="table_btn"><button type="button" class="btn btn-xs" id="delete_data_address" name="' + row.trans.id + '" data-toggle="modal" data-target="#delete_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
 	}
 }
+$(".table_statecheck_6").css("display","none"); //ページ読み込み時、出庫済みは非表示
 
 //パンくずリスト商品名追加
 var bread_rows = alasql('SELECT * FROM stock \
@@ -168,7 +177,7 @@ $('#update_order').on('click', function() {
 		$("#order-form_deadline_span").css("color","black");
 		$("#selected_deadline1").css("color","black");
 		var deadline = "0000-00-00 00:00"
-		deadline_ok = 2;
+		deadline_ok = 4;
 	}
 	else{
 		//納期日付チェック準備
@@ -222,7 +231,7 @@ $('#update_order').on('click', function() {
 		if (length_check2 == 16 && year_check2 >= 2010 && year_check2 <= y+1 && bar1_check2 == "-" && month_check2 >= 1 && month_check2 <=12 && bar2_check2 == "-" && date_check2 >=1 && date_check2 <=31 && space_check2 ==" " && hour_check2 == 1 && colon_check2 ==":" && minute_check2 == 1 && millisec_check2 != "NaN" && lastdate_check2 >= date_check2 && month_check2 == lastmonth_check2){
 			$("#order-form_deadline_span").css("color","black");
 			$("#selected_deadline1").css("color","black");
-			deadline_ok = 1;
+			deadline_ok = 5;
 		}
 		else{
 			$("#order-form_deadline_span").css("color","red");
@@ -236,7 +245,7 @@ $('#update_order').on('click', function() {
 	}
 	
 	//全条件クリアしていることをチェック (納期未確定)
-	if (date_ok == 1 && shop_ok == 1 && num_ok == 1 && deadline_ok == 2){
+	if (date_ok == 1 && shop_ok == 1 && num_ok == 1 && deadline_ok == 4){
 	var purpose = 2;
 	var state = 4
 	var trans_id = alasql('SELECT MAX(id) + 1 as id FROM trans')[0].id;
@@ -245,7 +254,7 @@ $('#update_order').on('click', function() {
 	}
 	
 	//全条件クリアしていることをチェック (納期確定済み)
-	if (date_ok == 1 && shop_ok == 1 && num_ok == 1 && deadline_ok == 1){
+	if (date_ok == 1 && shop_ok == 1 && num_ok == 1 && deadline_ok == 5){
 	var purpose = 2;
 	var state = 5
 	var trans_id = alasql('SELECT MAX(id) + 1 as id FROM trans')[0].id;
@@ -274,19 +283,51 @@ $(function(){
 	$("#selected_deadline1").attr("value", selected_deadline);
 });
 
+//チェックボックスクリック(受注済み)
+$(function(){
+	$(document).on("click","#checkbox_set1_state4",function() {
+		if ($("[name=checkbox_state4]").prop("checked") == true){	
+			$('#checkbox_set1_state4').replaceWith('<label class="btn btn-default btn-xs" id="checkbox_set1_state4">\
+			<input type="checkbox" name="checkbox_state4" autocomplete="off"> 受注済み</label>')
+			$(".table_statecheck_4").css("display","none");
+		}
+		else{
+			$('#checkbox_set1_state4').replaceWith('<label class="btn btn-danger btn-xs active" id="checkbox_set1_state4">\
+			<input type="checkbox" name="checkbox_state4" autocomplete="off" checked> 受注済み</label>')
+			$(".table_statecheck_4").css("display","");
+		}
+	});
+});
+		
+//チェックボックスクリック(納期確定済み)
+$(function(){
+	$(document).on("click","#checkbox_set1_state5",function() {
+		if ($("[name=checkbox_state5]").prop("checked") == true){	
+			$('#checkbox_set1_state5').replaceWith('<label class="btn btn-default btn-xs" id="checkbox_set1_state5">\
+			<input type="checkbox" name="checkbox_state5" autocomplete="off"> 納期確定済み</label>')
+			$(".table_statecheck_5").css("display","none");
+		}
+		else{
+			$('#checkbox_set1_state5').replaceWith('<label class="btn btn-warning btn-xs active" id="checkbox_set1_state5">\
+			<input type="checkbox" name="checkbox_state5" autocomplete="off" checked> 納期確定済み</label>')
+			$(".table_statecheck_5").css("display","");
+		}
+	});
+});
+
 //チェックボックスクリック(出庫済み)
 $(function(){
 	$(document).on("click","#checkbox_set1_state6",function() {
-	var abc = $("#checkbox_set1_state6:checked");
-	console.log(abc);
-		
-		
-	$('#checkbox_set1_state6').replaceWith('<label class="btn btn-default btn-xs active" id="checkbox_set1_state6"><input type="checkbox" autocomplete="off" checked> 出庫済み</label>');
-	
-	
-	$('<label class="btn btn-default" id="btn_state4"><input type="radio" autocomplete="off"> 受注済み</label>').appendTo("#selected_state");
-	$('<label class="btn btn-default" id="btn_state5"><input type="radio" autocomplete="off"> 納期確定済み</label>').appendTo("#selected_state");
-	$('<label class="btn btn-success active" id="btn_state6"><input type="radio" autocomplete="off" checked> 出庫済み</label>').appendTo("#selected_state");
+		if ($("[name=checkbox_state6]").prop("checked") == true){	
+			$('#checkbox_set1_state6').replaceWith('<label class="btn btn-default btn-xs" id="checkbox_set1_state6">\
+			<input type="checkbox" name="checkbox_state6" autocomplete="off"> 出庫済み</label>')
+			$(".table_statecheck_6").css("display","none");
+		}
+		else{
+			$('#checkbox_set1_state6').replaceWith('<label class="btn btn-success btn-xs active" id="checkbox_set1_state6">\
+			<input type="checkbox" name="checkbox_state6" autocomplete="off" checked> 出庫済み</label>')
+			$(".table_statecheck_6").css("display","");
+		}
 	});
 });
 

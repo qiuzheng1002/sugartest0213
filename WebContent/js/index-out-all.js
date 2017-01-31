@@ -63,10 +63,10 @@ for (var i = 0; i < rows.length; i++) {
 	tr.append('<td>' + numberWithCommas(row.trans.num) + '</td>');
 	tr.append('<td>' + row.trans.deadline + '</td>');
 	if (state_check == 4){
-		tr.append('<td class="table_state">' + '<button class="btn btn-danger btn-xs" id="fix_data_address">受注済み</button>' + '</td>');
+		tr.append('<td class="table_state">' + '<span class="label label-danger" id="fix_data_address" name="' + row.trans.id + '">受注済み</span>' + '</td>');
 	}
 	else if (state_check == 5){
-		tr.append('<td class="table_state">' + '<button class="btn btn-warning btn-xs" id="fix_data_address">納期確定済み</button>' + '</td>');
+		tr.append('<td class="table_state">' + '<span class="label label-warning" id="fix_data_address" name="' + row.trans.id + '">納期確定済み</span>' + '</td>');
 	}
 	tr.appendTo(tbody);
 }
@@ -74,32 +74,10 @@ for (var i = 0; i < rows.length; i++) {
 //履歴データ編集 
 $(function(){
 	$(document).on("click","#fix_data_address",function() {
-		var fix_data_address = $(this).parent().parent();
-		var tableid = document.getElementById('#mi_shukko_table');
-		var fd_address_rows = fix_data_address.index(this.rowIndex) + 1;
-		var fix_date = tableid.rows[fd_address_rows].cells[0].innerText;
-		var fix_shop = tableid.rows[fd_address_rows].cells[1].innerText;
-		var fix_num_comma = tableid.rows[fd_address_rows].cells[2].innerText;
-		var fix_num = parseInt(fix_num_comma.replace(/,/g,""));
-		var fix_deadline = tableid.rows[fd_address_rows].cells[3].innerText;
-		var fix_state_num = tableid.rows[fd_address_rows].cells[4].innerText;
-		if (fix_state_num == "出庫済み"){
-			var fix_state = 6;
-		}
-		else if (fix_state_num == "納期確定済み"){
-			var fix_state = 5;
-		}
-		else if (fix_state_num == "受注済み"){
-			var fix_state = 4;
-		}
-		var fix_words = "WHERE date = '" + fix_date + "' AND shop = '" + fix_shop + "' AND num = " + fix_num + " AND deadline = '" + fix_deadline + "' AND state = " + fix_state ;
-		var fix_row_id_obj = alasql('SELECT id FROM trans ' + fix_words)[0]; //編集するデータのidを割り出す (条件だけで検索すると、同じ条件が複数あった場合にバグる)
-		var fix_row_id = fix_row_id_obj["id"];
-		fix_data_address = "";
+		var fix_row_id = $(this).attr("name");
 		window.location.assign('stock-out-fix.html?id=' + fix_row_id);
 	});
 });
-
 
 // 受注データ0件の処理
 var table_length = mi_shukko_table.rows.length;
