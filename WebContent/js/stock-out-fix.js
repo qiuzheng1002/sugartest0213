@@ -2,11 +2,25 @@
 var id = parseInt($.url().param('id'));
 $("input[name=id]").val(id);
 
+//パンくずリスト：商品名(取引先名)
+var bread_rows = alasql('SELECT * FROM trans \
+		JOIN stock ON stock.id = trans.stock \
+		JOIN whouse ON whouse.id = stock.whouse \
+		JOIN item ON item.id = stock.item \
+		WHERE trans.id = ?', [ id ])[0];
+
+
 //直前のページ調査
 var url = document.referrer;
-
-console.log(url);
-console.log(url.lastIndexOf('index-out-all.html'));
+var url_last18 = url.substr(url.length - 18);
+if (url_last18 == "index-out-all.html"){
+	var last_url = "index-out-all.html"
+}
+else{
+	var last_url = "stock-out.html?id=" + id;
+	$('#this_bread_detail').append("<a href='stock-out.html?id=" + bread_rows.trans.stock + "'>[倉庫] " + bread_rows.whouse.name + "　[品番] " + bread_rows.item.maker + " : " + bread_rows.item.detail + "</a>");
+	$('#this_bread_shop').append("受注データ編集 (" + bread_rows.trans.shop + ")");
+}
 
 // 受注・出庫データ読み込み
 var rows = alasql('SELECT * FROM trans WHERE id = ?', [ id ])[0];
@@ -259,7 +273,7 @@ $('#update_data').on('click', function() {
 	var state = 4
 	var trans_id = alasql('SELECT MAX(id) + 1 as id FROM trans')[0].id;
 	alasql('INSERT INTO trans VALUES(?,?,?,?,?,?,?,?)', [ trans_id, id, purpose, state, date, deadline, num, shop]);
-	window.location.assign('stock-out.html?id=' + id);
+	window.location.assign(last_url);
 	}
 	
 	//全条件クリアしていることをチェック (納期確定済み)
@@ -268,7 +282,7 @@ $('#update_data').on('click', function() {
 	var state = 5
 	var trans_id = alasql('SELECT MAX(id) + 1 as id FROM trans')[0].id;
 	alasql('INSERT INTO trans VALUES(?,?,?,?,?,?,?,?)', [ trans_id, id, purpose, state, date, deadline, num, shop]);
-	window.location.assign('stock-out.html?id=' + id);
+	window.location.assign(last_url);
 	}
 });
 
@@ -291,15 +305,6 @@ $(function(){
 	var selected_deadline = y + '-' + m + '-' + d + ' 00:00';
 	$("#selected_deadline1").attr("value", selected_deadline);
 });
-
-// パンくずリストdetail + shop追加
-var bread_rows = alasql('SELECT * FROM trans \
-		JOIN stock ON stock.id = trans.stock \
-		JOIN whouse ON whouse.id = stock.whouse \
-		JOIN item ON item.id = stock.item \
-		WHERE trans.id = ?', [ id ])[0];
-$('#this_bread_detail').append("<a href='stock-out.html?id=" + bread_rows.trans.stock + "'>[倉庫] " + bread_rows.whouse.name + "　[品番] " + bread_rows.item.maker + " : " + bread_rows.item.detail + "</a>");
-$('#this_bread_shop').append("受注データ編集 (" + bread_rows.trans.shop + ")");
 
 // 取引先入力補助
 var shop_rows = alasql('SELECT DISTINCT shop FROM trans');
