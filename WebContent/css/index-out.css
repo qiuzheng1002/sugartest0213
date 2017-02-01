@@ -3,3 +3,9 @@
 .index-out_css{
 	background-color: #acffff;
 }
+
+span[name="state_id_css"]{
+	font-size: 86%;
+	font-weight: normal;
+	margin-right: 2px;
+}

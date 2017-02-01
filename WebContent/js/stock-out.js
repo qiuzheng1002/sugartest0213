@@ -64,6 +64,26 @@ for (var i = 0; i < shop_rows.length; i++) {
 	$('<option value = "' + shop_row.shop + '">').appendTo('#shops');
 }
 
+//本日の日付を自動入力
+var y = 0;
+$(function(){
+	var time = $.now();
+	var dateObj = new Date(time);
+		y = dateObj.getFullYear();
+	var m = dateObj.getMonth() + 1;
+		if(m<10){m = "0" + m}
+	var d = dateObj.getDate();
+		if(d<10){d = "0" + d}
+	var h = dateObj.getHours();
+		if(h<10){h = "0" + h}
+	var min = dateObj.getMinutes();
+		if(min<10){min = "0" + min}
+	var selected_date = y + '-' + m + '-' + d + ' ' + h + ':' + min;
+	$("#selected_date1").attr("value", selected_date);
+	var selected_deadline = y + '-' + m + '-' + d + ' 00:00';
+	$("#selected_deadline1").attr("value", selected_deadline);
+});
+
 //受注データ登録ボタン
 $('#update_order').on('click', function() {
 	//受注日日付チェック準備
@@ -261,26 +281,6 @@ $('#update_order').on('click', function() {
 	alasql('INSERT INTO trans VALUES(?,?,?,?,?,?,?,?)', [ trans_id, id, purpose, state, date, deadline, num, shop]);
 	window.location.assign('stock-out.html?id=' + id);
 	}
-});
-
-//本日の日付を自動入力
-var y = 0;
-$(function(){
-	var time = $.now();
-	var dateObj = new Date(time);
-		y = dateObj.getFullYear();
-	var m = dateObj.getMonth() + 1;
-		if(m<10){m = "0" + m}
-	var d = dateObj.getDate();
-		if(d<10){d = "0" + d}
-	var h = dateObj.getHours();
-		if(h<10){h = "0" + h}
-	var min = dateObj.getMinutes();
-		if(min<10){min = "0" + min}
-	var selected_date = y + '-' + m + '-' + d + ' ' + h + ':' + min;
-	$("#selected_date1").attr("value", selected_date);
-	var selected_deadline = y + '-' + m + '-' + d + ' 00:00';
-	$("#selected_deadline1").attr("value", selected_deadline);
 });
 
 //チェックボックスクリック(受注済み)

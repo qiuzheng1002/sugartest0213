@@ -9,16 +9,18 @@ var bread_rows = alasql('SELECT * FROM trans \
 		JOIN item ON item.id = stock.item \
 		WHERE trans.id = ?', [ id ])[0];
 
-
-//直前のページ調査
-var url = document.referrer;
+var url = document.referrer; //直前のページ調査
 var url_last18 = url.substr(url.length - 18);
 if (url_last18 == "index-out-all.html"){
 	var last_url = "index-out-all.html"
+	$('#this_bread_tab').append('<a href="index-out-all.html">[受注案件別]&nbsp;進捗管理</a>');
+	$('#this_bread_detail').replaceWith('<li id="this_bread_detail" class="hidden"></li>');
+	$('#this_bread_shop').append("受注データ編集 ( [倉庫] " + bread_rows.whouse.name + "　[品番] " + bread_rows.item.maker + " : " + bread_rows.item.detail+ " )");
 }
 else{
 	var last_url = "stock-out.html?id=" + id;
-	$('#this_bread_detail').append("<a href='stock-out.html?id=" + bread_rows.trans.stock + "'>[倉庫] " + bread_rows.whouse.name + "　[品番] " + bread_rows.item.maker + " : " + bread_rows.item.detail + "</a>");
+	$('#this_bread_tab').append('<a href="index-out.html">[商品別]&nbsp;進捗管理・新規登録</a>');
+	$('#this_bread_detail').replaceWith("<li id='this_bread_detail'><a href='stock-out.html?id=" + bread_rows.trans.stock + "'>[倉庫] " + bread_rows.whouse.name + "　[品番] " + bread_rows.item.maker + " : " + bread_rows.item.detail + "</a></li>");
 	$('#this_bread_shop').append("受注データ編集 (" + bread_rows.trans.shop + ")");
 }
 
@@ -30,36 +32,46 @@ $("#selected_num1").attr("value", rows.trans.num);
 $("#selected_deadline1").attr("value", rows.trans.deadline);
 var state_check = rows.trans.state;
 if (state_check == 4){
-	$('<label class="btn btn-danger active" id="btn_state4"><input type="radio" autocomplete="off" checked> 受注済み</label>').appendTo("#selected_state");
-	$('<label class="btn btn-default" id="btn_state5"><input type="radio" autocomplete="off"> 納期確定済み</label>').appendTo("#selected_state");
-	$('<label class="btn btn-default" id="btn_state6"><input type="radio" autocomplete="off"> 出庫済み</label>').appendTo("#selected_state");
-	/*
-	$('#selected_deadline1').replaceWith('<input type="text" class="form-control" name="deadline1" id="selected_deadline1" placeholder="yyyy-mm-dd hh:mm (半角英数字)" data-toggle="tooltip" data-placement="bottom" title="納期未定により入力不可" disabled>');
-*/
+	$('<label class="btn btn-danger active" id="btn_state4"><input type="radio" name="radio_state_check4" autocomplete="off" checked> 受注済み</label>').appendTo("#selected_state");
+	$('<label class="btn btn-default" id="btn_state5"><input type="radio" name="radio_state_check5" autocomplete="off"> 納期確定済み</label>').appendTo("#selected_state");
+	$('<label class="btn btn-default" id="btn_state6"><input type="radio" name="radio_state_check6" autocomplete="off"> 出庫済み</label>').appendTo("#selected_state");
 }
 else if (state_check == 5){
-	$('<label class="btn btn-default" id="btn_state4"><input type="radio" autocomplete="off"> 受注済み</label>').appendTo("#selected_state");
-	$('<label class="btn btn-warning active" id="btn_state5"><input type="radio" autocomplete="off" checked> 納期確定済み</label>').appendTo("#selected_state");
-	$('<label class="btn btn-default" id="btn_state6"><input type="radio" autocomplete="off"> 出庫済み</label>').appendTo("#selected_state");
+	$('<label class="btn btn-default" id="btn_state4"><input type="radio" name="radio_state_check4" autocomplete="off"> 受注済み</label>').appendTo("#selected_state");
+	$('<label class="btn btn-warning active" id="btn_state5"><input type="radio" name="radio_state_check5" autocomplete="off" checked> 納期確定済み</label>').appendTo("#selected_state");
+	$('<label class="btn btn-default" id="btn_state6"><input type="radio" name="radio_state_check6" autocomplete="off"> 出庫済み</label>').appendTo("#selected_state");
 }
 else if (state_check == 6){
-	$('<label class="btn btn-default" id="btn_state4"><input type="radio" autocomplete="off"> 受注済み</label>').appendTo("#selected_state");
-	$('<label class="btn btn-default" id="btn_state5"><input type="radio" autocomplete="off"> 納期確定済み</label>').appendTo("#selected_state");
-	$('<label class="btn btn-success active" id="btn_state6"><input type="radio" autocomplete="off" checked> 出庫済み</label>').appendTo("#selected_state");
+	$('<label class="btn btn-default" id="btn_state4"><input type="radio" name="radio_state_check4" autocomplete="off"> 受注済み</label>').appendTo("#selected_state");
+	$('<label class="btn btn-default" id="btn_state5"><input type="radio" name="radio_state_check5" autocomplete="off"> 納期確定済み</label>').appendTo("#selected_state");
+	$('<label class="btn btn-success active" id="btn_state6"><input type="radio" name="radio_state_check6" autocomplete="off" checked> 出庫済み</label>').appendTo("#selected_state");
 }
 
+//本日の日付を取得
+var y = 0;
+var date_today = "";
+$(function(){
+	var time = $.now();
+	var dateObj = new Date(time);
+		y = dateObj.getFullYear();
+	var m = dateObj.getMonth() + 1;
+		if(m<10){m = "0" + m}
+	var d = dateObj.getDate();
+		if(d<10){d = "0" + d}
+	date_today = y + '-' + m + '-' + d + ' 00:00';
+});
+
 // 入力禁止フォーム用
-var input_field = document.getElementById("selected_deadline1");
-var check_field = document.getElementById("deadline_checkbox");
+var input_field = document.getElementById("selected_deadline1"); //納期入力欄
 //ラジオボタンクリック(受注済み)
 $(function(){
 	$(document).on("click","#btn_state4",function() {
 	$('#selected_state').empty();
-	$('<label class="btn btn-danger active" id="btn_state4"><input type="radio" autocomplete="off" checked> 受注済み</label>').appendTo("#selected_state");
-	$('<label class="btn btn-default" id="btn_state5"><input type="radio" autocomplete="off"> 納期確定済み</label>').appendTo("#selected_state");
-	$('<label class="btn btn-default" id="btn_state6"><input type="radio" autocomplete="off"> 出庫済み</label>').appendTo("#selected_state");
+	$('<label class="btn btn-danger active" id="btn_state4"><input type="radio" name="radio_state_check4" autocomplete="off" checked> 受注済み</label>').appendTo("#selected_state");
+	$('<label class="btn btn-default" id="btn_state5"><input type="radio" name="radio_state_check5" autocomplete="off"> 納期確定済み</label>').appendTo("#selected_state");
+	$('<label class="btn btn-default" id="btn_state6"><input type="radio" name="radio_state_check6" autocomplete="off"> 出庫済み</label>').appendTo("#selected_state");
+	$('input[name="deadline_checkbox_name"]').prop("checked", true);
 	input_field.disabled = true;
-	check_field.disabled = false;
 	});
 });
 
@@ -67,11 +79,14 @@ $(function(){
 $(function(){
 	$(document).on("click","#btn_state5",function() {
 	$('#selected_state').empty();
-	$('<label class="btn btn-default" id="btn_state4"><input type="radio" autocomplete="off"> 受注済み</label>').appendTo("#selected_state");
-	$('<label class="btn btn-warning active" id="btn_state5"><input type="radio" autocomplete="off" checked> 納期確定済み</label>').appendTo("#selected_state");
-	$('<label class="btn btn-default" id="btn_state6"><input type="radio" autocomplete="off"> 出庫済み</label>').appendTo("#selected_state");
+	$('<label class="btn btn-default" id="btn_state4"><input type="radio" name="radio_state_check4" autocomplete="off"> 受注済み</label>').appendTo("#selected_state");
+	$('<label class="btn btn-warning active" id="btn_state5"><input type="radio" name="radio_state_check5" autocomplete="off" checked> 納期確定済み</label>').appendTo("#selected_state");
+	$('<label class="btn btn-default" id="btn_state6"><input type="radio" name="radio_state_check6" autocomplete="off"> 出庫済み</label>').appendTo("#selected_state");
+	if ($('#selected_deadline1').attr("value") == "0000-00-00 00:00") { //納期がゼロの場合のみ本日の日付を入力
+		$("#selected_deadline1").attr("value", date_today);
+	}
+	$('input[name="deadline_checkbox_name"]').prop("checked", false);
 	input_field.disabled = false;
-	check_field.disabled = true;
 	});
 });
 
@@ -79,15 +94,18 @@ $(function(){
 $(function(){
 	$(document).on("click","#btn_state6",function() {
 	$('#selected_state').empty();
-	$('<label class="btn btn-default" id="btn_state4"><input type="radio" autocomplete="off"> 受注済み</label>').appendTo("#selected_state");
-	$('<label class="btn btn-default" id="btn_state5"><input type="radio" autocomplete="off"> 納期確定済み</label>').appendTo("#selected_state");
-	$('<label class="btn btn-success active" id="btn_state6"><input type="radio" autocomplete="off" checked> 出庫済み</label>').appendTo("#selected_state");
+	$('<label class="btn btn-default" id="btn_state4"><input type="radio" name="radio_state_check4" autocomplete="off"> 受注済み</label>').appendTo("#selected_state");
+	$('<label class="btn btn-default" id="btn_state5"><input type="radio" name="radio_state_check5" autocomplete="off"> 納期確定済み</label>').appendTo("#selected_state");
+	$('<label class="btn btn-success active" id="btn_state6"><input type="radio" name="radio_state_check6" autocomplete="off" checked> 出庫済み</label>').appendTo("#selected_state");
+	if ($('#selected_deadline1').attr("value") == "0000-00-00 00:00") { //納期がゼロの場合のみ本日の日付を入力
+		$("#selected_deadline1").attr("value", date_today);
+	}
+	$('input[name="deadline_checkbox_name"]').prop("checked", false);
 	input_field.disabled = false;
-	check_field.disabled = true;
 	});
 });
 
-//受注データ更新ボタン(未編集)
+//受注データ更新ボタン
 $('#update_data').on('click', function() {
 	//受注日日付チェック準備
 	var date = $('input[name="date1"]').val();
@@ -179,12 +197,12 @@ $('#update_data').on('click', function() {
 	var num2 = $('input[name="number1"]').val();
 	var num_check = num - num2; //整数ならばゼロ
 	if (num_check === 0 && num > 0 && num < 1000000){
-		$("#selected_number1").css("color","black");
+		$("#selected_num1").css("color","black");
 		$("#order-form_number_span").css("color","black");
 		num_ok = 1;
 	}
 	else {
-		$("#selected_number1").css("color","red");
+		$("#selected_num1").css("color","red");
 		$("#order-form_number_span").css("color","red");
 		$("#order-form_number_span").animate({opacity: 0.4},50);
 		$("#order-form_number_span").animate({opacity: 1.0},50);
@@ -193,16 +211,24 @@ $('#update_data').on('click', function() {
 		num_ok = 0;
 	}
 	
-	//納期チェック (チェックボックスの状態)
-	var deadline_ok = 0;
-	var deadline_checkbox = document.getElementById("deadline_checkbox");
-	if (deadline_checkbox.checked){
-		$("#order-form_deadline_span").css("color","black");
-		$("#selected_deadline1").css("color","black");
-		var deadline = "0000-00-00 00:00"
-		deadline_ok = 4;
+	//ラジオボタンの状態チェック
+	var radio_name = "";
+	$(":radio:checked").each(function(){
+		radio_name = $(this).attr("name");
+	})
+		
+	if (radio_name == "radio_state_check4"){ //受注済みボタンチェックの場合
+		//納期チェック (チェックボックスの状態) (念のため)
+		var deadline_ok = 0;
+		var deadline_checkbox = document.getElementById("deadline_checkbox");
+		if (deadline_checkbox.checked){
+			$("#order-form_deadline_span").css("color","black");
+			$("#selected_deadline1").css("color","black");
+			var deadline = "0000-00-00 00:00"
+			deadline_ok = 4;
+		}
 	}
-	else{
+	else if (radio_name == "radio_state_check5" || radio_name == "radio_state_check6"){ //納期確定済み or 出荷済みボタンチェックの場合
 		//納期日付チェック準備
 		var deadline = $('input[name="deadline1"]').val();
 		var length_check2 = deadline.length; //長さ16桁
@@ -254,7 +280,12 @@ $('#update_data').on('click', function() {
 		if (length_check2 == 16 && year_check2 >= 2010 && year_check2 <= y+1 && bar1_check2 == "-" && month_check2 >= 1 && month_check2 <=12 && bar2_check2 == "-" && date_check2 >=1 && date_check2 <=31 && space_check2 ==" " && hour_check2 == 1 && colon_check2 ==":" && minute_check2 == 1 && millisec_check2 != "NaN" && lastdate_check2 >= date_check2 && month_check2 == lastmonth_check2){
 			$("#order-form_deadline_span").css("color","black");
 			$("#selected_deadline1").css("color","black");
-			deadline_ok = 5;
+			if (radio_name == "radio_state_check5"){
+				deadline_ok = 5;
+			}
+			else if(radio_name == "radio_state_check6"){
+				deadline_ok = 6;
+			}
 		}
 		else{
 			$("#order-form_deadline_span").css("color","red");
@@ -267,43 +298,23 @@ $('#update_data').on('click', function() {
 		}
 	}
 	
-	//全条件クリアしていることをチェック (納期未確定)
+	//全条件クリアでデータ更新 (納期未確定)
 	if (date_ok == 1 && shop_ok == 1 && num_ok == 1 && deadline_ok == 4){
-	var purpose = 2;
-	var state = 4
-	var trans_id = alasql('SELECT MAX(id) + 1 as id FROM trans')[0].id;
-	alasql('INSERT INTO trans VALUES(?,?,?,?,?,?,?,?)', [ trans_id, id, purpose, state, date, deadline, num, shop]);
+	alasql("UPDATE trans SET purpose = 2, state = 4, date = '" + date + "', deadline = '" + deadline + "', num = " + num + ", shop = '" + shop + "' WHERE id = " + id);
 	window.location.assign(last_url);
 	}
 	
-	//全条件クリアしていることをチェック (納期確定済み)
+	//全条件クリアでデータ更新 (納期確定済み)
 	if (date_ok == 1 && shop_ok == 1 && num_ok == 1 && deadline_ok == 5){
-	var purpose = 2;
-	var state = 5
-	var trans_id = alasql('SELECT MAX(id) + 1 as id FROM trans')[0].id;
-	alasql('INSERT INTO trans VALUES(?,?,?,?,?,?,?,?)', [ trans_id, id, purpose, state, date, deadline, num, shop]);
+	alasql("UPDATE trans SET purpose = 2, state = 5, date = '" + date + "', deadline = '" + deadline + "', num = " + num + ", shop = '" + shop + "' WHERE id = " + id);
 	window.location.assign(last_url);
 	}
-});
-
-//本日の日付を自動入力
-var y = 0;
-$(function(){
-	var time = $.now();
-	var dateObj = new Date(time);
-		y = dateObj.getFullYear();
-	var m = dateObj.getMonth() + 1;
-		if(m<10){m = "0" + m}
-	var d = dateObj.getDate();
-		if(d<10){d = "0" + d}
-	var h = dateObj.getHours();
-		if(h<10){h = "0" + h}
-	var min = dateObj.getMinutes();
-		if(min<10){min = "0" + min}
-	var selected_date = y + '-' + m + '-' + d + ' ' + h + ':' + min;
-	$("#selected_date1").attr("value", selected_date);
-	var selected_deadline = y + '-' + m + '-' + d + ' 00:00';
-	$("#selected_deadline1").attr("value", selected_deadline);
+	
+	//全条件クリアでデータ更新 (出庫済み)
+	if (date_ok == 1 && shop_ok == 1 && num_ok == 1 && deadline_ok == 6){
+	alasql("UPDATE trans SET purpose = 2, state = 6, date = '" + date + "', deadline = '" + deadline + "', num = " + num + ", shop = '" + shop + "' WHERE id = " + id);
+	window.location.assign(last_url);
+	}
 });
 
 // 取引先入力補助

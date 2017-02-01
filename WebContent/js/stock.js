@@ -153,59 +153,7 @@ $('#update_in').on('click', function() {
 		$("#in-form_date").animate({opacity: 1.0},50);
 	}
 });
-//移設後削除
-//出庫処理
-$('#update_out').on('click', function() {
-	var date = $('input[name="date3"]').val();
-	var length_check = date.length;
-	var year_check = date.slice(0,4);
-	var bar1_check = date.charAt(4);
-	var month_check = date.slice(5,7);
-	var bar2_check = date.charAt(7);
-	var date_check = date.slice(8,10);
-	var millisec_check = Date.parse(date);
-	if (month_check == 1 || month_check == 3 || month_check == 5 || month_check == 7 || month_check == 8 || month_check == 10 || month_check == 12){
-		var lastdate_check = 31;
-		var lastmonth_check = month_check;
-	}
-	else {
-		var lastdate = new Date(date);
-			lastdate.setMonth(lastdate.getMonth() + 1);
-			lastdate.setDate(0);
-		var lastdate_check = lastdate.getDate();
-		var lastmonth_check = lastdate.getMonth() + 1;
-	}
 
-	if (length_check == 16 && year_check >= 2010 && year_check <= y+1 && bar1_check == "-" && month_check >= 1 && month_check <=12 && bar2_check == "-" && date_check >=1 && date_check <=31 && millisec_check != "NaN" && lastdate_check >= date_check && month_check == lastmonth_check){
-		$("#out-form_date").css("color","black");
-		var out_wh = parseInt($('input[name="out_wh"]').val());
-		var out_wh2 = $('input[name="out_wh"]').val();
-		var out_wh_check = out_wh - out_wh2;
-		if (out_wh_check === 0 && out_wh > 0 && out_wh < 1000000){
-			$("#out-form_number").css("color","black");
-			var order_wh = 0;
-			var in_wh = 0;
-			var memo = $('input[name="memo3"]').val();
-			var trans_id = alasql('SELECT MAX(id) + 1 as id FROM trans')[0].id;
-			alasql('INSERT INTO trans VALUES(?,?,?,?,?,?,?)', [ trans_id, id, date, order_wh, in_wh, out_wh, memo ]);
-			window.location.assign('stock.html?id=' + id);
-		}
-		else {
-			$("#out-form_number").css("color","red");
-			$("#out-form_number").animate({opacity: 0.4},50);
-			$("#out-form_number").animate({opacity: 1.0},50);
-			$("#out-form_number").animate({opacity: 0.4},50);
-			$("#out-form_number").animate({opacity: 1.0},50);
-		}
-	}
-	else{
-		$("#out-form_date").css("color","red");
-		$("#out-form_date").animate({opacity: 0.4},50);
-		$("#out-form_date").animate({opacity: 1.0},50);
-		$("#out-form_date").animate({opacity: 0.4},50);
-		$("#out-form_date").animate({opacity: 1.0},50);
-	}
-});
 
 //移設後削除
 //返品処理
@@ -333,17 +281,9 @@ $(function(){
 		if(min<10){min = "0" + min}
 	var select_d = y + '-' + m + '-' + d + ' ' + h + ':' + min;
 	$("#selected_date1").attr("value", select_d);
-	$("#selected_date2").attr("value", select_d);
-	$("#selected_date3").attr("value", select_d);
-	$("#selected_date4").attr("value", select_d);
-	$("#selected_date5").attr("value", select_d);
-	
+
 	var y_limit = dateObj.getFullYear() + 1;
 	$("#order-form_year").append("<span> (登録可能期間 ： 2010-01-01 00:00 ～ " + y_limit +"-12-31 23:59)</span>");
-	$("#in-form_year").append("<span> (登録可能期間 ： 2010-01-01 00:00 ～ " + y_limit +"-12-31 23:59)</span>");
-	$("#out-form_year").append("<span> (登録可能期間 ： 2010-01-01 00:00 ～ " + y_limit +"-12-31 23:59)</span>");
-	$("#return-form_year").append("<span> (登録可能期間 ： 2010-01-01 00:00 ～ " + y_limit +"-12-31 23:59)</span>");
-	$("#check-form_year").append("<span> (登録可能期間 ： 2010-01-01 00:00 ～ " + y_limit +"-12-31 23:59)</span>");
 });
 
 //変更履歴：削除する行の設定

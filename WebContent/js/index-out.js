@@ -25,15 +25,12 @@ $('select[name="q2"]').val(q2);
 var q3 = $.url().param('q3') || '';
 $('input[name="q3"]').val(q3);
 
-
-
 // SQLの生成
-var sql = 'SELECT * FROM trans \
-		JOIN stock ON stock.id = trans.stock \
-		JOIN whouse ON whouse.id = stock.whouse \
-		JOIN item ON item.id = stock.item \
-		JOIN kind ON kind.id = item.kind \
-		WHERE item.code LIKE ? ';
+var sql = 'SELECT * FROM stock \
+	JOIN whouse ON whouse.id = stock.whouse \
+	JOIN item ON item.id = stock.item \
+	JOIN kind ON kind.id = item.kind \
+	WHERE item.code LIKE ? ';
 
 sql += q1 ? 'AND whouse.id = ' + q1 + ' ' : '';
 sql += q2 ? 'AND kind.id = ' + q2 + ' ' : '';
@@ -51,8 +48,24 @@ for (var i = 0; i < stocks.length; i++) {
 	tr.append('<td>' + stock.item.code + '</td>');
 	tr.append('<td>' + stock.item.maker + '</td>');
 	tr.append('<td>' + stock.item.detail + '</td>');
-	tr.append('<td style="text-align: right;">' + numberWithCommas(stock.item.price) + '</td>');//未出庫数にする
+	tr.append('<td id="state_row_id' + stock.stock.id + '"></td>'); //idのみ準備
 	tr.appendTo(tbody);
+}
+
+//ステータス追加(purpose:2, state:ダブりなし)
+var state_rows = alasql('SELECT DISTINCT stock, purpose, state FROM trans JOIN stock ON stock.id = trans.stock WHERE purpose = 2 ORDER BY state');
+for (var i = 0; i < state_rows.length; i++) {
+	var state_row = state_rows[i];
+	var state_id = "#state_row_id" + state_row.stock;
+		if(state_row.state == 4){
+			$('<span class="label label-danger" name="state_id_css">受注済み</span>').appendTo(state_id);
+		}
+		if(state_row.state == 5){
+			$('<span class="label label-warning" name="state_id_css">納期確定済み</span>').appendTo(state_id);
+		}/*
+		if(state_row.state == 6){
+			$('<span class="label label-success" name="state_id_css">出庫済み</span>').appendTo(state_id);
+		}*/
 }
 
 // クリック動作
