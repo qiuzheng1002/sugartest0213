@@ -52,7 +52,6 @@ for (var i = 0; i < stocks.length; i++) {
 	tr.appendTo(tbody);
 }
 
-
 //ステータス追加(purpose:2, state:ダブりなし)
 var state_rows = alasql('SELECT DISTINCT stock, purpose, state FROM trans JOIN stock ON stock.id = trans.stock WHERE purpose = 2 ORDER BY state');
 for (var i = 0; i < state_rows.length; i++) {
@@ -70,14 +69,16 @@ for (var i = 0; i < state_rows.length; i++) {
 }
 
 //受注済み・納期確定済み・出庫済みが何れも無い場合のみ、データなしラベル追加
-/*
-for (var i = 0; i < $('#table_stocks').children.length; i++) {
-	if($(state_id).children().length == 0){
-		$('<span class="label label-default" name="state_id_css6">データなし</span>').appendTo(state_id);
+for (var i = 0; i < stocks.length; i++) {
+	var stock = stocks[i];
+	var label_check_id = "#state_row_id" + stock.stock.id;
+	if($(label_check_id).children().length == 0){
+		$('<span class="label label-default" name="state_id_css6">データなし</span>').appendTo(label_check_id);
 	}
 }
-*/
-$('span[name="state_id_css6"]').parent().parent().css("display","none"); //ページ読み込み時、出庫済みは非表示
+
+//ページ読み込み時、出庫済みは非表示
+$('span[name="state_id_css6"]').parent().parent().css("display","none");
 
 //チェックボックスクリック(全て表示)
 $(function(){
