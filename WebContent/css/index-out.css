@@ -4,8 +4,28 @@
 	background-color: #acffff;
 }
 
-span[name="state_id_css"]{
+span[name="state_id_css4"]{
 	font-size: 86%;
 	font-weight: normal;
 	margin-right: 2px;
+}
+
+span[name="state_id_css5"]{
+	font-size: 86%;
+	font-weight: normal;
+	margin-right: 2px;
+}
+
+span[name="state_id_css6"]{
+	font-size: 86%;
+	font-weight: normal;
+	margin-right: 2px;
+}
+
+#checkbox_set1{
+	float: right;
+}
+
+.onoff{
+	float: right;
 }

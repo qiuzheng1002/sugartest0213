@@ -52,21 +52,48 @@ for (var i = 0; i < stocks.length; i++) {
 	tr.appendTo(tbody);
 }
 
+
 //ステータス追加(purpose:2, state:ダブりなし)
 var state_rows = alasql('SELECT DISTINCT stock, purpose, state FROM trans JOIN stock ON stock.id = trans.stock WHERE purpose = 2 ORDER BY state');
 for (var i = 0; i < state_rows.length; i++) {
 	var state_row = state_rows[i];
 	var state_id = "#state_row_id" + state_row.stock;
 		if(state_row.state == 4){
-			$('<span class="label label-danger" name="state_id_css">受注済み</span>').appendTo(state_id);
+			$('<span class="label label-danger" name="state_id_css4">受注済み</span>').appendTo(state_id);
 		}
 		if(state_row.state == 5){
-			$('<span class="label label-warning" name="state_id_css">納期確定済み</span>').appendTo(state_id);
-		}/*
-		if(state_row.state == 6){
-			$('<span class="label label-success" name="state_id_css">出庫済み</span>').appendTo(state_id);
-		}*/
+			$('<span class="label label-warning" name="state_id_css5">納期確定済み</span>').appendTo(state_id);
+		}
+		if(state_row.state == 6 && $(state_id).children().length == 0){ //受注済み・納期確定済みがない場合のみ、出庫済み追加
+			$('<span class="label label-success" name="state_id_css6">全件出庫済み</span>').appendTo(state_id);
+		}
 }
+
+//受注済み・納期確定済み・出庫済みが何れも無い場合のみ、データなしラベル追加
+/*
+for (var i = 0; i < $('#table_stocks').children.length; i++) {
+	if($(state_id).children().length == 0){
+		$('<span class="label label-default" name="state_id_css6">データなし</span>').appendTo(state_id);
+	}
+}
+*/
+$('span[name="state_id_css6"]').parent().parent().css("display","none"); //ページ読み込み時、出庫済みは非表示
+
+//チェックボックスクリック(全て表示)
+$(function(){
+	$(document).on("click","#checkbox_set1_state6",function() {
+		if ($("[name=checkbox_state6]").prop("checked") == true){	//offにするとき
+			$('#checkbox_set1_state6').replaceWith('<label class="btn btn-default btn-xs" id="checkbox_set1_state6">\
+			<input type="checkbox" name="checkbox_state6" autocomplete="off"> 全て表示</label>')
+			$('span[name="state_id_css6"]').parent().parent().css("display","none");
+		}
+		else{	//onにするとき
+			$('#checkbox_set1_state6').replaceWith('<label class="btn btn-info btn-xs active" id="checkbox_set1_state6">\
+			<input type="checkbox" name="checkbox_state6" autocomplete="off" checked> 全て表示</label>')
+			$('span[name="state_id_css6"]').parent().parent().css("display","");
+		}
+	});
+});
 
 // クリック動作
 $('tbody > tr').css('cursor', 'pointer').on('click', function() {

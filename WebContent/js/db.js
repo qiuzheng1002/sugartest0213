@@ -45,7 +45,6 @@ DB.load = function() {
 	alasql('CREATE TABLE stock(id INT IDENTITY, item INT, whouse INT, wh_stock INT, mi_shukko INT, mi_nyuuko INT);');
 	var pstock = alasql.promise('SELECT MATRIX * FROM CSV("data/STOCK-STOCK.csv", {headers: true})').then(
 			function(stocks) { //倉庫順に並べ替え
-				console.log(stocks);
 				stocks.sort(function(x,y){
 					if (x[2] < y[2]){
 						return -1;
@@ -55,7 +54,6 @@ DB.load = function() {
 					}
 					return 0;
 				})
-				console.log(stocks);
 				for (var i = 0; i < stocks.length; i++) {
 					var stock = stocks[i];
 					alasql('INSERT INTO stock VALUES(?,?,?,?,?,?);', stock);

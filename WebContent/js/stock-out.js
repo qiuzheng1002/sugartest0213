@@ -35,7 +35,6 @@ for (var i = 0; i < rows.length; i++) {
 	tr.append('<td class="table_btn"><button type="button" class="btn btn-xs" id="delete_data_address" name="' + row.trans.id + '" data-toggle="modal" data-target="#delete_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
 	}
 }
-$(".table_statecheck_6").css("display","none"); //ページ読み込み時、出庫済みは非表示
 
 //パンくずリスト商品名追加
 var bread_rows = alasql('SELECT * FROM stock \
@@ -56,6 +55,10 @@ if (table_length == 1){
 	tr.append('<td class="table_state">-</td>');	
 	tr.append('<td class="table_btn"></td>');
 }
+
+setTimeout(function(){
+$(".table_statecheck_6").css("display","none"); //ページ読み込み時、出庫済みは非表示(テーブル数カウント後に非表示)
+},0);
 
 // 取引先入力補助
 var shop_rows = alasql('SELECT DISTINCT shop FROM trans');
@@ -88,54 +91,114 @@ $(function(){
 $('#update_order').on('click', function() {
 	//受注日日付チェック準備
 	var date = $('input[name="date1"]').val();
-	var length_check = date.length; //長さ16桁
-	var year_check = date.slice(0,4); //年
-	var bar1_check = date.charAt(4); //ハイフン
-	var month_check = date.slice(5,7); //月
-	var bar2_check = date.charAt(7); //ハイフン
-	var date_check = date.slice(8,10); //日
-	var space_check = date.charAt(10); //スペース
-	var hour10_check = date.charAt(11); //時間10の位
-	var hour01_check = date.charAt(12); //時間1の位
+
+	//長さ16桁チェック
+	var length_check_sub = date.length;
+	var length_check = 0;
+		if (length_check_sub == 16){length_check = 1}
+
+	//年(2010-2018)
+	var year_check_sub = parseInt(date.slice(0,4));
+	var year_check = 0;
+		if (year_check_sub >= 2010 && year_check_sub <= y+1){year_check = 1}
+
+	//ハイフン
+	var bar1_check_sub = date.charAt(4);
+	var bar1_check = 0;
+		if (bar1_check_sub == "-"){bar1_check = 1}
+
+	//月(1-12)
+	var month_check_sub = parseInt(date.slice(5,7));
+	var month10_check = parseInt(date.charAt(5)); //月10の位
+	var month01_check = parseInt(date.charAt(6)); //月1の位
+	var month_check = 0;
+		if (month_check_sub >= 1 && month_check_sub <= 12){
+			if (month10_check == 0){
+				if (month01_check >= 1 && month01_check <= 9){month_check = 1} //01-09月
+			}
+			else if (month10_check == 1){
+				if (month01_check >= 0 && month01_check <= 2){month_check = 1} //10-12月
+			}
+		}
+
+	//ハイフン
+	var bar2_check_sub = String(date.charAt(7));
+	var bar2_check = 0;
+		if (bar2_check_sub == "-"){bar2_check = 1}
+
+	//日(1-31)
+	var date_check_sub = parseInt(date.slice(8,10));
+	var date10_check = parseInt(date.charAt(8)); //月10の位
+	var date01_check = parseInt(date.charAt(9)); //月1の位
+	var date_check = 0;
+		if (date_check_sub >= 1 && date_check_sub <= 31){
+			if (date10_check == 0){
+				if (date01_check >= 1 && date01_check <= 9){date_check = 1} //01-09日
+			}
+			else if (date10_check == 1 || date10_check == 2){
+				if (date01_check >= 0 && date01_check <= 9){date_check = 1} //10-29日
+			}			
+			else if (date10_check == 3){
+				if (date01_check == 0 || date01_check == 1){date_check = 1} //30,31日
+			}
+		}
+		
+	//スペース
+	var space_check_sub = date.charAt(10);
+	var space_check = 0;
+	if (space_check_sub == " "){space_check = 1}
+	
+	//時間(00-23)
+	var hour_check_sub = parseInt(date.slice(11,13));
+	var hour10_check = parseInt(date.charAt(11)); //時間10の位
+	var hour01_check = parseInt(date.charAt(12)); //時間1の位
 	var hour_check = 0;
-		if (hour10_check == 0 || hour10_check == 1){
-			if (hour01_check >=0 && hour01_check <=9){hour_check = 1} //00～19時
-			else{hour_check = 0}
+		if (hour_check_sub >= 0 && hour_check_sub <= 23){
+			if (hour10_check == 0 || hour10_check == 1){
+				if (hour01_check >=0 && hour01_check <=9){hour_check = 1} //00～19時
+			}
+			else if (hour10_check == 2){
+				if (hour01_check >=0 && hour01_check <=3){hour_check = 1}//20～23時
+			}
 		}
-		else if (hour10_check == 2){
-			if (hour01_check >=0 && hour01_check <=3){hour_check = 1}//20～23時	
-			else{hour_check = 0}
-		}
-		else{
-			hour_check = 0;
-		}
-	var colon_check = date.charAt(13); //コロン
+
+	//コロン
+	var colon_check_sub = date.charAt(13);
+	var colon_check = 0;
+		if (colon_check_sub == ":"){colon_check = 1}	
+	
+	//分(00-59)
+	var minute_check_sub = parseInt(date.slice(14,16));
+	var minute10_check = parseInt(date.charAt(14)); //分10の位
+	var minute01_check = parseInt(date.charAt(15)); //分1の位
 	var minute_check = 0;
-	var minute10_check = date.charAt(14); //分10の位
-	var minute01_check = date.charAt(15); //分1の位
 		if (minute10_check >= 0 && minute10_check <= 5){ //0～5
 			if (minute01_check >=0 && minute01_check <=9){minute_check = 1} //0～9
-			else{minute_check = 0}
 		}
-		else{
-			minute_check = 0;
-		}
-	var millisec_check = Date.parse(date); //ミリ秒
-	if (month_check == 1 || month_check == 3 || month_check == 5 || month_check == 7 || month_check == 8 || month_check == 10 || month_check == 12){
-		var lastdate_check = 31; //1 3 5 7 8 10 12月の最終日は31日
-		var lastmonth_check = month_check;
+
+	//ミリ秒
+	var millisec_check_sub = Date.parse(date);
+	var millisec_check = 0;
+		if (millisec_check_sub != "NaN"){millisec_check = 1}
+	
+	//各月の最終日を越えてないかチェック
+	if (month_check_sub == 1 || month_check_sub == 3 || month_check_sub == 5 || month_check_sub == 7 || month_check_sub == 8 || month_check_sub == 10 || month_check_sub == 12){
+		var lastday = 31; //1 3 5 7 8 10 12月の最終日は31日
+		var lastday_month = month_check_sub;
 	}
 	else { //2 4 6 9 11月の最終日割り出し
-		var lastdate = new Date(date);
-			lastdate.setMonth(lastdate.getMonth() + 1);
-			lastdate.setDate(0);
-		var lastdate_check = lastdate.getDate();
-		var lastmonth_check = lastdate.getMonth() + 1;
+		var lastday_sub = new Date(date);
+			lastday_sub.setMonth(lastday_sub.getMonth() + 1);
+			lastday_sub.setDate(0);
+		var lastday = lastday_sub.getDate(); //最終日
+		var lastday_month = lastday_sub.getMonth() + 1;
 	}
+	var lastday_check = 0;
+		if (lastday >= date_check_sub && lastday_month == month_check_sub){lastday_check = 1}	
 	
 	//日時が正しいことをチェック
 	var date_ok = 0;
-	if (length_check == 16 && year_check >= 2010 && year_check <= y+1 && bar1_check == "-" && month_check >= 1 && month_check <=12 && bar2_check == "-" && date_check >=1 && date_check <=31 && space_check ==" " && hour_check == 1 && colon_check ==":" && minute_check == 1 && millisec_check != "NaN" && lastdate_check >= date_check && month_check == lastmonth_check){
+	if (length_check == 1 && year_check == 1 && bar1_check == 1 && month_check == 1 && bar2_check == 1 && date_check ==1 && space_check == 1 && hour_check == 1 && colon_check == 1 && minute_check == 1 && millisec_check == 1 && lastday_check == 1){
 		$("#order-form_date_span").css("color","black");
 		$("#selected_date1").css("color","black");
 		date_ok = 1;
@@ -192,63 +255,125 @@ $('#update_order').on('click', function() {
 	
 	//納期チェック (チェックボックスの状態)
 	var deadline_ok = 0;
-	var deadline_checkbox = document.getElementById("deadline_checkbox");
-	if (deadline_checkbox.checked){
+	var deadline_checkbox = $("#deadline_checkbox").prop("checked");
+	if (deadline_checkbox == true){
 		$("#order-form_deadline_span").css("color","black");
 		$("#selected_deadline1").css("color","black");
 		var deadline = "0000-00-00 00:00"
 		deadline_ok = 4;
 	}
 	else{
-		//納期日付チェック準備
+		//納期日付チェック
 		var deadline = $('input[name="deadline1"]').val();
-		var length_check2 = deadline.length; //長さ16桁
-		var year_check2 = deadline.slice(0,4); //年
-		var bar1_check2 = deadline.charAt(4); //ハイフン
-		var month_check2 = deadline.slice(5,7); //月
-		var bar2_check2 = deadline.charAt(7); //ハイフン
-		var date_check2 = deadline.slice(8,10); //日
-		var space_check2 = date.charAt(10); //スペース
-		var hour10_check2 = date.charAt(11); //時間10の位
-		var hour01_check2 = date.charAt(12); //時間1の位
+
+		//長さ16桁チェック
+		var length_check_sub2 = deadline.length;
+		var length_check2 = 0;
+			if (length_check_sub2 == 16){length_check2 = 1}
+
+		//年(2010-2018)
+		var year_check_sub2 = parseInt(deadline.slice(0,4));
+		var year_check2 = 0;
+			if (year_check_sub2 >= 2010 && year_check_sub2 <= y+1){year_check2 = 1}
+
+		//ハイフン
+		var bar1_check_sub2 = deadline.charAt(4);
+		var bar1_check2 = 0;
+			if (bar1_check_sub2 == "-"){bar1_check2 = 1}
+
+		//月(1-12)
+		var month_check_sub2 = parseInt(deadline.slice(5,7));
+		var month10_check2 = parseInt(deadline.charAt(5)); //月10の位
+		var month01_check2 = parseInt(deadline.charAt(6)); //月1の位
+		var month_check2 = 0;
+			if (month_check_sub2 >= 1 && month_check_sub2 <= 12){
+				if (month10_check2 == 0){
+					if (month01_check2 >= 1 && month01_check2 <= 9){month_check2 = 1} //01-09月
+				}
+				else if (month10_check2 == 1){
+					if (month01_check2 >= 0 && month01_check2 <= 2){month_check2 = 1} //10-12月
+				}
+			}
+
+		//ハイフン
+		var bar2_check_sub2 = deadline.charAt(7);
+		var bar2_check2 = 0;
+			if (bar2_check_sub2 == "-"){bar2_check2 = 1}
+
+		//日(1-31)
+		var date_check_sub2 = parseInt(deadline.slice(8,10));
+		var date10_check2 = parseInt(deadline.charAt(8)); //月10の位
+		var date01_check2 = parseInt(deadline.charAt(9)); //月1の位
+		var date_check2 = 0;
+			if (date_check_sub2 >= 1 && date_check_sub2 <= 31){
+				if (date10_check2 == 0){
+					if (date01_check2 >= 1 && date01_check2 <= 9){date_check2 = 1} //01-09日
+				}
+				else if (date10_check2 == 1 || date10_check2 == 2){
+					if (date01_check2 >= 0 && date01_check2 <= 9){date_check2 = 1} //10-29日
+				}			
+				else if (date10_check2 == 3){
+					if (date01_check2 == 0 || date01_check2 == 1){date_check2 = 1} //30,31日
+				}
+			}
+			
+		//スペース
+		var space_check_sub2 = deadline.charAt(10);
+		var space_check2 = 0;
+		if (space_check_sub2 == " "){space_check2 = 1}
+		
+		//時間(00-23)
+		var hour_check_sub2 = parseInt(deadline.slice(11,13));
+		var hour10_check2 = parseInt(deadline.charAt(11)); //時間10の位
+		var hour01_check2 = parseInt(deadline.charAt(12)); //時間1の位
 		var hour_check2 = 0;
-			if (hour10_check2 == 0 || hour10_check2 == 1){
-				if (hour01_check2 >=0 && hour01_check2 <=9){hour_check2 = 1} //00～19時
-				else{hour_check2 = 0}
+			if (hour_check_sub2 >= 0 && hour_check_sub2 <= 23){
+				if (hour10_check2 == 0 || hour10_check2 == 1){
+					if (hour01_check2 >=0 && hour01_check2 <=9){hour_check2 = 1} //00～19時
+				}
+				else if (hour10_check2 == 2){
+					if (hour01_check2 >=0 && hour01_check2 <=3){hour_check2 = 1}//20～23時
+				}
 			}
-			else if (hour10_check2 == 2){
-				if (hour01_check2 >=0 && hour01_check2 <=3){hour_check2 = 1}//20～23時	
-				else{hour_check2 = 0}
-			}
-			else{
-				hour_check2 = 0;
-			}
-		var colon_check2 = date.charAt(13); //コロン
+
+		//コロン
+		var colon_check_sub2 = deadline.charAt(13);
+		var colon_check2 = 0;
+			if (colon_check_sub2 == ":"){colon_check2 = 1}	
+		
+		//分(00-59)
+		var minute_check_sub2 = parseInt(deadline.slice(14,16));
+		var minute10_check2 = parseInt(deadline.charAt(14)); //分10の位
+		var minute01_check2 = parseInt(deadline.charAt(15)); //分1の位
 		var minute_check2 = 0;
-		var minute10_check2 = date.charAt(14); //分10の位
-		var minute01_check2 = date.charAt(15); //分1の位
 			if (minute10_check2 >= 0 && minute10_check2 <= 5){ //0～5
 				if (minute01_check2 >=0 && minute01_check2 <=9){minute_check2 = 1} //0～9
-				else{minute_check2 = 0}
 			}
-			else{
-				minute_check2 = 0;
-			}
-		var millisec_check2 = Date.parse(deadline);
-		if (month_check2 == 1 || month_check2 == 3 || month_check2 == 5 || month_check2 == 7 || month_check2 == 8 || month_check2 == 10 || month_check2 == 12){
-			var lastdate_check2 = 31; //1 3 5 7 8 10 12月の最終日は31日
-			var lastmonth_check2 = month_check2;
+
+		//ミリ秒
+		var millisec_check_sub2 = Date.parse(deadline);
+		var millisec_check2 = 0;
+			if (millisec_check_sub2 != "NaN"){millisec_check2 = 1}
+		
+		//各月の最終日を越えてないかチェック
+		if (month_check_sub2 == 1 || month_check_sub2 == 3 || month_check_sub2 == 5 || month_check_sub2 == 7 || month_check_sub2 == 8 || month_check_sub2 == 10 || month_check_sub2 == 12){
+			var lastday2 = 31; //1 3 5 7 8 10 12月の最終日は31日
+			var lastday_month2 = month_check_sub2;
 		}
 		else { //2 4 6 9 11月の最終日割り出し
-			var lastdate2 = new Date(deadline);
-				lastdate2.setMonth(lastdate2.getMonth() + 1);
-				lastdate2.setDate(0);
-			var lastdate_check2 = lastdate2.getDate();
-			var lastmonth_check2 = lastdate2.getMonth() + 1;
+			var lastday_sub2 = new Date(deadline);
+				lastday_sub2.setMonth(lastday_sub2.getMonth() + 1);
+				lastday_sub2.setDate(0);
+			var testdate = new Date(lastday_sub2)
+			var lastday2 = lastday_sub2.getDate(); //最終日
+			var lastday_month2 = lastday_sub2.getMonth() + 1;
 		}
+		var lastday_check2 = 0;
+			if (lastday2 >= date_check_sub2 && lastday_month2 == month_check_sub2){lastday_check2 = 1}	
 		
-		//納期日付が正しいことをチェック
-		if (length_check2 == 16 && year_check2 >= 2010 && year_check2 <= y+1 && bar1_check2 == "-" && month_check2 >= 1 && month_check2 <=12 && bar2_check2 == "-" && date_check2 >=1 && date_check2 <=31 && space_check2 ==" " && hour_check2 == 1 && colon_check2 ==":" && minute_check2 == 1 && millisec_check2 != "NaN" && lastdate_check2 >= date_check2 && month_check2 == lastmonth_check2){
+		//納期日時が正しいことをチェック
+		var deadline_ok = 0;
+		if (length_check2 == 1 && year_check2 == 1 && bar1_check2 == 1 && month_check2 == 1 && bar2_check2 == 1 && date_check2 ==1 && space_check2 == 1 && hour_check2 == 1 && colon_check2 == 1 && minute_check2 == 1 && millisec_check2 == 1 && lastday_check2 == 1){
 			$("#order-form_deadline_span").css("color","black");
 			$("#selected_deadline1").css("color","black");
 			deadline_ok = 5;
