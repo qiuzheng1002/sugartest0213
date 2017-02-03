@@ -1,0 +1,82 @@
+@charset "UTF-8";
+
+.index-out_css{
+	background-color: #acffff;
+}
+
+#order-form_date{
+	float: left;
+	width: 47%;
+	margin-right: 2%;
+	margin-bottom: 2%;
+}
+
+#order-form_shop{
+	width: 47%;
+	margin-bottom: 2%;
+}
+
+#order-form_number{
+	float: left;
+	width: 47%;
+	margin-right: 2%
+}
+
+#order-form_deadline{
+	width: 47%;
+}
+
+thead.thead_scroll, tbody.tbody_scroll{
+	display: block;
+}
+
+tbody.tbody_scroll{
+	overflow-y:scroll;
+	height:260px;
+}
+
+td, th{
+	table-layout:fixed;
+}
+
+.table_date{
+	width: 270px;
+	text-align: center;
+}
+
+.table_shop{
+	width: 270px;
+	text-align: center;
+}
+
+.table_num{
+	width: 120px;
+	text-align: center;
+}
+
+.table_deadline{
+	width: 270px;
+	text-align: center;
+}
+
+.table_state{
+	width: 110px;
+	text-align: center;
+}
+
+.table_btn{
+	width: 80px;
+	text-align: center;
+}
+
+#update_order{
+	float: right;
+}
+
+#checkbox_set1{
+	float: right;
+}
+
+.onoff{
+	float: right;
+}

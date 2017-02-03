@@ -3,7 +3,7 @@
 	<head>
 		<script src="lib/jquery.min.js"></script>
 		<link href="css/bootstrap.min.css" rel="stylesheet" />
-		<link rel="stylesheet" href="css/index-stock-check.css">
+		<link rel="stylesheet" href="css/index-kind-info.css">
 		<script src="lib/bootstrap.min.js"></script>
 		<script src="lib/alasql.min.js"></script>
 		<script src="lib/purl.js"></script>
@@ -72,10 +72,10 @@
 			<div><!-- パンくずリスト -->
 				<ol class="breadcrumb">
 					<li><a href="index.html">在庫情報&nbsp;portal</a></li>
-					<li class="active">分析</li>
+					<li class="active">メンテナンス&nbsp;&ndash;&nbsp;商品区分データ</li>
 				</ol>
 			</div>
-			
+		
 			<form action="index.html" class="form-inline text-center">
 				<div class="form-group">
 					<label>倉庫</label>
@@ -99,6 +99,10 @@
 			</form>
 			<hr>
 
+			<div class="clearfix" style="margin: 10px 0;">
+				<a href="stock-form.html" class="btn btn-sm btn-success pull-right"><span class="glyphicon glyphicon-plus"></span> 新規</a>
+			</div>
+
 			<table class="table table-hover table-condensed">
 				<thead>
 					<tr>
@@ -113,6 +117,6 @@
 				<tbody id="tbody-stocks"></tbody>
 			</table>
 		</div>
-		<script src="js/index-stock-check.js"></script>
+		<script src="js/index-kind-info.js"></script>
 	</body>
 </html>
