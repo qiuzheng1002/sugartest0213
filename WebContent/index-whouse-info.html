@@ -75,48 +75,28 @@
 					<li class="active">メンテナンス&nbsp;&ndash;&nbsp;倉庫データ</li>
 				</ol>
 			</div>
-		
-			<form action="index.html" class="form-inline text-center">
-				<div class="form-group">
-					<label>倉庫</label>
-					<select name="q1" class="form-control">
-						<option value="0">すべて</option>
-					</select>
-				</div>
-				<div class="form-group">
-					<label>分類</label>
-					<select name="q2" class="form-control">
-						<option value="0">すべて</option>
-					</select>
-				</div>
-				<div class="form-group">
-					<label>コード</label>
-					<input name="q3" type="text" class="form-control" placeholder="前方一致">
-				</div>
-				<button type="submit" class="btn btn-primary">
-					<span class="glyphicon glyphicon-search"></span> 検索
-				</button>
-			</form>
-			<hr>
 
 			<div class="clearfix" style="margin: 10px 0;">
-				<a href="stock-form.html" class="btn btn-sm btn-success pull-right"><span class="glyphicon glyphicon-plus"></span> 新規</a>
+				<button class="btn btn-sm btn-success pull-right" onclick="add_data();">
+					<span class="glyphicon glyphicon-ok"></span>&nbsp;新規登録</button>
+			</div>
+			
+			<div class="panel panel-default">
+			<div class="panel-heading">登録済み&nbsp;倉庫データ</div>
+				<table class="table table-hover table-condensed" id="index_whouse_table">
+					<thead>
+						<tr>
+							<th class="table-data">Data&nbsp;No.</th>
+							<th>倉庫名</th>
+							<th>住所</th>
+							<th>電話番号</th>
+						</tr>
+					</thead>
+					<tbody id="tbody-whouse"></tbody>
+				</table>
 			</div>
 
-			<table class="table table-hover table-condensed">
-				<thead>
-					<tr>
-						<th>倉庫</th>
-						<th>分類</th>
-						<th>コード</th>
-						<th>メーカー</th>
-						<th>品番</th>
-						<th>未出庫</th>
-					</tr>
-				</thead>
-				<tbody id="tbody-stocks"></tbody>
-			</table>
-		</div>
+		</div><!-- container -->
 		<script src="js/index-whouse-info.js"></script>
 	</body>
 </html>

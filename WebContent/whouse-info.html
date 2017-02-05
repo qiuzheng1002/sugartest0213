@@ -72,51 +72,48 @@
 			<div><!-- パンくずリスト -->
 				<ol class="breadcrumb">
 					<li><a href="index.html">在庫情報&nbsp;portal</a></li>
-					<li class="active">メンテナンス&nbsp;&ndash;&nbsp;倉庫データ</li>
+					<li><a href = "index-whouse-info.html">メンテナンス&nbsp;&ndash;&nbsp;倉庫データ</a></li>
+					<li class="active" id="this_bread"></li>
 				</ol>
 			</div>
 		
-			<form action="index.html" class="form-inline text-center">
-				<div class="form-group">
-					<label>倉庫</label>
-					<select name="q1" class="form-control">
-						<option value="0">すべて</option>
-					</select>
+			<div class="panel panel-default">
+				<div class="panel-heading">商品区分データ
+				<!-- データ削除ボタン -->
+					<button type="submit" class="btn btn-danger btn-xs" id="delete_whouse">
+						<span class="glyphicon glyphicon-trash" aria-hidden="true"></span> 削除
+					</button>
+				<!-- データ登録ボタン -->
+					<button type="submit" class="btn btn-primary btn-xs" id="update_whouse">
+						<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> 保存
+					</button>
 				</div>
-				<div class="form-group">
-					<label>分類</label>
-					<select name="q2" class="form-control">
-						<option value="0">すべて</option>
-					</select>
+				<div class="container">
+					<br><!-- id入力フォーム(常に自動入力 = 入力禁止) -->
+					<div class="input-group" id="whouse_data_id" data-toggle="tooltip" data-placement="top" title="自動入力となっております">
+						<span class="input-group-addon" id="whouse_data_id_span">Data&nbsp;No.</span>
+						<input type="number" class="form-control" id="whouse_data_id_input" value="" disabled>
+					</div>
+					<br><!-- 倉庫名入力フォーム -->
+					<div class="input-group" id="whouse_data_text">
+						<span class="input-group-addon" id="whouse_data_text_span">倉庫名</span>
+						<input type="text" class="form-control" id="whouse_data_text_input" name="whouse_data_text_name" value="" placeholder="登録する倉庫名を入力してください" data-toggle="tooltip" data-placement="bottom" title="10文字以内で登録してください">
+					</div>
+					<br><!-- 住所入力フォーム -->
+					<div class="input-group" id="whouse_data_addr">
+						<span class="input-group-addon" id="whouse_data_addr_span">&nbsp;&nbsp;住所&nbsp;</span>
+						<input type="text" class="form-control" id="whouse_data_addr_input" name="whouse_data_addr_name" value="" placeholder="登録する住所を入力してください" data-toggle="tooltip" data-placement="bottom" title="30文字以内で登録してください">
+					</div>
+					<br><!-- 電話番号入力フォーム -->
+					<div class="input-group" id="whouse_data_tel">
+						<span class="input-group-addon" id="whouse_data_tel_span">電話番号</span>
+						<input type="text" class="form-control" id="whouse_data_tel_input" name="whouse_data_tel_name" value="" placeholder="登録する電話番号を入力してください" data-toggle="tooltip" data-placement="bottom" title="15文字以内で登録してください">
+					</div>
+					<br>
 				</div>
-				<div class="form-group">
-					<label>コード</label>
-					<input name="q3" type="text" class="form-control" placeholder="前方一致">
-				</div>
-				<button type="submit" class="btn btn-primary">
-					<span class="glyphicon glyphicon-search"></span> 検索
-				</button>
-			</form>
-			<hr>
-
-			<div class="clearfix" style="margin: 10px 0;">
-				<a href="stock-form.html" class="btn btn-sm btn-success pull-right"><span class="glyphicon glyphicon-plus"></span> 新規</a>
 			</div>
-
-			<table class="table table-hover table-condensed">
-				<thead>
-					<tr>
-						<th>倉庫</th>
-						<th>分類</th>
-						<th>コード</th>
-						<th>メーカー</th>
-						<th>品番</th>
-						<th>未出庫</th>
-					</tr>
-				</thead>
-				<tbody id="tbody-stocks"></tbody>
-			</table>
-		</div>
+			
+		</div><!-- container -->
 		<script src="js/whouse-info.js"></script>
 	</body>
 </html>

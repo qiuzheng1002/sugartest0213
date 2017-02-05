@@ -79,6 +79,10 @@
 
 			<div class="panel panel-default">
 				<div class="panel-heading">商品区分データ
+				<!-- データ削除ボタン -->
+					<button type="submit" class="btn btn-danger btn-xs" id="delete_kind">
+						<span class="glyphicon glyphicon-trash" aria-hidden="true"></span> 削除
+					</button>
 				<!-- データ登録ボタン -->
 					<button type="submit" class="btn btn-primary btn-xs" id="update_kind">
 						<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> 保存
@@ -86,19 +90,20 @@
 				</div>
 				<div class="container">
 					<br><!-- id入力フォーム(常に自動入力 = 入力禁止) -->
-					<div class="input-group" id="kind_data_id">
+					<div class="input-group" id="kind_data_id" data-toggle="tooltip" data-placement="top" title="自動入力となっております">
 						<span class="input-group-addon" id="kind_data_id_span">Data&nbsp;No.</span>
-						<input type="number" class="form-control" id="kind_data_id_input" value="" data-toggle="tooltip" data-placement="top" title="自動入力です" disabled>
+						<input type="number" class="form-control" id="kind_data_id_input" value="" disabled>
 					</div>
 					<br><!-- 商品区分入力フォーム -->
 					<div class="input-group" id="kind_data_text">
 						<span class="input-group-addon" id="kind_data_text_span">商品区分</span>
-						<input type="text" class="form-control" id="kind_data_text_input" value="" placeholder="登録する商品区分を入力してください" data-toggle="tooltip" data-placement="bottom" title="10文字以内で登録してください">
+						<input type="text" class="form-control" id="kind_data_text_input" name="kind_data_text_name" value="" placeholder="登録する商品区分を入力してください" data-toggle="tooltip" data-placement="bottom" title="10文字以内で登録してください">
 					</div>
 					<br>
 				</div>
 			</div>
 		</div><!-- container -->
+		
 		<script src="js/kind-info.js"></script>
 	</body>
 </html>

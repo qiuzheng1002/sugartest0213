@@ -66,49 +66,83 @@
 					</ul>
 				</div><!-- /.navbar-collapse -->
 			</div><!-- /.container-fluid -->
-		</nav>
-
-		<div class="container">
-
-
-			<!-- Abstract -->
-			<table class="table table-hover">
-				<tbody>
-					<tr>
-						<th>倉庫</th><td id="whouse"></td>
-					</tr>
-					<tr>
-						<th>コード</th><td id="code"></td>
-					</tr>
-					<tr>
-						<th>メーカー</th><td id="maker"></td>
-					</tr>
-					<tr>
-						<th>詳細</th><td id="detail"></td>
-					</tr>
-					<tr>
-						<th>価格</th><td id="price"></td>
-					</tr>
-					<tr>
-						<th>残量</th><td id="balance"></td>
-					</tr>
-					<tr>
-						<th>リードタイム</th><td id="leadtime"><a id="form-emp" class="btn btn-sm btn-primary pull-right"><span class="glyphicon glyphicon-pencil"></span> 編集</a></td>
-					</tr>
-					<tr>
-						<th>許容欠品率</th><td id="lack"></td>
-					</tr>
-				</tbody>
-			</table>
-
-		</div>
-
-
-
-
-
-
+		</nav>		
 		
+		<div class="container">
+			<div><!-- パンくずリスト -->
+				<ol class="breadcrumb">
+					<li><a href="index.html">在庫情報&nbsp;portal</a></li>
+					<li><a href = "index-item-info.html">メンテナンス&nbsp;&ndash;&nbsp;商品データ</a></li>
+					<li class="active" id="this_bread"></li>
+				</ol>
+			</div>
+		
+			<div class="panel panel-default">
+				<div class="panel-heading">商品区分データ
+				<!-- データ削除ボタン -->
+					<button type="submit" class="btn btn-danger btn-xs" id="delete_item">
+						<span class="glyphicon glyphicon-trash" aria-hidden="true"></span> 削除
+					</button>
+				<!-- データ登録ボタン -->
+					<button type="submit" class="btn btn-primary btn-xs" id="update_item">
+						<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> 保存
+					</button>
+				</div>
+				<div class="container">
+					<br><!-- id入力フォーム(常に自動入力 = 入力禁止) -->
+					<div class="input-group" id="item_data_id" data-toggle="tooltip" data-placement="top" title="自動入力となっております">
+						<span class="input-group-addon" id="item_data_id_span">Data&nbsp;No.</span>
+						<input type="number" class="form-control" id="item_data_id_input" value="" disabled>
+					</div>
+					<br><!-- 商品コード入力フォーム -->
+					<div class="input-group" id="item_data_code">
+						<span class="input-group-addon" id="item_data_code_span">商品コード</span>
+						<input type="text" class="form-control" id="item_data_code_input" name="item_data_code_name" value="" placeholder="登録する商品コードを入力してください" data-toggle="tooltip" data-placement="bottom" title="5文字で登録してください">
+					</div>
+					<br><!-- 商品区分選択フォーム -->
+					<div class="input-group" id="item_data_kind">
+						<span class="input-group-addon" id="item_data_kind_span">商品区分</span>
+						<select class="form-control" id="item_data_kind_input" name="item_data_kind_name" data-toggle="tooltip" data-placement="bottom" title="プルダウンから選択してください"></select>
+					</div>
+					<br><!-- メーカー入力フォーム -->
+					<div class="input-group" id="item_data_maker">
+						<span class="input-group-addon" id="item_data_maker_span">メーカー</span>
+						<input type="text" class="form-control" id="item_data_maker_input" name="item_data_maker_name" value="" autocomplete="on" list="makers" placeholder="登録するメーカーを入力してください" data-toggle="tooltip" data-placement="bottom" title="プルダウン選択 or 直接入力(20文字)">
+						<datalist id="makers"></datalist>
+					</div>
+					<br><!-- 品番入力フォーム -->
+					<div class="input-group" id="item_data_detail">
+						<span class="input-group-addon" id="item_data_detail_span">&nbsp;&nbsp;品番&nbsp;</span>
+						<input type="text" class="form-control" id="item_data_detail_input" name="item_data_detail_name" value="" placeholder="登録する品番を入力してください" data-toggle="tooltip" data-placement="bottom" title="30文字以内で登録してください">
+					</div>
+					<br><!-- 単価入力フォーム -->
+					<div class="input-group" id="item_data_price">
+						<span class="input-group-addon" id="item_data_price_span">&nbsp;&nbsp;単価(円)</span>
+						<input type="number" class="form-control" id="item_data_price_input" name="item_data_price_name" value="" placeholder="登録する単価(円)を入力してください" data-toggle="tooltip" data-placement="bottom" title="7桁以内で登録してください">
+					</div>
+					<br><!-- リードタイム入力フォーム -->
+					<div class="input-group" id="item_data_leadtime">
+						<span class="input-group-addon" id="item_data_leadtime_span">リードタイム(日)</span>
+						<input type="number" class="form-control" id="item_data_leadtime_input" name="item_data_leadtime_name" value="" placeholder="登録するリードタイム(日)を入力してください" data-toggle="tooltip" data-placement="bottom" title="3桁以内で登録してください">
+					</div>
+					<br><!-- 許容欠品率入力フォーム -->
+					<div class="input-group" id="item_data_lack">
+						<span class="input-group-addon" id="item_data_lack_span">許容欠品率(%)</span>
+						<select class="form-control" id="item_data_lack_input" name="item_data_lack_name" data-toggle="tooltip" data-placement="bottom" title="プルダウンから選択してください">
+							<option value="0.01">0.01</option>
+							<option value="0.1">0.1</option>
+							<option value="0.5">0.5</option>
+							<option value="1">1</option>
+							<option value="2.5">2.5</option>
+							<option value="5">5</option>
+							<option value="10">10</option>
+						</select>
+					</div>
+					<br>
+				</div>
+			</div>
+			
+		</div><!-- container -->
 		<script src="js/item-info.js"></script>
 	</body>
 </html>

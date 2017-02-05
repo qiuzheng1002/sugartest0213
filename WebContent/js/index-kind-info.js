@@ -12,6 +12,14 @@ for (var i = 0; i < kinds.length; i++) {
 	tr.appendTo(tbody);
 }
 
+//登録データ0件の処理
+var table_length = index_kind_table.rows.length;
+if (table_length == 1){
+	var tr = $('<tr data-href="index-kind-info.html">').appendTo(tbody);
+	tr.append('<td>登録データなし</td>');
+	tr.append('<td>-</td>');
+}
+
 // 新規登録ボタン
 function add_data(){
 	window.location.assign('kind-info.html');

@@ -3,3 +3,16 @@
 .index-whouse-info_css{
 	background-color: #acffff;
 }
+
+#kind_data_id{
+	width: 97%;
+}
+
+#kind_data_text{
+	width: 97%;
+}
+
+#update_kind, #delete_kind, #delete_kind_not{
+	float: right;
+	margin-right: 3px;
+}

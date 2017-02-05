@@ -3,3 +3,24 @@
 .item-info_css{
 	background-color: #acffff;
 }
+
+#whouse_data_id{
+	width: 97%;
+}
+
+#whouse_data_text{
+	width: 97%;
+}
+
+#whouse_data_addr{
+	width: 97%;
+}
+
+#whouse_data_tel{
+	width: 97%;
+}
+
+#update_whouse, #delete_whouse, #delete_whouse_not{
+	float: right;
+	margin-right: 3px;
+}
