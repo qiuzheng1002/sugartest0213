@@ -14,10 +14,7 @@ var sql = 'SELECT * FROM stock \
 
 var row = alasql(sql, [ id ])[0];
 $('#image').attr('src', 'img/' + row.item.id + '.jpg');
-$('#whouse').text(row.whouse.name);
 $('#code').text(row.item.code);
-$('#maker').text(row.item.maker);
-$('#detail').text(row.item.detail);
 $('#price').text(numberWithCommas(row.item.price) + ' 円');
 $('#leadtime').text(row.item.leadtime + ' 日');
 $('#lack').text(row.item.lack + ' %');
@@ -37,9 +34,13 @@ var out_25_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose 
 var out_25 = out_25_sql["SUM(num)"]; //納期回答済み
 var out_26_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 2 AND state = 6', [ id ])[0];
 var out_26 = out_26_sql["SUM(num)"]; //出庫済み
+var out_27_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 2 AND state = 7', [ id ])[0];
+var out_27 = out_27_sql["SUM(num)"]; //返品数
+var out_28_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 2 AND state = 8', [ id ])[0];
+var out_28 = out_28_sql["SUM(num)"]; //棚卸調整数
 
 //在庫数吐き出し
-var warehouse_stock = in_13 - out_26; //在庫数(倉庫内在庫)
+var warehouse_stock = in_13 - out_26 + out_27 + out_28; //在庫数(倉庫内在庫)
 var mikomi_stock = warehouse_stock + in_11 + in_12 - out_24 - out_25; //理論在庫
 var safe_stock = 16000; //安全在庫数
 var diff_stock = mikomi_stock - safe_stock; //見込み在庫 - 安全在庫
@@ -80,8 +81,9 @@ var tr = $('<tr>').appendTo(tbody_zaiko_state);
 //入庫済み累積
 $("#nyuuko_total").append(numberWithCommas(in_13));
 
+var shukko_total_num = out_26 - out_27 - out_28;
 //出庫済み累積
-$("#shukko_total").append(numberWithCommas(out_26));
+$("#shukko_total").append(numberWithCommas(shukko_total_num));
 
 //発注・入庫手配中
 var nyuuko_state_total = in_11 + in_12;
@@ -98,201 +100,6 @@ var tr = $('<tr>').appendTo(tbody_shukko_state);
 tr.append('<td>' + numberWithCommas(shukko_state_total) + '</td>');
 tr.append('<td>' + numberWithCommas(out_24) + '</td>');
 tr.append('<td>' + numberWithCommas(out_25) + '</td>');
-
-
-//移設後削除
-//入庫処理
-$('#update_in').on('click', function() {
-	var date = $('input[name="date2"]').val();
-	var length_check = date.length;
-	var year_check = date.slice(0,4);
-	var bar1_check = date.charAt(4);
-	var month_check = date.slice(5,7);
-	var bar2_check = date.charAt(7);
-	var date_check = date.slice(8,10);
-	var millisec_check = Date.parse(date);
-	if (month_check == 1 || month_check == 3 || month_check == 5 || month_check == 7 || month_check == 8 || month_check == 10 || month_check == 12){
-		var lastdate_check = 31;
-		var lastmonth_check = month_check;
-	}
-	else {
-		var lastdate = new Date(date);
-			lastdate.setMonth(lastdate.getMonth() + 1);
-			lastdate.setDate(0);
-		var lastdate_check = lastdate.getDate();
-		var lastmonth_check = lastdate.getMonth() + 1;
-	}
-
-	if (length_check == 16 && year_check >= 2010 && year_check <= y+1 && bar1_check == "-" && month_check >= 1 && month_check <=12 && bar2_check == "-" && date_check >=1 && date_check <=31 && millisec_check != "NaN" && lastdate_check >= date_check && month_check == lastmonth_check){
-		$("#in-form_date").css("color","black");
-		var in_wh = parseInt($('input[name="in_wh"]').val());
-		var in_wh2 = $('input[name="in_wh"]').val();
-		var in_wh_check = in_wh - in_wh2;
-		if (in_wh_check === 0 && in_wh > 0 && in_wh < 1000000){
-			$("#in-form_number").css("color","black");
-			var order_wh = 0;
-			var out_wh = 0;
-			var memo = $('input[name="memo2"]').val();
-			var trans_id = alasql('SELECT MAX(id) + 1 as id FROM trans')[0].id;
-			alasql('INSERT INTO trans VALUES(?,?,?,?,?,?,?)', [ trans_id, id, date, order_wh, in_wh, out_wh, memo ]);
-			window.location.assign('stock.html?id=' + id);
-		}
-		else {
-			$("#in-form_number").css("color","red");
-			$("#in-form_number").animate({opacity: 0.4},50);
-			$("#in-form_number").animate({opacity: 1.0},50);
-			$("#in-form_number").animate({opacity: 0.4},50);
-			$("#in-form_number").animate({opacity: 1.0},50);
-		}
-	}
-	else{
-		$("#in-form_date").css("color","red");
-		$("#in-form_date").animate({opacity: 0.4},50);
-		$("#in-form_date").animate({opacity: 1.0},50);
-		$("#in-form_date").animate({opacity: 0.4},50);
-		$("#in-form_date").animate({opacity: 1.0},50);
-	}
-});
-
-
-//移設後削除
-//返品処理
-$('#update_return').on('click', function() {
-	var date = $('input[name="date4"]').val();
-	var length_check = date.length;
-	var year_check = date.slice(0,4);
-	var bar1_check = date.charAt(4);
-	var month_check = date.slice(5,7);
-	var bar2_check = date.charAt(7);
-	var date_check = date.slice(8,10);
-	var millisec_check = Date.parse(date);
-	if (month_check == 1 || month_check == 3 || month_check == 5 || month_check == 7 || month_check == 8 || month_check == 10 || month_check == 12){
-		var lastdate_check = 31;
-		var lastmonth_check = month_check;
-	}
-	else {
-		var lastdate = new Date(date);
-			lastdate.setMonth(lastdate.getMonth() + 1);
-			lastdate.setDate(0);
-		var lastdate_check = lastdate.getDate();
-		var lastmonth_check = lastdate.getMonth() + 1;
-	}
-
-	if (length_check == 16 && year_check >= 2010 && year_check <= y+1 && bar1_check == "-" && month_check >= 1 && month_check <=12 && bar2_check == "-" && date_check >=1 && date_check <=31 && millisec_check != "NaN" && lastdate_check >= date_check && month_check == lastmonth_check){
-		$("#return-form_date").css("color","black");
-		var return_wh = parseInt($('input[name="return_wh"]').val());
-		var return_wh2 = $('input[name="return_wh"]').val();
-		var return_wh_check = return_wh - return_wh2;
-		if (return_wh_check === 0 && return_wh > 0 && return_wh < 1000000){
-			$("#return-form_number").css("color","black");
-			var order_wh = -1 * return_wh;
-			var in_wh = return_wh;
-			var out_wh = -1 * return_wh;
-			var memo = $('input[name="memo4"]').val() + "より返品";
-			var trans_id = alasql('SELECT MAX(id) + 1 as id FROM trans')[0].id;
-			alasql('INSERT INTO trans VALUES(?,?,?,?,?,?,?)', [ trans_id, id, date, order_wh, in_wh, out_wh, memo ]);
-			window.location.assign('stock.html?id=' + id);
-		}
-		else {
-			$("#return-form_number").css("color","red");
-			$("#return-form_number").animate({opacity: 0.4},50);
-			$("#return-form_number").animate({opacity: 1.0},50);
-			$("#return-form_number").animate({opacity: 0.4},50);
-			$("#return-form_number").animate({opacity: 1.0},50);
-		}
-	}
-	else{
-		$("#return-form_date").css("color","red");
-		$("#return-form_date").animate({opacity: 0.4},50);
-		$("#return-form_date").animate({opacity: 1.0},50);
-		$("#return-form_date").animate({opacity: 0.4},50);
-		$("#return-form_date").animate({opacity: 1.0},50);
-	}
-});
-//移設後削除
-//棚卸し処理
-$('#update_check').on('click', function() {
-	var date = $('input[name="date5"]').val();
-	var length_check = date.length;
-	var year_check = date.slice(0,4);
-	var bar1_check = date.charAt(4);
-	var month_check = date.slice(5,7);
-	var bar2_check = date.charAt(7);
-	var date_check = date.slice(8,10);
-	var millisec_check = Date.parse(date);
-	if (month_check == 1 || month_check == 3 || month_check == 5 || month_check == 7 || month_check == 8 || month_check == 10 || month_check == 12){
-		var lastdate_check = 31;
-		var lastmonth_check = month_check;
-	}
-	else {
-		var lastdate = new Date(date);
-			lastdate.setMonth(lastdate.getMonth() + 1);
-			lastdate.setDate(0);
-		var lastdate_check = lastdate.getDate();
-		var lastmonth_check = lastdate.getMonth() + 1;
-	}
-
-	if (length_check == 16 && year_check >= 2010 && year_check <= y+1 && bar1_check == "-" && month_check >= 1 && month_check <=12 && bar2_check == "-" && date_check >=1 && date_check <=31 && millisec_check != "NaN" && lastdate_check >= date_check && month_check == lastmonth_check){
-		$("#check-form_date").css("color","black");
-		var check_wh = parseInt($('input[name="check_wh"]').val());
-		var check_wh2 = $('input[name="check_wh"]').val();
-		var check_wh_check = check_wh - check_wh2;
-		if (check_wh_check === 0 && check_wh > -1000000 && check_wh < 1000000){
-			$("#check-form_number").css("color","black");
-			var order_wh = 0;
-			var in_wh = check_wh;
-			var out_wh = 0;
-			var memo = "棚卸し";
-			var trans_id = alasql('SELECT MAX(id) + 1 as id FROM trans')[0].id;
-			alasql('INSERT INTO trans VALUES(?,?,?,?,?,?,?)', [ trans_id, id, date, order_wh, in_wh, out_wh, memo ]);
-			window.location.assign('stock.html?id=' + id);
-		}
-		else {
-			$("#check-form_number").css("color","red");
-			$("#check-form_number").animate({opacity: 0.4},50);
-			$("#check-form_number").animate({opacity: 1.0},50);
-			$("#check-form_number").animate({opacity: 0.4},50);
-			$("#check-form_number").animate({opacity: 1.0},50);
-		}
-	}
-	else{
-		$("#check-form_date").css("color","red");
-		$("#check-form_date").animate({opacity: 0.4},50);
-		$("#check-form_date").animate({opacity: 1.0},50);
-		$("#check-form_date").animate({opacity: 0.4},50);
-		$("#check-form_date").animate({opacity: 1.0},50);
-	}
-});
-
-//要移設 移設後は削除
-//本日の日付を自動入力
-var y = 0;
-$(function(){
-	var time = $.now();
-	var dateObj = new Date(time);
-		y = dateObj.getFullYear();
-	var m = dateObj.getMonth() + 1;
-		if(m<10){m = "0" + m}
-	var d = dateObj.getDate();
-		if(d<10){d = "0" + d}
-	var h = dateObj.getHours();
-		if(h<10){h = "0" + h}
-	var min = dateObj.getMinutes();
-		if(min<10){min = "0" + min}
-	var select_d = y + '-' + m + '-' + d + ' ' + h + ':' + min;
-	$("#selected_date1").attr("value", select_d);
-
-	var y_limit = dateObj.getFullYear() + 1;
-	$("#order-form_year").append("<span> (登録可能期間 ： 2010-01-01 00:00 ～ " + y_limit +"-12-31 23:59)</span>");
-});
-
-//変更履歴：削除する行の設定
-var dd_address="";
-$(function(){
-	$(document).on("click","#delete_data_address",function() {
-		dd_address = $(this).parent().parent();
-	});
-});
 
 //パンくずリスト商品名追加
 var bread_rows = alasql(sql, [ id ])[0];

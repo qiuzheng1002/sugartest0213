@@ -72,13 +72,13 @@
 			<div><!-- パンくずリスト -->
 				<ol class="breadcrumb">
 					<li><a href="index.html">在庫情報&nbsp;portal</a></li>
-					<li>受注・出庫&nbsp;&ndash;&nbsp;[商品別]&nbsp;進捗管理・データ登録</li>
+					<li><a href="index-return.html">返品・棚卸&nbsp;&ndash;&nbsp;返品データ&nbsp;登録</a></li>
 					<li class="active" id="this_bread"></li>
 				</ol>
 			</div>
 		
 			<div class="panel panel-default">
-				<div class="panel-heading">受注データ登録
+				<div class="panel-heading">返品データ登録
 				<!-- データ登録ボタン -->
 					<button type="submit" class="btn btn-primary btn-xs" id="update_order">
 						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 登録
@@ -86,56 +86,42 @@
 				</div>
 				<div class="container">
 					<input type="hidden" name="id">
+					<span id="too_much"></span>
 					<br><!-- 受注日入力フォーム -->
 					<div class="input-group" id="order-form_date">
-						<span class="input-group-addon" id="order-form_date_span">受注日</span>
+						<span class="input-group-addon" id="order-form_date_span">受付日</span>
 						<input type="text" class="form-control" name="date1" id="selected_date1" value="" placeholder="yyyy-mm-dd hh:mm (半角英数字)" data-toggle="tooltip" data-placement="top" title="2010～2018年の範囲で入力可">
 					</div>
 						<!-- 取引先入力フォーム -->
 					<div class="input-group" id="order-form_shop">
 						<span class="input-group-addon" id="order-form_shop_span">取引先</span>
-						<input type="text" class="form-control" name="shop1" id="selected_shop1" autocomplete="on" list="shops" data-toggle="tooltip" data-placement="top" title="プルダウンから選択 or 直接入力 (10文字以内)">
-						<datalist id="shops"></datalist>
+						<select class="form-control" name="shop1" id="selected_shop1" data-toggle="tooltip" data-placement="top" title="プルダウンから選択してください"></select>
 					</div>
-						<!-- 受注数入力フォーム -->
+						<!-- 返品数入力フォーム -->
 					<div class="input-group" id="order-form_number">
-						<span class="input-group-addon" id="order-form_number_span">受注数</span>
+						<span class="input-group-addon" id="order-form_number_span">返品数</span>
 						<input type="number" class="form-control" name="number1" id="selected_number1" value="" placeholder="半角数字(1～999999)で入力してください">
 					</div>
 						<!-- 納期入力フォーム -->
-					<div class="input-group" id="order-form_deadline">
+					<div class="input-group" id="order-form_deadline"  data-toggle="tooltip" data-placement="bottom" title="受注日と同じ日時で自動登録します。">
 						<span class="input-group-addon" id="order-form_deadline_span">&nbsp;&nbsp;納期&nbsp;</span>
 						<div>
-							<input type="text" class="form-control" name="deadline1" id="selected_deadline1" value="" placeholder="yyyy-mm-dd hh:mm (半角英数字)" data-toggle="tooltip" data-placement="bottom" title="2010～2018年の範囲で入力可">
+							<input type="text" class="form-control" name="deadline1" id="selected_deadline1" value="" disabled>
 						</div>
-						<span class="input-group-addon" data-toggle="tooltip" data-placement="bottom" title="納期未定の場合はチェックしてください"><input type="checkbox" id="deadline_checkbox"> 未定</span>
 					</div>
-					<br>					
+					<br>
 				</div>
 			</div>
 
 			<div class="panel panel-default">
-				<div class="panel-heading">受注・出庫状況
-					<div class="btn-group" data-toggle="buttons" id="checkbox_set1">
-						<label class="btn btn-danger btn-xs active" id="checkbox_set1_state4">
-							<input type="checkbox" name="checkbox_state4" autocomplete="off" checked> 受注済み
-						</label>
-						<label class="btn btn-warning btn-xs active" id="checkbox_set1_state5">
-							<input type="checkbox" name="checkbox_state5" autocomplete="off" checked> 納期確定済み
-						</label>
-						<label class="btn btn-default btn-xs" id="checkbox_set1_state6">
-							<input type="checkbox" name="checkbox_state6" autocomplete="off"> 出庫済み
-						</label>
-					</div>
-				<span class="onoff">(on/off)&nbsp;</span>
-				</div>
+				<div class="panel-heading" >返品履歴</div>
 				
 				<table class="table table-hover" id="shukko_process_table">
 					<thead class="thead_scroll">
 						<tr>
 							<th class="table_date">受注日</th>
 							<th class="table_shop">取引先</th>
-							<th class="table_num">受注数</th>
+							<th class="table_num">返品数</th>
 							<th class="table_deadline">納期</th>
 							<th class="table_state">ステータス</th>
 							<th class="table_btn"></th>
@@ -146,7 +132,6 @@
 			</div>
 
 		</div><!-- container -->
-
 
 <!-- モーダル・ダイアログ -->
 		<div class="modal fade" id="delete_data" tabindex="-1">
@@ -163,8 +148,6 @@
 				</div>
 			</div>
 		</div>
-
-
 		<script src="js/stock-return.js"></script>
 	</body>
 </html>

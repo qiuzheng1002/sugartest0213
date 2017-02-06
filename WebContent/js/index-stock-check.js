@@ -49,7 +49,6 @@ for (var i = 0; i < stocks.length; i++) {
 	tr.append('<td>' + stock.item.code + '</td>');
 	tr.append('<td>' + stock.item.maker + '</td>');
 	tr.append('<td>' + stock.item.detail + '</td>');
-	tr.append('<td style="text-align: right;">' + numberWithCommas(stock.item.price) + '</td>');//未出庫数にする
 	tr.appendTo(tbody);
 }
 

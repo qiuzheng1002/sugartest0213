@@ -4,23 +4,39 @@
 	background-color: #acffff;
 }
 
-#whouse_data_id{
+#item_data_id{
 	width: 97%;
 }
 
-#whouse_data_text{
+#item_data_code{
 	width: 97%;
 }
 
-#whouse_data_addr{
+#item_data_kind{
 	width: 97%;
 }
 
-#whouse_data_tel{
+#item_data_maker{
 	width: 97%;
 }
 
-#update_whouse, #delete_whouse, #delete_whouse_not{
+#item_data_detail{
+	width: 97%;
+}
+
+#item_data_price{
+	width: 97%;
+}
+
+#item_data_leadtime{
+	width: 97%;
+}
+
+#item_data_lack{
+	width: 97%;
+}
+
+#update_item, #delete_item, #delete_item_not{
 	float: right;
 	margin-right: 3px;
 }

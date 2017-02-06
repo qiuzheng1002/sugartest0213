@@ -15,6 +15,11 @@
 		<title>COMPANY</title>
 	</head>
 	<body>
+		<div class="sitename">
+		  <div class="container">
+		    <a href="index.html">COMPANY&nbsp;在庫管理</a>
+		  </div>
+		</div>
 		<nav class="navbar navbar-default">
 			<div class="container">
 				<!-- Brand and toggle get grouped for better mobile display -->
@@ -25,7 +30,6 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a href="index.html" class="navbar-brand">COMPANY</a>
 				</div>
 
 				<!-- Collect the nav links, forms, and other content for toggling -->
@@ -58,11 +62,8 @@
 								<li><a href="index-kind-info.html" class="index-kind-info_css">商品区分データ</a></li>
 							</ul>
 						</li>
-
-					</ul>
-					<ul class="nav navbar-nav navbar-right">
 						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span> システム <span class="caret"></span></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">システム <span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<li>
 									<a onclick="window.location.reload(true);"><span class="glyphicon glyphicon-refresh"></span> リロード</a>
@@ -90,7 +91,7 @@
 					</select>
 				</div>
 				<div class="form-group">
-					<label>分類</label>
+					<label>商品区分</label>
 					<select name="q2" class="form-control">
 						<option value="0">すべて</option>
 					</select>
@@ -105,23 +106,21 @@
 			</form>
 			<hr>
 
-
-
 			<table class="table table-hover table-condensed">
 				<thead>
 					<tr>
 						<th>倉庫</th>
-						<th>分類</th>
+						<th>商品区分</th>
 						<th>コード</th>
 						<th>メーカー</th>
 						<th>品番</th>
-						<th>金額</th>
-						<th>残量</th>
+						<th>在庫評価</th>
 					</tr>
 				</thead>
 				<tbody id="tbody-stocks"></tbody>
 			</table>
 		</div>
+		
 		<script src="js/index.js"></script>
 	</body>
 </html>

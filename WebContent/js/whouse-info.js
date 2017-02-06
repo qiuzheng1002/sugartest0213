@@ -18,9 +18,11 @@ else{
 	$("#whouse_data_text_input").attr("value", whouse.name); //倉庫名
 	$("#whouse_data_addr_input").attr("value", whouse.addr); //住所
 	$("#whouse_data_tel_input").attr("value", whouse.tel); //電話番号
-	var using_whouse_inStock = alasql('SELECT * FROM stock WHERE whouse = ?', [ id ]); //stockCSVの中で使用中かチェック
-	var using_whouse_inStock_num = using_whouse_inStock.length; //使用中の個数
-	if (using_whouse_inStock_num != 0){ //使用中の場合、削除ボタン無効
+	var using_whouse_inTrans = alasql('SELECT * FROM trans \
+			JOIN stock ON stock.id = trans.stock \
+			WHERE stock.whouse = ?', [ id ]); //transCSVの中に、消したいwhouse番号を持つstock.idが無いかチェック	
+	var using_whouse_inTrans_num = using_whouse_inTrans.length; //使用中の個数
+	if (using_whouse_inTrans_num != 0){ //使用中の場合、削除ボタン無効
 		$("#delete_whouse").replaceWith('<button type="submit" class="btn btn-danger btn-xs" id="delete_whouse_not" data-toggle="tooltip" data-placement="top" title="在庫データに使用中のため削除不可"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> 削除</button>');
 	}
 }
@@ -90,7 +92,16 @@ $(function(){
 		if (whouse_text_check == 1 && whouse_addr_check == 1 && whouse_tel_check == 1){
 			if (isNaN(id) == true){
 				var whouse_id = alasql('SELECT MAX(id) + 1 as id FROM whouse')[0].id;
-				alasql('INSERT INTO whouse VALUES(?,?,?,?)', [ whouse_id, whouse_text, whouse_addr, whouse_tel ]);
+				alasql('INSERT INTO whouse VALUES(?,?,?,?)', [ whouse_id, whouse_text, whouse_addr, whouse_tel ]); //whouseCSVにデータ追加
+			//stockCSVに登録済みのitemに対して、今回のwhouseIDを追加する
+				var stock_item_objects = alasql('SELECT DISTINCT item FROM stock');
+				for (var i = 0; i < stock_item_objects.length; i++) {
+					var stock_item_object = stock_item_objects[i];
+					var stock_item = $(stock_item_object).attr("item"); //object皮むき(item番号取得)
+					var stock_id = alasql('SELECT MAX(id) + 1 as id FROM stock')[0].id;
+					alasql('INSERT INTO stock VALUES(?,?,?,?,?,?)', [ stock_id, stock_item, whouse_id, 0, 0, 0 ]); //stockCSVにデータ追加
+					var test = alasql('SELECT * FROM stock');
+				}
 			}
 			else{
 				var whouse_id = id;
@@ -104,7 +115,8 @@ $(function(){
 //登録データ削除
 $(function(){ //SQL内のデータを削除し、結果的にテーブルから削除
 	$(document).on("click","#delete_whouse",function() {
-		alasql('DELETE FROM whouse WHERE id = ' + id)[0]; //idを用いてデータを削除する
+		alasql('DELETE FROM whouse WHERE id = ' + id)[0]; //whouseからデータを削除する
+		alasql('DELETE FROM stock WHERE whouse = ' + id)[0]; //stockから、消したいwhouse番号を持つデータを削除する(transデータ無し)
 		window.location.assign('index-whouse-info.html');
 	});
 });

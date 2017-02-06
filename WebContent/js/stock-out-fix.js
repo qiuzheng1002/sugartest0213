@@ -397,24 +397,7 @@ $('#update_data').on('click', function() {
 		}
 		var lastday_check2 = 0;
 			if (lastday2 >= date_check_sub2 && lastday_month2 == month_check_sub2){lastday_check2 = 1}	
-		
-	/*	
-			console.log(length_check2);
-			console.log(year_check2);			
-			console.log(bar1_check2);
-			console.log(month_check2);
-			console.log(bar2_check2);
-			console.log(date_check2);
-			console.log(space_check2);
-			console.log(hour_check2);
-			console.log(colon_check2);
-			console.log(minute_check2);
-			console.log(millisec_check2);
-			console.log(lastday_check2);
-			console.log(lastday2);
-		*/
-			
-			
+
 		//納期日時が正しいことをチェック
 		var deadline_ok = 0;
 		if (length_check2 == 1 && year_check2 == 1 && bar1_check2 == 1 && month_check2 == 1 && bar2_check2 == 1 && date_check2 ==1 && space_check2 == 1 && hour_check2 == 1 && colon_check2 == 1 && minute_check2 == 1 && millisec_check2 == 1 && lastday_check2 == 1){
@@ -458,7 +441,7 @@ $('#update_data').on('click', function() {
 });
 
 // 取引先入力補助
-var shop_rows = alasql('SELECT DISTINCT shop FROM trans');
+var shop_rows = alasql('SELECT DISTINCT shop FROM trans WHERE purpose = 2 AND state = 4 OR state = 5 OR state = 6');
 for (var i = 0; i < shop_rows.length; i++) {
 	var shop_row = shop_rows[i];
 	$('<option value = "' + shop_row.shop + '">').appendTo('#shops');

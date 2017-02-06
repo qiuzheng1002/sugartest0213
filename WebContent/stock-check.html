@@ -219,6 +219,129 @@
 				</table>
 			</div>
 
+<!-- ここから未編集 -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+</head>
+<body>
+<?xml version="1.0" encoding="shift_jis"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xml:lang="ja" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ <meta name="GENERATOR" content="notepad 6.0 for Windows">
+ <meta http-equiv="Content-Style-Type" content="text/css">
+ <link rel="shortcut icon" href="favicon.ico">
+
+
+ <script type="text/javascript" src="corp.js"></script>
+
+ <title>相関係数と回帰直線（JavaScript版）</title>
+</head>
+
+<body onLoad="loadCanvas()">
+<h2>
+■相関係数と回帰直線（JavaScript版）</h2>
+<blockquote>
+　<strong>相関係数</strong>：R（correlation coefficient）は２つの変数間の相関すなわち類似性を示す指標で、－１から＋１までの値です。　この値が正のときは「正の相関」、負のときは「負の相関」があると呼びます。　相関係数が０に近いときは２つの変数間の相関は弱いことになります。<br><br>
+
+　両者の関係を直線で近似したものを<strong>回帰直線</strong>と呼び、<br>
+　　・xからyへの回帰直線：　y = a1*x + b1<br>
+　　・yからxへの回帰直線：　x = a2*y + b2<br>
+があります。<br>
+　両回帰直線はともに平均点（xm, ym）を通ります。<br><br>
+
+　２変数間の相関の程度を表すもう１つの指標に<strong>決定係数</strong>：R2があります。<br>
+　　R2 = 1 - 残差２乗和/被説明変数の全変動<br>
+　　　　= 1 - Σ[yi - (a1・xi + b1)]<sup>2</sup>/Σ(yi - ym)<sup>2</sup>　（xからyへの回帰直線の場合）<br><br>
+
+　相関係数：Rと決定係数：R2の間には、<br>
+　　R2 = R x R<br>
+の関係があります（後述）。<br><br>
+
+　下の画面にデータを打ち込んで下さい。相関係数、決定係数、回帰直線が表示されます。<br>
+
+<hr size="3">
+
+<form name="form1">
+<table>
+<tr><td>ﾃﾞｰﾀ数 n：</td>
+    <td>相関係数 R：</td>
+    <td>決定係数 R2：</td>
+    <td><input type="button" value="全 ﾃﾞｰﾀｸﾘｱ" onClick="clearD(0)"></td>
+</tr>
+
+<tr><td><input type="text" name="tfN" value=""></td>
+    <td><input type="text" name="tfCC" value=""></td>
+    <td><input type="text" name="tfR2" value=""></td>
+    <td><input type="button" value="直前ﾃﾞｰﾀｸﾘｱ" onClick="clearD(1)"></td>
+</tr>
+</table>
+
+<hr size="3">
+
+<canvas width="500" height="500" id="canvas" style="border: 1px solid green;"></canvas>
+</form>
+<br>
+
+<strong>●相関係数：R および回帰直線の計算式</strong><br>
+<pre>
+・データを(x1,y1), (x2,y2), .., (xn,yn) とする。
+・平均
+　　xm = Σxi/n
+　　ym = Σyi/n
+・分散、標準偏差
+　　xの標準偏差 sx = sqrt[Σ(xi-xm)<sup>2</sup>/n]　　<span id="idc">（注）sqrt: 平方根を表す</span>
+　　yの標準偏差 sy = sqrt[Σ(yi-ym)<sup>2</sup>/n]
+　　x,yの共分散 sxy = Σ(xi-xm)(yi-ym)/n
+・相関係数：R
+　　R = sxy/(sx・sy)
+・xからyへの回帰直線：　y = a1*x + b1
+　　a1 = sxy/sx<sup>2</sup>
+　　b1 = ym - a1・xm
+・yからxへの回帰直線：　x = a2*y + b2 [ -> y = (1/a2)x - (b2/a2) ]
+　　a2 = sxy/sy<sup>2</sup>
+　　b2 = xm - a2・ym
+</pre><br>
+
+<strong>●相関係数：R と 決定係数：R2 の関係</strong><br>
+<span id ="idc">
+　xからyへの回帰直線の場合について記すが、yからxへの回帰直線でも同じ結果となる。<br>
+</span>
+<pre>
+・残差２乗和（RSS：Residual Sum of Squares）
+　　RSS = Σ[yi- (a1・xi+b1)]<sup>2</sup>
+　　    = Σ[yi- (sxy/sx<sup>2</sup>・xi + ym - sxy/sx<sup>2</sup>・xm)]<sup>2</sup>
+　　    = Σ[(yi-ym) - sxy/sx<sup>2</sup>・(xi-xm)]<sup>2</sup>
+　　    = Σ(yi-ym)<sup>2</sup> - 2・sxy/sx<sup>2</sup>Σ(xi-xm)(yi-ym) + (sxy/sx<sup>2</sup>)<sup>2</sup>Σ(xi-xm)<sup>2</sup>
+　　　　= n・ sy<sup>2</sup> - 2・n・(sxy/sx)<sup>2</sup> + n・(sxy/sx)<sup>2</sup> 
+　　　　= n・ sy<sup>2</sup> - n・(sxy/sx)<sup>2</sup>
+・被説明変数（従属変数 y）の全変動
+　　DY2 = Σ(yi-ym)<sup>2</sup>
+　　    = n・ sy<sup>2</sup>
+・決定係数：R2
+　　R2 = 1 - RSS/DY2
+　　   = 1 - [n・ sy<sup>2</sup> - n・(sxy/sx)<sup>2</sup>] / [n・ sy<sup>2</sup>]
+　　   = n・(sxy/sx)<sup>2</sup>] / [n・ sy<sup>2</sup>]
+　　   =(sxy/sx)<sup>2</sup>] / sy<sup>2</sup>
+　　   =[sxy/(sx・sy)]<sup>2</sup>
+　　   =R<sup>2</sup>
+</pre>
+</blockquote>
+
+<a href="http://www.enjoy.ne.jp/~k-ichikawa/index.html">ホーム</a>
+</body>
+</html>
+</body>
+</html>
+
+
+
 		</div>
 		<script src="js/stock-check.js"></script>
 	</body>

@@ -49,8 +49,7 @@ for (var i = 0; i < stocks_wh.length; i++) {
 	tr.append('<td>' + stock.item.code + '</td>');
 	tr.append('<td>' + stock.item.maker + '</td>');
 	tr.append('<td>' + stock.item.detail + '</td>');
-	tr.append('<td style="text-align: right;">' + numberWithCommas(stock.item.price) + '</td>');
-	tr.append('<td style="text-align: right;">' + stock.stock.balance + '</td>');
+	tr.append('<td style="text-align: right;"></td>'); //評価を足す
 	tr.appendTo(tbody);
 }
 

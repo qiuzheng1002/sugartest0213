@@ -80,3 +80,10 @@ td, th{
 .onoff{
 	float: right;
 }
+
+#too_much{
+	float: right;
+	color: red;
+	font-size: 12px;
+	margin-right: 15%;
+}

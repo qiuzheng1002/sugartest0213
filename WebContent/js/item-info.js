@@ -33,9 +33,11 @@ else{
 	$("#item_data_price_input").attr("value", item.price); //単価
 	$("#item_data_leadtime_input").attr("value", item.leadtime); //リードタイム
 	$("#item_data_lack_input").val(item.lack); //許容欠品率(数値そのものをvalue指定)
-	var using_item_inStock = alasql('SELECT * FROM stock WHERE item = ?', [ id ]); //stockCSVの中で使用中かチェック
-	var using_item_inStock_num = using_item_inStock.length; //使用中の個数
-	if (using_item_inStock_num != 0){ //使用中の場合、削除ボタン無効
+	var using_item_inTrans = alasql('SELECT * FROM trans \
+			JOIN stock ON stock.id = trans.stock \
+			WHERE stock.item = ?', [ id ]); //transCSVの中に、消したいitem番号を持つstock.idが無いかチェック	
+	var using_item_inTrans_num = using_item_inTrans.length; //使用中の個数
+	if (using_item_inTrans_num != 0){ //使用中の場合、削除ボタン無効
 		$("#delete_item").replaceWith('<button type="submit" class="btn btn-danger btn-xs" id="delete_item_not" data-toggle="tooltip" data-placement="top" title="在庫データに使用中のため削除不可"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> 削除</button>');
 	}
 }
@@ -50,73 +52,131 @@ for (var i = 0; i < makers_rows.length; i++) {
 //データ保存
 $(function(){
 	$(document).on("click","#update_item",function() {
-	//倉庫名10文字以内チェック
-		var item_text_check = 0;
-		var item_text = $('input[name="item_data_text_name"]').val();
-		var item_text_num = item_text.split(/[\uD800-\udbff][\uDC00-\uDFFF]/g).length - 1; //サロゲートペアチェック
-		var item_text_length = item_text.length - item_text_num;
-		if (item_text_length == 0 || item_text_length > 10){ //0文字 or 11文字以上の場合アウト		
-			$("#item_data_text").css("color","red");
-			$("#item_data_text_span").css("color","red");
-			$("#item_data_text_span").animate({opacity: 0.4},50);
-			$("#item_data_text_span").animate({opacity: 1.0},50);
-			$("#item_data_text_span").animate({opacity: 0.4},50);
-			$("#item_data_text_span").animate({opacity: 1.0},50);
-			item_text_check = 0;
+	//商品コード5文字チェック
+		var item_code_check = 0;
+		var item_code = $('input[name="item_data_code_name"]').val();
+		var item_code_num = item_code.split(/[\uD800-\udbff][\uDC00-\uDFFF]/g).length - 1; //サロゲートペアチェック
+		var item_code_length = item_code.length - item_code_num;
+		if (item_code_length != 5){ //5文字以外の場合アウト		
+			$("#item_data_code").css("color","red");
+			$("#item_data_code_span").css("color","red");
+			$("#item_data_code_span").animate({opacity: 0.4},50);
+			$("#item_data_code_span").animate({opacity: 1.0},50);
+			$("#item_data_code_span").animate({opacity: 0.4},50);
+			$("#item_data_code_span").animate({opacity: 1.0},50);
+			item_code_check = 0;
 		}
 		else{
-			$("#item_data_text").css("color","black");
-			$("#item_data_text_span").css("color","black");
-			item_text_check = 1;
+			$("#item_data_code").css("color","black");
+			$("#item_data_code_span").css("color","black");
+			item_code_check = 1;
 		}
-	//住所30文字以内チェック
-		var item_addr_check = 0;
-		var item_addr = $('input[name="item_data_addr_name"]').val();
-		var item_addr_num = item_addr.split(/[\uD800-\udbff][\uDC00-\uDFFF]/g).length - 1; //サロゲートペアチェック
-		var item_addr_length = item_addr.length - item_addr_num;
-		if (item_addr_length == 0 || item_addr_length > 30){ //0文字 or 31文字以上の場合アウト		
-			$("#item_data_addr").css("color","red");
-			$("#item_data_addr_span").css("color","red");
-			$("#item_data_addr_span").animate({opacity: 0.4},50);
-			$("#item_data_addr_span").animate({opacity: 1.0},50);
-			$("#item_data_addr_span").animate({opacity: 0.4},50);
-			$("#item_data_addr_span").animate({opacity: 1.0},50);
-			item_addr_check = 0;
-		}
-		else{
-			$("#item_data_addr").css("color","black");
-			$("#item_data_addr_span").css("color","black");
-			item_addr_check = 1;
-		}
-	//電話番号15文字以内チェック
-		var item_tel_check = 0;
-		var item_tel = $('input[name="item_data_tel_name"]').val();
-		var item_tel_num = item_tel.split(/[\uD800-\udbff][\uDC00-\uDFFF]/g).length - 1; //サロゲートペアチェック
-		var item_tel_length = item_tel.length - item_tel_num;
-		if (item_tel_length == 0 || item_tel_length > 15){ //0文字 or 16文字以上の場合アウト		
-			$("#item_data_tel").css("color","red");
-			$("#item_data_tel_span").css("color","red");
-			$("#item_data_tel_span").animate({opacity: 0.4},50);
-			$("#item_data_tel_span").animate({opacity: 1.0},50);
-			$("#item_data_tel_span").animate({opacity: 0.4},50);
-			$("#item_data_tel_span").animate({opacity: 1.0},50);
-			item_tel_check = 0;
+	
+	//商品区分チェック
+		var item_kind = $("#item_data_kind_input").val();
+		
+	//メーカー20文字以内チェック
+		var item_maker_check = 0;
+		var item_maker = $('input[name="item_data_maker_name"]').val();
+		var item_maker_num = item_maker.split(/[\uD800-\udbff][\uDC00-\uDFFF]/g).length - 1; //サロゲートペアチェック
+		var item_maker_length = item_maker.length - item_maker_num;
+		if (item_maker_length == 0 || item_maker_length > 20){ //0文字 or 21文字以上の場合アウト		
+			$("#item_data_maker").css("color","red");
+			$("#item_data_maker_span").css("color","red");
+			$("#item_data_maker_span").animate({opacity: 0.4},50);
+			$("#item_data_maker_span").animate({opacity: 1.0},50);
+			$("#item_data_maker_span").animate({opacity: 0.4},50);
+			$("#item_data_maker_span").animate({opacity: 1.0},50);
+			item_maker_check = 0;
 		}
 		else{
-			$("#item_data_tel").css("color","black");
-			$("#item_data_tel_span").css("color","black");
-			item_tel_check = 1;
+			$("#item_data_maker").css("color","black");
+			$("#item_data_maker_span").css("color","black");
+			item_maker_check = 1;
 		}
 		
+	//品名30文字以内チェック
+		var item_detail_check = 0;
+		var item_detail = $('input[name="item_data_detail_name"]').val();
+		var item_detail_num = item_detail.split(/[\uD800-\udbff][\uDC00-\uDFFF]/g).length - 1; //サロゲートペアチェック
+		var item_detail_length = item_detail.length - item_detail_num;
+		if (item_detail_length == 0 || item_detail_length > 30){ //0文字 or 31文字以上の場合アウト		
+			$("#item_data_detail").css("color","red");
+			$("#item_data_detail_span").css("color","red");
+			$("#item_data_detail_span").animate({opacity: 0.4},50);
+			$("#item_data_detail_span").animate({opacity: 1.0},50);
+			$("#item_data_detail_span").animate({opacity: 0.4},50);
+			$("#item_data_detail_span").animate({opacity: 1.0},50);
+			item_detail_check = 0;
+		}
+		else{
+			$("#item_data_detail").css("color","black");
+			$("#item_data_detail_span").css("color","black");
+			item_detail_check = 1;
+		}
+		
+	//単価7文字以内チェック
+		var item_price_check = 0;
+		var item_price = parseInt($('input[name="item_data_price_name"]').val());
+		var item_price2 = $('input[name="item_data_price_name"]').val();
+		var item_price_check = item_price - item_price2; //整数ならばゼロ
+		if (item_price_check === 0 && item_price > 0 && item_price < 10000000){
+			$("#item_data_price").css("color","black");
+			$("#item_data_price_span").css("color","black");
+			item_price_check = 1;
+		}
+		else {
+			$("#item_data_price").css("color","red");
+			$("#item_data_price_span").css("color","red");
+			$("#item_data_price_span").animate({opacity: 0.4},50);
+			$("#item_data_price_span").animate({opacity: 1.0},50);
+			$("#item_data_price_span").animate({opacity: 0.4},50);
+			$("#item_data_price_span").animate({opacity: 1.0},50);
+			item_price_check = 0;
+		}
+		
+		//リードタイム3文字以内チェック
+		var item_leadtime_check = 0;
+		var item_leadtime = parseInt($('input[name="item_data_leadtime_name"]').val());
+		var item_leadtime2 = $('input[name="item_data_leadtime_name"]').val();
+		var item_leadtime_check = item_leadtime - item_leadtime2; //整数ならばゼロ
+		if (item_leadtime_check === 0 && item_leadtime > 0 && item_leadtime < 1000){
+			$("#item_data_leadtime").css("color","black");
+			$("#item_data_leadtime_span").css("color","black");
+			item_leadtime_check = 1;
+		}
+		else {
+			$("#item_data_leadtime").css("color","red");
+			$("#item_data_leadtime_span").css("color","red");
+			$("#item_data_leadtime_span").animate({opacity: 0.4},50);
+			$("#item_data_leadtime_span").animate({opacity: 1.0},50);
+			$("#item_data_leadtime_span").animate({opacity: 0.4},50);
+			$("#item_data_leadtime_span").animate({opacity: 1.0},50);
+			item_leadtime_check = 0;
+		}
+
+	//許容欠品率チェック
+		var item_lack = $("#item_data_lack_input").val();
+		
 	//既存のデータと重複チェック
-		if (item_text_check == 1 && item_addr_check == 1 && item_tel_check == 1){
+		if (item_code_check == 1 && item_maker_check == 1 && item_detail_check == 1 && item_price_check == 1 && item_leadtime_check == 1){
 			if (isNaN(id) == true){
+				var item_safestock = 0;
 				var item_id = alasql('SELECT MAX(id) + 1 as id FROM item')[0].id;
-				alasql('INSERT INTO item VALUES(?,?,?,?)', [ item_id, item_text, item_addr, item_tel ]);
+				alasql('INSERT INTO item VALUES(?,?,?,?,?,?,?,?,?)', [ item_id, item_code, item_kind, item_detail, item_maker, item_price, item_leadtime, item_lack, item_safestock ]);
+			//stockCSV(whouseCSV)に登録済みのwhouseに対して、今回のitemIDを追加する
+				var stock_whouse_objects = alasql('SELECT DISTINCT whouse FROM stock');
+				for (var i = 0; i < stock_whouse_objects.length; i++) {
+					var stock_whouse_object = stock_whouse_objects[i];
+					var stock_whouse = $(stock_whouse_object).attr("whouse"); //object皮むき(whouse番号取得)
+					var stock_id = alasql('SELECT MAX(id) + 1 as id FROM stock')[0].id;
+					alasql('INSERT INTO stock VALUES(?,?,?,?,?,?)', [ stock_id, item_id, stock_whouse, 0, 0, 0 ]); //stockCSVにデータ追加
+					var test = alasql('SELECT * FROM stock');
+				}
 			}
 			else{
 				var item_id = id;
-				alasql("UPDATE item SET name = '" + item_text + "', addr = '" + item_addr + "', tel = '" + item_tel + "' WHERE id = " + item_id);
+				alasql("UPDATE item SET code = '" + item_code + "', kind = '" + item_kind + "', detail = '" + item_detail + "', maker = '" + item_maker + "', price = '" + item_price + "', leadtime = '" + item_leadtime + "', lack = '" + item_lack + "' WHERE id = " + item_id);
 			}
 		window.location.assign('index-item-info.html');
 		}

@@ -75,6 +75,7 @@
 					<li class="active">返品・棚卸&nbsp;&ndash;&nbsp;返品データ&nbsp;登録</li>
 				</ol>
 			</div>
+			
 			<form action="index.html" class="form-inline text-center">
 				<div class="form-group">
 					<label>倉庫</label>
@@ -97,19 +98,16 @@
 				</button>
 			</form>
 			<hr>
-
-
-			<table class="table table-hover table-condensed">
+			<p class="table_notice">※出庫済みデータが登録されている商品のみに絞って表示しております。</p>
+			<table class="table table-hover table-condensed" id="table_stocks">
 				<thead>
 					<tr>
 						<th>倉庫</th>
-						<th>分類</th>
+						<th>商品区分</th>
 						<th>コード</th>
 						<th>メーカー</th>
 						<th>品番</th>
-						<th>金額</th>
-						<th>残量</th>
-						<th>単位</th>
+						<th class="hidden">ステータス</th>
 					</tr>
 				</thead>
 				<tbody id="tbody-stocks"></tbody>

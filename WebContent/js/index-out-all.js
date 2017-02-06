@@ -53,8 +53,8 @@ for (var i = 0; i < rows.length; i++) {
 	var state_check = row.trans.state;
 	var tr = $('<tr data-href="stock-out-fix.html?id=' + row.trans.id + '"></tr>');
 	tr.append('<td>' + row.whouse.name + '</td>');
-	tr.append('<td class="hidden">' + row.kind.text + '</td>');
-	tr.append('<td class="hidden">' + row.item.code + '</td>');
+	tr.append('<td>' + row.kind.text + '</td>');
+	tr.append('<td>' + row.item.code + '</td>');
 	tr.append('<td>' + row.item.maker + '</td>');	
 	tr.append('<td>' + row.item.detail + '</td>');
 	tr.append('<td class="hidden">' + row.trans.date + '</td>');
@@ -83,8 +83,8 @@ var table_length = mi_shukko_table.rows.length;
 if (table_length == 1){
 	var tr = $('<tr>').appendTo(tbody);
 	tr.append('<td>受注データなし</td>');
-	tr.append('<td class="hidden">-</td>');
-	tr.append('<td class="hidden">-</td>');
+	tr.append('<td>-</td>');
+	tr.append('<td>-</td>');
 	tr.append('<td>-</td>');
 	tr.append('<td>-</td>');
 	tr.append('<td class="hidden">-</td>');

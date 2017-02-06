@@ -80,3 +80,8 @@ td, th{
 .onoff{
 	float: right;
 }
+
+#fix_data_address_span{
+	font-size: 86%;
+	font-weight: normal;
+}

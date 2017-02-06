@@ -1,6 +1,5 @@
 // SQL(itemより)
 var items = alasql('SELECT * FROM item JOIN kind ON kind.id = item.kind');
-console.log(items);
 
 // HTML作成
 var tbody = $('#tbody-item');
