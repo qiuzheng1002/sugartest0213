@@ -48,8 +48,8 @@ for (var i = 0; i < stocks.length; i++) {
 	tr.append('<td>' + stock.item.code + '</td>');
 	tr.append('<td>' + stock.item.maker + '</td>');
 	tr.append('<td>' + stock.item.detail + '</td>');
-	tr.append('<td id="state_row_return_id' + stock.stock.id + '"></td>'); //idのみ準備
-	tr.append('<td id="state_row_id' + stock.stock.id + '"></td>'); //idのみ準備
+	tr.append('<td class="hidden" id="state_row_return_id' + stock.stock.id + '"></td>'); //idのみ準備
+	tr.append('<td class="hidden" id="state_row_id' + stock.stock.id + '"></td>'); //idのみ準備
 	tr.appendTo(tbody);
 }
 

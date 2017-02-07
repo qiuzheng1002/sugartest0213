@@ -214,9 +214,9 @@ $('#update_order').on('click', function() {
 	//取引先が入力されていることをチェック
 	var shop_ok = 0;
 	var shop = $("#selected_shop1").val();
-	var shop_out_total_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 2 AND state = 6', [ id ])[0];
+	var shop_out_total_sql = alasql("SELECT SUM(num) FROM trans WHERE stock =" + id + "AND purpose = 2 AND state = 6 AND shop = '" + shop + "'")[0];
 	var shop_out_total = shop_out_total_sql["SUM(num)"]; //選択された取引先の出庫数合計
-	var shop_return_total_past_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 2 AND state = 7', [ id ])[0];
+	var shop_return_total_past_sql = alasql("SELECT SUM(num) FROM trans WHERE stock =" + id + "AND purpose = 2 AND state = 7 AND shop = '" + shop + "'")[0];
 	var shop_return_total_past = shop_return_total_past_sql["SUM(num)"]; //選択された取引先の返品数合計	
 	var shop_return_total = num + shop_return_total_past //今回返品数追加
 	var shop_out_num = shop_out_total - shop_return_total_past;

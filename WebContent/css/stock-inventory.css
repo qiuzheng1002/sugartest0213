@@ -73,10 +73,9 @@ td, th{
 	float: right;
 }
 
-#checkbox_set1{
-	float: right;
-}
-
-.onoff{
-	float: right;
+#too_much{
+	float: left;
+	color: red;
+	font-size: 12px;
+	margin-left: 8%;
 }

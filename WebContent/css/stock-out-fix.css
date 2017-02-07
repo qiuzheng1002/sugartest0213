@@ -25,3 +25,9 @@
 	margin-right: 3%;
 	width: 15%;
 }
+
+#too_much{
+	color: red;
+	font-size: 12px;
+	padding-left: 8%
+}

@@ -421,23 +421,83 @@ $('#update_data').on('click', function() {
 		}
 	}
 	
-	//全条件クリアでデータ更新 (納期未確定)
-	if (date_ok == 1 && shop_ok == 1 && num_ok == 1 && deadline_ok == 4){
-	alasql("UPDATE trans SET purpose = 2, state = 4, date = '" + date + "', deadline = '" + deadline + "', num = " + num + ", shop = '" + shop + "' WHERE id = " + id);
-	window.location.assign(last_url);
+	if (state_check == 6){  //変更データが出庫済みか判別：違う場合は即変更
+		var shop_out_this_data_sql = alasql('SELECT num FROM trans WHERE id = ?', [id])[0];
+		var shop_out_this_data = shop_out_this_data_sql["num"]; //変更対象データ数
+		var input_data = num; //入力中のデータ
+		if (input_data - shop_out_this_data < 0){ //入力数を減らしたときのみチェック
+			//1つのショップにおける 出庫数計 - 返品数 - 変更対象データ数 (+ 入力データ) がゼロ未満にならないようにする
+			var this_shop_sql = alasql('SELECT shop FROM trans WHERE id = ?', [id])[0]; //shop名割り出し
+			var this_shop = this_shop_sql["shop"];
+			var this_stock_sql = alasql('SELECT stock FROM trans WHERE id = ?', [id])[0]; //stock番号割り出し
+			var this_stock = this_stock_sql["stock"];
+			var shop_out_26_sql = alasql("SELECT SUM(num) FROM trans WHERE stock =" + this_stock + "AND purpose = 2 AND state = 6 AND shop = '" + this_shop + "'")[0];
+			var shop_out_26 = shop_out_26_sql["SUM(num)"]; //出庫済み(shop)
+			var shop_out_27_sql = alasql("SELECT SUM(num) FROM trans WHERE stock =" + this_stock + "AND purpose = 2 AND state = 7 AND shop = '" + this_shop + "'")[0];
+			var shop_out_27 = shop_out_27_sql["SUM(num)"]; //返品数(shop)
+			var shop_out_total = shop_out_26 - shop_out_27 - shop_out_this_data + input_data; //1つのショップにおける 出庫数計 - 返品数 - 変更前データ数 + 変更後データ数
+			if (shop_out_total < 0){  //ショップ内でマイナスにならないことをチェック
+				$("#too_much").empty();
+				var too_much_text = '(データ変更により ' + this_shop + ' への累計出庫数が ' + shop_out_total + ' となります。先に返品・棚卸調整データを修正してください。)';
+				$("#too_much").append(too_much_text);
+				$("#selected_shop1").css("color","red");
+				$("#order-form_shop_span").css("color","red");
+				$("#order-form_shop_span").animate({opacity: 0.4},50);
+				$("#order-form_shop_span").animate({opacity: 1.0},50);
+				$("#order-form_shop_span").animate({opacity: 0.4},50);
+				$("#order-form_shop_span").animate({opacity: 1.0},50);
+				return;
+			}
+			else{ //ショップ内で矛盾なし：全体数のチェック
+				var all_out_26_sql = alasql("SELECT SUM(num) FROM trans WHERE stock =" + this_stock + "AND purpose = 2 AND state = 6")[0];
+				var all_out_26 = all_out_26_sql["SUM(num)"]; //出庫済み(全体)
+				var all_out_27_sql = alasql("SELECT SUM(num) FROM trans WHERE stock =" + this_stock + "AND purpose = 2 AND state = 7")[0];
+				var all_out_27 = all_out_27_sql["SUM(num)"]; //返品数(全体)
+				var all_out_28_sql = alasql("SELECT SUM(num) FROM trans WHERE stock =" + this_stock + "AND purpose = 2 AND state = 8 ")[0];
+				var all_out_28 = all_out_28_sql["SUM(num)"]; //棚卸調整数(全体)
+				var all_out_this_data_sql = alasql('SELECT num FROM trans WHERE id = ?', [id])[0];
+				var all_out_this_data = all_out_this_data_sql["num"]; //変更対象データ数
+				var input_data = num;
+				var all_out_total = all_out_26 - all_out_27 - all_out_this_data + input_data; //1つのショップにおける 出庫数計 - 返品数 - 変更前データ数 + 変更後データ数
+				if (all_out_total < 0){  //全体でマイナスにならないことをチェック
+					$("#too_much").empty();
+					var too_much_text = '(データ削除によりこの商品の出庫数が ' + all_out_total + ' となります。先に返品・棚卸調整データを修正してください。)';
+					$("#too_much").append(too_much_text);
+					$("#selected_shop1").css("color","red");
+					$("#order-form_shop_span").css("color","red");
+					$("#order-form_shop_span").animate({opacity: 0.4},50);
+					$("#order-form_shop_span").animate({opacity: 1.0},50);
+					$("#order-form_shop_span").animate({opacity: 0.4},50);
+					$("#order-form_shop_span").animate({opacity: 1.0},50);
+					return;
+				}
+				else{ //全体数でも矛盾なし：データ変更
+				//全条件クリアでデータ更新 (出庫済み)
+					$("#too_much").empty();
+					if (date_ok == 1 && shop_ok == 1 && num_ok == 1 && deadline_ok == 6){
+					alasql("UPDATE trans SET purpose = 2, state = 6, date = '" + date + "', deadline = '" + deadline + "', num = " + num + ", shop = '" + shop + "' WHERE id = " + id);
+					window.location.assign(last_url);
+					}
+				}
+			}
+		}
+		else{
+			$("#too_much").empty();
+		}
 	}
-	
-	//全条件クリアでデータ更新 (納期確定済み)
-	if (date_ok == 1 && shop_ok == 1 && num_ok == 1 && deadline_ok == 5){
-	alasql("UPDATE trans SET purpose = 2, state = 5, date = '" + date + "', deadline = '" + deadline + "', num = " + num + ", shop = '" + shop + "' WHERE id = " + id);
-	window.location.assign(last_url);
-	}
-	
-	//全条件クリアでデータ更新 (出庫済み)
-	if (date_ok == 1 && shop_ok == 1 && num_ok == 1 && deadline_ok == 6){
-	alasql("UPDATE trans SET purpose = 2, state = 6, date = '" + date + "', deadline = '" + deadline + "', num = " + num + ", shop = '" + shop + "' WHERE id = " + id);
-	window.location.assign(last_url);
-	}
+	else{ //出庫済みデータでないので、即変更
+		$("#too_much").empty();
+		//全条件クリアでデータ更新 (納期未確定)
+		if (date_ok == 1 && shop_ok == 1 && num_ok == 1 && deadline_ok == 4){
+		alasql("UPDATE trans SET purpose = 2, state = 4, date = '" + date + "', deadline = '" + deadline + "', num = " + num + ", shop = '" + shop + "' WHERE id = " + id);
+		window.location.assign(last_url);
+		}
+		//全条件クリアでデータ更新 (納期確定済み)
+		if (date_ok == 1 && shop_ok == 1 && num_ok == 1 && deadline_ok == 5){
+		alasql("UPDATE trans SET purpose = 2, state = 5, date = '" + date + "', deadline = '" + deadline + "', num = " + num + ", shop = '" + shop + "' WHERE id = " + id);
+		window.location.assign(last_url);
+		}
+	}	
 });
 
 // 取引先入力補助

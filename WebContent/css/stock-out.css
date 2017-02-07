@@ -85,3 +85,8 @@ td, th{
 	font-size: 86%;
 	font-weight: normal;
 }
+
+#too_much{
+	color: red;
+	font-size: 12px;
+}

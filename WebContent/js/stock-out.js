@@ -30,20 +30,24 @@ for (var i = 0; i < rows.length; i++) {
 	tr.append('<td class="table_deadline">' + row.trans.deadline + '</td>');
 	if (state_check == 4){
 		tr.append('<td class="table_state">' + '<button class="btn btn-danger btn-xs" id="fix_data_address" name="' + row.trans.id + '">受注済み</button>' + '</td>');
+		tr.append('<td class="table_btn"><button type="button" class="btn btn-xs" id="delete_data_address" name="' + row.trans.id + '" data-toggle="modal" data-target="#delete_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
 	}
 	else if (state_check == 5){
 		tr.append('<td class="table_state">' + '<button class="btn btn-warning btn-xs" id="fix_data_address" name="' + row.trans.id + '">納期確定済み</button>' + '</td>');
+		tr.append('<td class="table_btn"><button type="button" class="btn btn-xs" id="delete_data_address" name="' + row.trans.id + '" data-toggle="modal" data-target="#delete_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
 	}
 	else if (state_check == 6){
 		tr.append('<td class="table_state">' + '<button class="btn btn-success btn-xs" id="fix_data_address" name="' + row.trans.id + '">出庫済み</button>' + '</td>');
+		tr.append('<td class="table_btn"><button type="button" class="btn btn-xs" id="delete_data_address" name="' + row.trans.id + '" data-toggle="modal" data-target="#delete_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
 	}
 	else if (state_check == 7){
 		tr.append('<td class="table_state">' + '<span class="label label-primary" id="fix_data_address_span" name="' + row.trans.id + '">返品</span>' + '</td>');
-	}	
+		tr.append('<td></td>');
+	}
 	else if (state_check == 8){
-		tr.append('<td class="table_state">' + '<span class="label label-default" id="fix_data_address_span" name="' + row.trans.id + '">棚卸調整</span>' + '</td>');
-	}	
-tr.append('<td class="table_btn"><button type="button" class="btn btn-xs" id="delete_data_address" name="' + row.trans.id + '" data-toggle="modal" data-target="#delete_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
+		tr.append('<td class="table_state">' + '<span class="label label-primary" id="fix_data_address_span" name="' + row.trans.id + '">棚卸</span>' + '</td>');
+		tr.append('<td></td>');
+	}
 }
 
 //パンくずリスト商品名追加
@@ -478,14 +482,66 @@ $(function(){
 var delete_row_id=""; 
 $(function(){ //削除箇所を先に指定 (モーダルダイアログでthisが使えない)
 	$(document).on("click","#delete_data_address",function() {
-		delete_row_id = $(this).attr("name");
+		delete_row_id = parseInt($(this).attr("name"));
 	});
 });
 $(function(){ //SQL内のデータを削除し、結果的にテーブルから削除
 	$(document).on("click","#destroy_data",function() {
-		alasql('DELETE FROM trans WHERE id = ' + delete_row_id)[0]; //idを用いてデータを削除する
-		delete_row_id = "";
-		window.location.assign('stock-out.html?id=' + id);
+		var this_state_check_sql = alasql('SELECT state FROM trans WHERE id = ?', [delete_row_id])[0]; //state割り出し
+		var this_state_check = this_state_check_sql["state"];
+		if (this_state_check == 6){  //削除データが出庫済みか判別：違う場合は即削除
+		//1つのショップにおける 出庫数計 - 返品数 - 削除対象データ数 (+ 入力データ) がゼロ未満にならないようにする
+			var this_shop_sql = alasql('SELECT shop FROM trans WHERE id = ?', [delete_row_id])[0]; //shop名割り出し
+			var this_shop = this_shop_sql["shop"];
+			var shop_out_26_sql = alasql("SELECT SUM(num) FROM trans WHERE stock =" + id + "AND purpose = 2 AND state = 6 AND shop = '" + this_shop + "'")[0];
+			var shop_out_26 = shop_out_26_sql["SUM(num)"]; //出庫済み(shop)
+			var shop_out_27_sql = alasql("SELECT SUM(num) FROM trans WHERE stock =" + id + "AND purpose = 2 AND state = 7 AND shop = '" + this_shop + "'")[0];
+			var shop_out_27 = shop_out_27_sql["SUM(num)"]; //返品数(shop)
+			var shop_out_this_data_sql = alasql('SELECT num FROM trans WHERE id = ?', [delete_row_id])[0];
+			var shop_out_this_data = shop_out_this_data_sql["num"]; //削除対象データ数
+			var shop_out_total = shop_out_26 - shop_out_27 - shop_out_this_data; //1つのショップにおける 出庫数計 - 返品数 - 削除対象データ数
+			if (shop_out_total < 0){  //ショップ内でマイナスにならないことをチェック
+				$("#too_much").empty();
+				var too_much_text = '(データ削除により ' + this_shop + ' への累計出庫数が ' + shop_out_total + ' となります。先に返品・棚卸調整データを修正してください。)';
+				$("#too_much").append(too_much_text);
+				$("#too_much").animate({opacity: 0.4},50);
+				$("#too_much").animate({opacity: 1.0},50);
+				$("#too_much").animate({opacity: 0.4},50);
+				$("#too_much").animate({opacity: 1.0},50);
+				return;
+			}
+			else{ //ショップ内で矛盾なし：全体数のチェック
+				var all_out_26_sql = alasql("SELECT SUM(num) FROM trans WHERE stock =" + id + "AND purpose = 2 AND state = 6")[0];
+				var all_out_26 = all_out_26_sql["SUM(num)"]; //出庫済み(全体)
+				var all_out_27_sql = alasql("SELECT SUM(num) FROM trans WHERE stock =" + id + "AND purpose = 2 AND state = 7")[0];
+				var all_out_27 = all_out_27_sql["SUM(num)"]; //返品数(全体)
+				var all_out_28_sql = alasql("SELECT SUM(num) FROM trans WHERE stock =" + id + "AND purpose = 2 AND state = 8 ")[0];
+				var all_out_28 = all_out_28_sql["SUM(num)"]; //棚卸調整数(全体)
+				var all_out_this_data_sql = alasql('SELECT num FROM trans WHERE id = ?', [delete_row_id])[0];
+				var all_out_this_data = all_out_this_data_sql["num"]; //削除対象データ数
+				var all_out_total = all_out_26 - all_out_27 - all_out_this_data; //1つのショップにおける 出庫数計 - 返品数 - 棚卸調整数 - 削除対象データ数
+				if (all_out_total < 0){  //全体でマイナスにならないことをチェック
+					$("#too_much").empty();
+					var too_much_text = '(データ削除によりこの商品の出庫数が ' + all_out_total + ' となります。先に返品・棚卸調整データを修正してください。)';
+					$("#too_much").append(too_much_text);
+					$("#too_much").animate({opacity: 0.4},50);
+					$("#too_much").animate({opacity: 1.0},50);
+					$("#too_much").animate({opacity: 0.4},50);
+					$("#too_much").animate({opacity: 1.0},50);
+					return;
+				}
+				else{ //全体数でも矛盾なし：データ削除
+					alasql('DELETE FROM trans WHERE id = ' + delete_row_id)[0]; //idを用いてデータを削除する
+					delete_row_id = "";
+					window.location.assign('stock-out.html?id=' + id);
+				}
+			}
+		}
+		else{ //出庫済みデータでないので、即削除
+			alasql('DELETE FROM trans WHERE id = ' + delete_row_id)[0]; //idを用いてデータを削除する
+			delete_row_id = "";
+			window.location.assign('stock-out.html?id=' + id);
+		}	
 	});
 });
 

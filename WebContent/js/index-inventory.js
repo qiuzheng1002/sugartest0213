@@ -26,8 +26,7 @@ var q3 = $.url().param('q3') || '';
 $('input[name="q3"]').val(q3);
 
 // SQLの生成
-var sql = 'SELECT * \
-	FROM stock \
+var sql = 'SELECT * FROM stock \
 	JOIN whouse ON whouse.id = stock.whouse \
 	JOIN item ON item.id = stock.item \
 	JOIN kind ON kind.id = item.kind \
@@ -39,19 +38,16 @@ sql += q2 ? 'AND kind.id = ' + q2 + ' ' : '';
 // SQL実行
 var stocks = alasql(sql, [ q3 + '%' ]);
 
-// HTML作成
+//HTML作成
 var tbody = $('#tbody-stocks');
 for (var i = 0; i < stocks.length; i++) {
 	var stock = stocks[i];
-	var tr = $('<tr data-href="stock-in.html?id=' + stock.stock.id + '"></tr>');
+	var tr = $('<tr data-href="stock-inventory.html?id=' + stock.stock.id + '"></tr>');
 	tr.append('<td>' + stock.whouse.name + '</td>');
 	tr.append('<td>' + stock.kind.text + '</td>');
 	tr.append('<td>' + stock.item.code + '</td>');
 	tr.append('<td>' + stock.item.maker + '</td>');
 	tr.append('<td>' + stock.item.detail + '</td>');
-	tr.append('<td style="text-align: right;">' + numberWithCommas(stock.item.price) + '</td>');
-	tr.append('<td style="text-align: right;">' + stock.stock.balance + '</td>');
-	tr.append('<td>' + stock.item.unit + '</td>');
 	tr.appendTo(tbody);
 }
 

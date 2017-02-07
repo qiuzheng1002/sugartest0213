@@ -26,6 +26,8 @@ var in_12_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose =
 var in_12 = in_12_sql["SUM(num)"]; //発注済
 var in_13_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 1 AND state = 3', [ id ])[0];
 var in_13 = in_13_sql["SUM(num)"]; //入庫済み
+var in_19_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 1 AND state = 9', [ id ])[0];
+var in_19 = in_19_sql["SUM(num)"]; //棚卸(過剰)数：値はマイナスで保持
 
 //出庫数読み込み
 var out_24_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 2 AND state = 4', [ id ])[0];
@@ -37,10 +39,10 @@ var out_26 = out_26_sql["SUM(num)"]; //出庫済み
 var out_27_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 2 AND state = 7', [ id ])[0];
 var out_27 = out_27_sql["SUM(num)"]; //返品数
 var out_28_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 2 AND state = 8', [ id ])[0];
-var out_28 = out_28_sql["SUM(num)"]; //棚卸調整数
+var out_28 = out_28_sql["SUM(num)"]; //棚卸(不足)数
 
 //在庫数吐き出し
-var warehouse_stock = in_13 - out_26 + out_27 + out_28; //在庫数(倉庫内在庫)
+var warehouse_stock = in_13 - in_19 - out_26 + out_27 - out_28; //在庫数(倉庫内在庫)
 var mikomi_stock = warehouse_stock + in_11 + in_12 - out_24 - out_25; //理論在庫
 var safe_stock = 16000; //安全在庫数
 var diff_stock = mikomi_stock - safe_stock; //見込み在庫 - 安全在庫
@@ -79,10 +81,11 @@ var tr = $('<tr>').appendTo(tbody_zaiko_state);
 		}
 	
 //入庫済み累積
-$("#nyuuko_total").append(numberWithCommas(in_13));
+var nyuuko_total_num = in_13 - in_19;
+$("#nyuuko_total").append(numberWithCommas(nyuuko_total_num));
 
-var shukko_total_num = out_26 - out_27 - out_28;
 //出庫済み累積
+var shukko_total_num = out_26 - out_27 + out_28;
 $("#shukko_total").append(numberWithCommas(shukko_total_num));
 
 //発注・入庫手配中
