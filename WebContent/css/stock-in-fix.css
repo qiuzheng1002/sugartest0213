@@ -3,3 +3,31 @@
 .index-in_css{
 	background-color: #acffff;
 }
+
+#order-form_date{
+	width: 97%;
+}
+
+#order-form_shop{
+	width: 97%;
+}
+
+#order-form_number{
+	width: 97%;
+}
+
+#order-form_deadline{
+	width: 97%;
+}
+
+#order-form_update{
+	float: right;
+	margin-right: 3%;
+	width: 15%;
+}
+
+#too_much{
+	color: red;
+	font-size: 12px;
+	padding-left: 8%
+}

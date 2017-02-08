@@ -3,7 +3,21 @@ var id = parseInt($.url().param('id'));
 $("input[name=id]").val(id);
 
 // 受注・出庫データ読み込み (2-8のみ)
-var rows = alasql('SELECT * FROM trans WHERE stock = ' + id + ' AND (purpose = 2 AND state = 8) OR (purpose = 1 AND state = 9)');
+var rows = alasql('SELECT * FROM trans WHERE stock = ' + id + ' AND purpose = 2 AND state = 8');
+var tbody = $('#tbody-shukko_process_table');
+for (var i = 0; i < rows.length; i++) {
+	var row = rows[i];
+	var purpose_check = row.trans.purpose;
+	var tr = $('<tr class="table_statecheck_6">').appendTo(tbody);
+		tr.append('<td class="table_date">' + row.trans.date + '</td>');
+		tr.append('<td class="table_shop">' + row.trans.shop + '</td>');
+		tr.append('<td class="table_num">' + numberWithCommas(row.trans.num) + '</td>');	
+		tr.append('<td class="table_deadline">' + row.trans.deadline + '</td>');
+		tr.append('<td class="table_state">' + '<button class="btn btn-primary btn-xs" id="fix_data_address" name="' + row.trans.id + '">棚卸</button>' + '</td>');
+		tr.append('<td class="table_btn"><button type="button" class="btn btn-xs" id="delete_data_address" name="' + row.trans.id + '" data-toggle="modal" data-target="#delete_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
+}
+//受注・出庫データ読み込み (1-9のみ)
+var rows = alasql('SELECT * FROM trans WHERE stock = ' + id + ' AND purpose = 1 AND state = 9');
 var tbody = $('#tbody-shukko_process_table');
 for (var i = 0; i < rows.length; i++) {
 	var row = rows[i];
@@ -17,6 +31,8 @@ for (var i = 0; i < rows.length; i++) {
 		tr.append('<td class="table_btn"><button type="button" class="btn btn-xs" id="delete_data_address" name="' + row.trans.id + '" data-toggle="modal" data-target="#delete_data"><span class="glyphicon glyphicon-remove"></span></button></td>');
 }
 
+
+
 //パンくずリスト商品名追加
 var bread_rows = alasql('SELECT * FROM stock \
 		JOIN whouse ON whouse.id = stock.whouse \
@@ -24,9 +40,6 @@ var bread_rows = alasql('SELECT * FROM stock \
 		WHERE stock.id = ?', [ id ])[0];
 var this_bread_name = "(倉庫) " + bread_rows.whouse.name + "　(品番) " + bread_rows.item.maker + " : " + bread_rows.item.detail;
 $('#this_bread').text(this_bread_name);
-
-//取引先入力(自身の倉庫名)
-$('#selected_shop1').attr("value", "棚卸");
 
 // 受注データ0件の処理
 var table_length = shukko_process_table.rows.length;
@@ -212,7 +225,7 @@ $('#update_order').on('click', function() {
 			$("#order-form_number_span").animate({opacity: 0.4},50);
 			$("#order-form_number_span").animate({opacity: 1.0},50);
 			$("#too_much").empty();
-			var too_much_text = '(現時点の在庫数が ' + stock_num + ' になるため、登録できません。 )';
+			var too_much_text = '(データ更新によりこの商品の倉庫在庫数が ' + stock_num + ' となります。先に入庫・返品・棚卸調整データを修正してください。)';
 			$("#too_much").append(too_much_text);
 			num_ok = 0;
 		}

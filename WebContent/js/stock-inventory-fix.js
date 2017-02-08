@@ -8,25 +8,15 @@ var bread_rows = alasql('SELECT * FROM trans \
 		JOIN whouse ON whouse.id = stock.whouse \
 		JOIN item ON item.id = stock.item \
 		WHERE trans.id = ?', [ id ])[0];
-$('#this_bread_detail').replaceWith("<li id='this_bread_detail'><a href='stock-return.html?id=" + bread_rows.trans.stock + "'>[倉庫] " + bread_rows.whouse.name + "　[品番] " + bread_rows.item.maker + " : " + bread_rows.item.detail + "</a></li>");
-$('#this_bread_shop').append("返品データ編集 (" + bread_rows.trans.shop + ")");
+$('#this_bread_detail').replaceWith("<li id='this_bread_detail'><a href='stock-inventory.html?id=" + bread_rows.trans.stock + "'>[倉庫] " + bread_rows.whouse.name + "　[品番] " + bread_rows.item.maker + " : " + bread_rows.item.detail + "</a></li>");
+$('#this_bread_shop').append("棚卸データ編集 (" + bread_rows.trans.shop + ")");
 var trans_stock_id = bread_rows.trans.stock; //transCSVのstock番号取得
 
-//取引先入力補助
-var shop_rows = alasql('SELECT DISTINCT shop FROM trans WHERE purpose = 2 AND state = 6');
-for (var i = 0; i < shop_rows.length; i++) {
-	var shop_row = shop_rows[i];
-	var option = $('<option>');
-	option.attr('value', shop_row.shop);
-	option.text(shop_row.shop);
-	$('select[name="shop1"]').append(option);
-}
-
-//返品データ読み込み
+//棚卸データ読み込み
 var rows = alasql('SELECT * FROM trans WHERE id = ?', [ id ])[0];
 $("#selected_date1").attr("value", rows.trans.date);
-$("#selected_shop1").val(rows.trans.shop);
 $("#selected_num1").attr("value", rows.trans.num);
+var this_data = rows.trans.num; //変更前データ
 
 //本日の日付を取得
 var y = 0;
@@ -168,63 +158,65 @@ $('#update_data').on('click', function() {
 		date_ok = 0;
 	}
 	
-	//数値が1～999,999の整数であることをチェック
+	//数値が-999,999～999,999の整数であることをチェック
 	var num_ok = 0;
 	var num = parseInt($('input[name="number1"]').val());
 	var num2 = $('input[name="number1"]').val();
 	var num_check = num - num2; //整数ならばゼロ
-	if (num_check === 0 && num > 0 && num < 1000000){
-		$("#selected_num1").css("color","black");
+	if (num_check === 0 && num > -1000000 && num < 1000000 && num != 0){
+		$("#selected_number1").css("color","black");
 		$("#order-form_number_span").css("color","black");
-		num_ok = 1;
+		var shop_in_total_sql = alasql("SELECT SUM(num) FROM trans WHERE stock =" + trans_stock_id + "AND purpose = 1 AND state = 3")[0];
+		var shop_in_total = shop_in_total_sql["SUM(num)"]; //入庫数合計
+		var shop_out_total_sql = alasql("SELECT SUM(num) FROM trans WHERE stock =" + trans_stock_id + "AND purpose = 2 AND state = 6")[0];
+		var shop_out_total = shop_out_total_sql["SUM(num)"]; //出庫数合計
+		var shop_return_total_sql = alasql("SELECT SUM(num) FROM trans WHERE stock =" + trans_stock_id + "AND purpose = 2 AND state = 7")[0];
+		var shop_return_total = shop_return_total_sql["SUM(num)"]; //返品数合計
+		var shop_inventory_total_p_sql = alasql("SELECT SUM(num) FROM trans WHERE stock =" + trans_stock_id + "AND purpose = 2 AND state = 8")[0];
+		var shop_inventory_total_p = shop_inventory_total_p_sql["SUM(num)"]; //棚卸不足数合計
+		var shop_inventory_total_m_sql = alasql("SELECT SUM(num) FROM trans WHERE stock =" + trans_stock_id + "AND purpose = 1 AND state = 9")[0];
+		var shop_inventory_total_m = shop_inventory_total_m_sql["SUM(num)"]; //棚卸過剰数合計(中身はマイナス)
+		//入庫 - 棚卸(過剰：マイナス) - 出庫 + 返品 - 棚卸(不足：プラス) + 変更前データ - 変更後データ(入力値(num)) が現時点の在庫数
+		var stock_num = shop_in_total - shop_inventory_total_m - shop_out_total + shop_return_total - shop_inventory_total_p + this_data - num;
+		if (stock_num < 0 ){ //現時点の在庫数が0未満の場合は登録不可
+			$("#selected_num1").css("color","red");
+			$("#order-form_number_span").css("color","red");
+			$("#order-form_number_span").animate({opacity: 0.4},50);
+			$("#order-form_number_span").animate({opacity: 1.0},50);
+			$("#order-form_number_span").animate({opacity: 0.4},50);
+			$("#order-form_number_span").animate({opacity: 1.0},50);
+			$("#too_much").empty();
+			var too_much_text = '(データ更新によりこの商品の倉庫在庫数が ' + stock_num + ' となります。先に入庫・出庫・返品データを修正してください。)';
+			$("#too_much").append(too_much_text);
+			num_ok = 0;
+		}
+		else { //条件クリア
+			$("#selected_num1").css("color","black");
+			$("#order-form_number_span").css("color","black");
+			$("#too_much").empty();
+			num_ok = 1;
+		}
 	}
-	else {
-		$("#selected_num1").css("color","red");
+	else { //-1m～1m以外
+		$("#selected_number1").css("color","red");
 		$("#order-form_number_span").css("color","red");
 		$("#order-form_number_span").animate({opacity: 0.4},50);
 		$("#order-form_number_span").animate({opacity: 1.0},50);
 		$("#order-form_number_span").animate({opacity: 0.4},50);
 		$("#order-form_number_span").animate({opacity: 1.0},50);
+		$("#too_much").empty();
 		num_ok = 0;
 	}
-	
-	//取引先が入力されていることをチェック
-	var shop_ok = 0;
-	var shop = $("#selected_shop1").val();
-	var shop_out_total_sql = alasql("SELECT SUM(num) FROM trans WHERE stock =" + trans_stock_id + "AND purpose = 2 AND state = 6 AND shop = '" + shop + "'")[0];
-	var shop_out_total = shop_out_total_sql["SUM(num)"]; //選択された取引先の出庫数合計
-	var shop_return_total_past_sql = alasql("SELECT SUM(num) FROM trans WHERE stock =" + trans_stock_id + "AND purpose = 2 AND state = 7 AND shop = '" + shop + "'")[0];
-	var shop_return_total_past = shop_return_total_past_sql["SUM(num)"]; //選択された取引先の返品数合計	
-	var shop_return_total = num + shop_return_total_past //今回返品数 + これまでの返品数合計
-	var shop_out_num = shop_out_total - shop_return_total_past; //出庫数 - 返品数 
-	if (shop_out_total < shop_return_total ){ //出庫数 < 返品数合計は登録不可
-		$("#selected_shop1").css("color","red");
-		$("#order-form_shop_span").css("color","red");
-		$("#order-form_shop_span").animate({opacity: 0.4},50);
-		$("#order-form_shop_span").animate({opacity: 1.0},50);
-		$("#order-form_shop_span").animate({opacity: 0.4},50);
-		$("#order-form_shop_span").animate({opacity: 1.0},50);
-		$("#too_much").empty();
-		if (shop_out_num <= 0){ //出庫数 - 返品数がゼロの場合
-			var too_much_text = '(' + shop + 'の累計出庫済み数は 0 のため、登録できません。 )';
+
+	//全条件クリアでデータ更新
+	if (date_ok == 1 && num_ok == 1){
+		if(num > 0){ //不足データ追加
+			alasql("UPDATE trans SET purpose = 2, state = 8, date = '" + date + "', deadline = '" + date + "', num = " + num + ", shop = '棚卸' WHERE id = " + id);	
 		}
-		else {
-			var too_much_text = '(' + shop + 'の累計出庫済み数 ' + shop_out_num +' 以下で登録してください。)';
+		else { //過剰データ追加
+			alasql("UPDATE trans SET purpose = 1, state = 9, date = '" + date + "', deadline = '" + date + "', num = " + num + ", shop = '棚卸' WHERE id = " + id);
 		}
-		$("#too_much").append(too_much_text);
-		shop_ok = 0;
-	}
-	else{
-		$("#selected_shop1").css("color","black");
-		$("#order-form_shop_span").css("color","black");
-		$("#too_much").empty();
-		shop_ok = 1;
-	}
-	
-	//全条件クリアでデータ更新 (出庫済み)
-	if (date_ok == 1 && shop_ok == 1 && num_ok == 1){
-	alasql("UPDATE trans SET purpose = 2, state = 7, date = '" + date + "', deadline = '" + date + "', num = " + num + ", shop = '" + shop + "' WHERE id = " + id);
-	window.location.assign("stock-return.html?id=" + bread_rows.trans.stock);
+	window.location.assign("stock-inventory.html?id=" + bread_rows.trans.stock);
 	}
 });
 

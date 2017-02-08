@@ -4,8 +4,16 @@
 	background-color: #acffff;
 }
 
+.progress{
+	margin: 0px;
+}
+
 #zaiko_state_table th, td{
 	text-align: center;
+}
+
+.zaiko_table_head{
+	width: 15%;
 }
 
 #nyuuko_box{
@@ -38,7 +46,8 @@
 	text-align: center;
 }
 
-#nyuuko_table th, td{
+#nyuuko_state_total{
+	padding: 28px;
 	text-align: center;
 }
 

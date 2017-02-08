@@ -84,7 +84,7 @@
 					</select>
 				</div>
 				<div class="form-group">
-					<label>分類</label>
+					<label>商品区分</label>
 					<select name="q2" class="form-control">
 						<option value="0">すべて</option>
 					</select>
@@ -97,27 +97,27 @@
 					<span class="glyphicon glyphicon-search"></span> 検索
 				</button>
 			</form>
-			並び替えボタン実装
 			<hr>
 
 			<table class="table table-hover table-condensed" id="mi_shukko_table">
 				<thead>
 					<tr>
 						<th>倉庫</th><!-- whouse.name -->
-						<th class="hidden">分類</th><!-- kind.text -->
-						<th class="hidden">コード</th><!-- item.code -->
+						<th>商品区分</th><!-- kind.text -->
+						<th>コード</th><!-- item.code -->
 						<th>メーカー</th><!-- item.maker -->
 						<th>品番</th><!-- item.detail -->
-						<th class="hidden">受注日</th><!-- trans.date -->
+						<th class="hidden">発注日</th><!-- trans.date -->
 						<th class="hidden">取引先</th><!-- trans.shop -->
-						<th>受注数</th><!-- trans.num -->
+						<th>発注数</th><!-- trans.num -->
 						<th>納期</th><!-- trans.deadline -->
 						<th>ステータス</th><!-- trans.state -->
 					</tr>
 				</thead>
 				<tbody id="tbody-mi_shukko"></tbody>
 			</table>
-		</div>
+			
+		</div><!-- container -->
 		<script src="js/index-in-all.js"></script>
 	</body>
 </html>

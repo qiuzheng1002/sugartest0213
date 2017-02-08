@@ -67,45 +67,94 @@
 				</div><!-- /.navbar-collapse -->
 			</div><!-- /.container-fluid -->
 		</nav>
-
-出庫処理画面が完成したらコピペ
-
 		<div class="container">
-	<!-- 
-		表示期間　：　2016-01-01 ～　2017-01-01
-		<hr>
-	-->
+			<div><!-- パンくずリスト -->
+				<ol class="breadcrumb">
+					<li><a href="index.html">在庫情報&nbsp;portal</a></li>
+					<li><a href="index-in.html">発注・入庫&nbsp;&ndash;&nbsp;[商品別]&nbsp;進捗管理・データ登録</a></li>
+					<li class="active" id="this_bread"></li>
+				</ol>
+			</div>
+		
 			<div class="panel panel-default">
-				<div class="panel-heading" id="nyuuko_list">発注・入庫状況</div>
-	
-				<table class="table table-hover table-condensed">
-					<thead>
+				<div class="panel-heading">発注データ登録
+				<!-- データ登録ボタン -->
+					<button type="submit" class="btn btn-primary btn-xs" id="update_order">
+						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 登録
+					</button>
+				</div>
+				<div class="container">
+					<input type="hidden" name="id">
+					<br><!-- 発注日入力フォーム -->
+					<div class="input-group" id="order-form_date">
+						<span class="input-group-addon" id="order-form_date_span">発注日</span>
+						<input type="text" class="form-control" name="date1" id="selected_date1" value="" placeholder="yyyy-mm-dd hh:mm (半角英数字)" data-toggle="tooltip" data-placement="top" title="2010～2018年の範囲で入力可">
+					</div>
+						<!-- 取引先入力フォーム -->
+					<div class="input-group" id="order-form_shop">
+						<span class="input-group-addon" id="order-form_shop_span">取引先</span>
+						<input type="text" class="form-control" name="shop1" id="selected_shop1" autocomplete="on" list="shops" data-toggle="tooltip" data-placement="top" title="プルダウン選択 or 直接入力 (10文字以内)">
+						<datalist id="shops"></datalist>
+					</div>
+						<!-- 発注数入力フォーム -->
+					<div class="input-group" id="order-form_number">
+						<span class="input-group-addon" id="order-form_number_span">発注数</span>
+						<input type="number" class="form-control" name="number1" id="selected_number1" value="" placeholder="半角数字(1～999999)で入力してください">
+					</div>
+						<!-- 納期入力フォーム -->
+					<div class="input-group" id="order-form_deadline">
+						<span class="input-group-addon" id="order-form_deadline_span">&nbsp;&nbsp;納期&nbsp;</span>
+						<input type="text" class="form-control" name="deadline1" id="selected_deadline1" value="" placeholder="yyyy-mm-dd hh:mm (半角英数字)" data-toggle="tooltip" data-placement="bottom" title="2010～2018年の範囲で入力可">
+					</div>
+					<br>					
+				</div>
+			</div>
+
+			<div class="panel panel-default">
+				<div class="panel-heading">発注・入庫状況&nbsp;&nbsp;<span id="too_much"></span>
+					<div class="btn-group" data-toggle="buttons" id="checkbox_set1">
+						<label class="btn btn-warning btn-xs active" id="checkbox_set1_state2">
+							<input type="checkbox" name="checkbox_state5" autocomplete="off" checked> 発注済み
+						</label>
+						<label class="btn btn-default btn-xs" id="checkbox_set1_state3">
+							<input type="checkbox" name="checkbox_state6" autocomplete="off"> 出庫済み
+						</label>
+					</div>
+				<span class="onoff">(on/off)&nbsp;</span>
+				</div>
+				
+				<table class="table table-hover" id="shukko_process_table">
+					<thead class="thead_scroll">
 						<tr>
-							<th>受注日</th>
-	<!--						<th>倉庫</th>
-							<th>分類</th>
-							<th>コード</th>
-							<th>メーカー</th>
-							<th>品番</th>
-	-->						<th>取引先</th>
-							<th>受注数</th>
-							<th>納期</th>
-							<th>ステータス</th>
-							<th>(ボタン)</th>
-							<th></th>
+							<th class="table_date">発注日</th>
+							<th class="table_shop">取引先</th>
+							<th class="table_num">発注数</th>
+							<th class="table_deadline">納期</th>
+							<th class="table_state">ステータス</th>
+							<th class="table_btn"></th>
 						</tr>
 					</thead>
-					<tbody id="tbody-stock-in"></tbody>
+					<tbody class="tbody_scroll" id="tbody-shukko_process_table"></tbody>
 				</table>
 			</div>
-		</div>
 
+		</div><!-- container -->
 
-
-
-
-
-		
+<!-- モーダル・ダイアログ -->
+		<div class="modal fade" id="delete_data" tabindex="-1">
+			<div class="modal-dialog modal-sm">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h3 id="modal-title">警告</h3>
+					</div>
+					<div class="modal-body">データを削除すると在庫管理業務に<br>重大な影響を及ぼす可能性があります。<br>(削除ボタンを押すと削除が完了します。)</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary btm-sm" id="destroy_data" data-dismiss="modal">削除</button>
+						<button type="button" class="btn btn-default btm-sm" data-dismiss="modal">キャンセル</button>
+					</div>
+				</div>
+			</div>
+		</div><!-- modal -->
 		<script src="js/stock-in.js"></script>
 	</body>
 </html>

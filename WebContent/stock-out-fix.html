@@ -88,14 +88,15 @@
 						<span class="input-group-addon" id="order-form_date_span">受注日</span>
 						<input type="text" class="form-control" name="date1" id="selected_date1" value="" placeholder="yyyy-mm-dd hh:mm (半角英数字)" data-toggle="tooltip" data-placement="top" title="2010～2018年の範囲で入力可">
 					</div>
+					<br>
 					<!-- 取引先入力フォーム -->
-					<span id="too_much"></span>
 					<div class="input-group" id="order-form_shop">
 						<span class="input-group-addon" id="order-form_shop_span">取引先</span>
 						<input type="text" class="form-control" name="shop1" id="selected_shop1" value="" autocomplete="on" list="shops"  data-toggle="tooltip" data-placement="top" title="プルダウンから選択 or 直接入力 (10文字以内)">
 						<datalist id="shops"></datalist>
 					</div>
-					<br><!-- 受注数入力フォーム -->
+					<span id="too_much"></span>
+					<!-- 受注数入力フォーム -->
 					<div class="input-group" id="order-form_number">
 						<span class="input-group-addon" id="order-form_number_span">受注数</span>
 						<input type="number" class="form-control" name="number1" id="selected_num1" value="" placeholder="半角数字(1～999999)で入力してください">
@@ -123,7 +124,7 @@
 				</div>
 			</div>
 			
-		</div>
+		</div><!-- container -->
 		<script src="js/stock-out-fix.js"></script>
 	</body>
 </html>

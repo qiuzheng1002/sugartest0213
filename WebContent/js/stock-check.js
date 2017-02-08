@@ -13,6 +13,33 @@ var row = alasql(sql, [ id ])[0];
 $('#leadtime').text(row.item.leadtime + ' 日');
 $('#lack').text(row.item.lack + ' %');
 
+//現在の在庫数
+//入庫数読み込み
+var in_13_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 1 AND state = 3', [ id ])[0];
+var in_13 = in_13_sql["SUM(num)"]; //入庫済み
+var in_19_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 1 AND state = 9', [ id ])[0];
+var in_19 = in_19_sql["SUM(num)"]; //棚卸(過剰)数：値はマイナスで保持
+
+//出庫数読み込み
+var out_26_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 2 AND state = 6', [ id ])[0];
+var out_26 = out_26_sql["SUM(num)"]; //出庫済み
+var out_27_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 2 AND state = 7', [ id ])[0];
+var out_27 = out_27_sql["SUM(num)"]; //返品数
+var out_28_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 2 AND state = 8', [ id ])[0];
+var out_28 = out_28_sql["SUM(num)"]; //棚卸(不足)数
+
+//パンくずリスト商品名追加
+var bread_rows = alasql('SELECT * FROM stock \
+		JOIN whouse ON whouse.id = stock.whouse \
+		JOIN item ON item.id = stock.item \
+		WHERE stock.id = ?', [ id ])[0];
+var this_bread_name = "(倉庫) " + bread_rows.whouse.name + "　(品番) " + bread_rows.item.maker + " : " + bread_rows.item.detail;
+$('#this_bread').text(this_bread_name);
+
+//在庫数吐き出し
+var warehouse_stock = in_13 - in_19 - out_26 + out_27 - out_28; //在庫数(倉庫内在庫)
+$("#current_stock_data").append(numberWithCommas(warehouse_stock));
+
 //日付を取得
 var y = 0;
 var this_month = "";
@@ -42,8 +69,7 @@ console.table(hensa_data_test)
 
 
 //SQL 日付の取り出し調べる
-var hensa_data = alasql("SELECT id, stock, purpose, state, LEFT(date,10),num FROM trans WHERE stock = " + id + " AND purpose = 2 AND state = 6 AND date >= '" + three_months_ago + "' AND date < '" + this_month + "'");
-console.table(hensa_data)
+
 var hensa_box = [];
 
 

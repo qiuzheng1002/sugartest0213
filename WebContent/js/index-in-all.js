@@ -44,28 +44,25 @@ var rows = alasql('SELECT * FROM trans \
 	JOIN whouse ON whouse.id = stock.whouse \
 	JOIN item ON item.id = stock.item \
 	JOIN kind ON kind.id = item.kind \
-	WHERE trans.purpose = 2 AND trans.state = 4 OR trans.state = 5');
+	WHERE trans.purpose = 1 AND trans.state = 2');
 
 //未出庫リスト作成
 var tbody = $('#tbody-mi_shukko');
 for (var i = 0; i < rows.length; i++) {
 	var row = rows[i];
 	var state_check = row.trans.state;
-	var tr = $('<tr data-href="stock-out-fix.html?id=' + row.trans.id + '"></tr>');
+	var tr = $('<tr data-href="stock-in-fix.html?id=' + row.trans.id + '"></tr>');
 	tr.append('<td>' + row.whouse.name + '</td>');
-	tr.append('<td class="hidden">' + row.kind.text + '</td>');
-	tr.append('<td class="hidden">' + row.item.code + '</td>');
+	tr.append('<td>' + row.kind.text + '</td>');
+	tr.append('<td>' + row.item.code + '</td>');
 	tr.append('<td>' + row.item.maker + '</td>');	
 	tr.append('<td>' + row.item.detail + '</td>');
 	tr.append('<td class="hidden">' + row.trans.date + '</td>');
 	tr.append('<td class="hidden">' + row.trans.shop + '</td>');
 	tr.append('<td>' + numberWithCommas(row.trans.num) + '</td>');
 	tr.append('<td>' + row.trans.deadline + '</td>');
-	if (state_check == 4){
-		tr.append('<td class="table_state">' + '<span class="label label-danger" id="fix_data_address" name="' + row.trans.id + '">受注済み</span>' + '</td>');
-	}
-	else if (state_check == 5){
-		tr.append('<td class="table_state">' + '<span class="label label-warning" id="fix_data_address" name="' + row.trans.id + '">納期確定済み</span>' + '</td>');
+	if (state_check == 2){
+		tr.append('<td class="table_state">' + '<span class="label label-warning" id="fix_data_address" name="' + row.trans.id + '">発注済み</span>' + '</td>');
 	}
 	tr.appendTo(tbody);
 }
@@ -74,17 +71,17 @@ for (var i = 0; i < rows.length; i++) {
 $(function(){
 	$(document).on("click","#fix_data_address",function() {
 		var fix_row_id = $(this).attr("name");
-		window.location.assign('stock-out-fix.html?id=' + fix_row_id);
+		window.location.assign('stock-in-fix.html?id=' + fix_row_id);
 	});
 });
 
-// 受注データ0件の処理
+// 発注データ0件の処理
 var table_length = mi_shukko_table.rows.length;
 if (table_length == 1){
 	var tr = $('<tr>').appendTo(tbody);
-	tr.append('<td>受注データなし</td>');
-	tr.append('<td class="hidden">-</td>');
-	tr.append('<td class="hidden">-</td>');
+	tr.append('<td>発注データなし</td>');
+	tr.append('<td>-</td>');
+	tr.append('<td>-</td>');
 	tr.append('<td>-</td>');
 	tr.append('<td>-</td>');
 	tr.append('<td class="hidden">-</td>');

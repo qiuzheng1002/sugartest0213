@@ -94,12 +94,12 @@
 						<!-- 取引先入力フォーム -->
 					<div class="input-group" id="order-form_shop"  data-toggle="tooltip" data-placement="top" title="自動入力です">
 						<span class="input-group-addon" id="order-form_shop_span">取引先</span>
-						<input class="form-control" name="shop1" id="selected_shop1" value="" disabled>
+						<input class="form-control" name="shop1" id="selected_shop1" value="棚卸" disabled>
 					</div>
 						<!-- 不足数入力フォーム -->
 					<div class="input-group" id="order-form_number">
 						<span class="input-group-addon" id="order-form_number_span">不足数</span>
-						<input type="number" class="form-control" name="number1" id="selected_number1" value="" placeholder="半角数字(-999999～999999)で入力してください(0除く)" data-toggle="tooltip" data-placement="top" title="不足分を「+」、過剰分を「-」で登録してください">
+						<input type="number" class="form-control" name="number1" id="selected_number1" value="" placeholder="半角数字(-999999～999999)で入力してください (0除く)" data-toggle="tooltip" data-placement="top" title="不足分を「+」、過剰分を「-」で登録してください">
 					</div>
 						<!-- 納期入力フォーム -->
 					<div class="input-group" id="order-form_deadline"  data-toggle="tooltip" data-placement="bottom" title="登録日と同じ日時で自動登録します">
@@ -120,7 +120,7 @@
 						<tr>
 							<th class="table_date">登録日</th>
 							<th class="table_shop">取引先</th>
-							<th class="table_num">返品数</th>
+							<th class="table_num">不足数</th>
 							<th class="table_deadline">納期</th>
 							<th class="table_state">ステータス</th>
 							<th class="table_btn"></th>

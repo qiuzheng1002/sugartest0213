@@ -69,7 +69,15 @@
 		</nav>
 
 		<div class="container">
-<!-- リスト -->
+			<div><!-- パンくずリスト -->
+				<ol class="breadcrumb">
+					<li><a href="index.html">在庫情報&nbsp;portal</a></li>
+					<li><a href="index-stock-check.html">分析</a></li>
+					<li class="active" id="this_bread"></li>
+				</ol>
+			</div>		
+		
+
 			<div class="panel panel-default">
 				<div class="panel-heading">安全在庫数 設定条件</div>
 				<table class="table table-hover">
@@ -96,9 +104,8 @@
 <!-- 現在の在庫数 -->
 			<div class="panel panel-default" id="current_stock">
 				<div class="panel-heading">現在の在庫数</div>
-					<div id="current_stock_data">(仮)17000</div> <!-- 仮置き -->
+					<div id="current_stock_data"></div>
 			</div>
-<hr>
 
 <!-- 回帰分析 -->
 			<div class="panel panel-default" id="analysis">
