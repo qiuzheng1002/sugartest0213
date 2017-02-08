@@ -45,23 +45,11 @@ var time = $.now();
 var dateObj = new Date(time);
 var	this_year = dateObj.getFullYear();
 var this_month = dateObj.getMonth() + 1;
-/*	if (m<=3){
-		var y3 = parseInt(y) - 1;
-		var m3 = parseInt(m) + 9;
-	}
-	else{
-		y3 = y;
-		m3 = m -3;
-	}
-	*/
 
 var next_year = parseInt(this_year) + 1;
 var last1_year = parseInt(this_year) - 1;
 var last2_year = parseInt(this_year) - 2;
 var last3_year = parseInt(this_year) - 3;
-
-console.log(this_year);
-console.log(this_month);
 
 //テーブルに年度設定
 $('#this_year').append(this_year);
@@ -69,20 +57,140 @@ $('#next_year').append(next_year);
 $('#last1_year').append(last1_year);
 $('#last2_year').append(last2_year);
 $('#last3_year').append(last3_year);
+$('#ana_title').append(' (' + this_year + '年' + this_month + '月現在)');
 
 //標準偏差
-var shukko_data = alasql("SELECT id, stock, purpose, state, deadline, num FROM trans WHERE stock = " + id + " AND purpose = 2 AND state = 6 ORDER BY deadline");
-console.table(shukko_data);
+var shukko_data = alasql("SELECT id, stock, purpose, state, deadline, num FROM trans WHERE stock = " + id + " AND purpose = 2 AND state = 6 ORDER BY deadline DESC");
 
+//データ入力
+var this_m1= 0, this_m2= 0, this_m3= 0, this_m4= 0, this_m5= 0, this_m6= 0, this_m7= 0, this_m8= 0, this_m9= 0, this_m10= 0, this_m11= 0, this_m12 = 0;
+var last1_m1= 0, last1_m2= 0, last1_m3= 0, last1_m4= 0, last1_m5= 0, last1_m6= 0, last1_m7= 0, last1_m8= 0, last1_m9= 0, last1_m10= 0, last1_m11= 0, last1_m12 = 0;
+var last2_m1= 0, last2_m2= 0, last2_m3= 0, last2_m4= 0, last2_m5= 0, last2_m6= 0, last2_m7= 0, last2_m8= 0, last2_m9= 0, last2_m10= 0, last2_m11= 0, last2_m12 = 0;
+var last3_m1= 0, last3_m2= 0, last3_m3= 0, last3_m4= 0, last3_m5= 0, last3_m6= 0, last3_m7= 0, last3_m8= 0, last3_m9= 0, last3_m10= 0, last3_m11= 0, last3_m12 = 0;
+var next_m1= 0, next_m2= 0, next_m3= 0, next_m4= 0, next_m5= 0, next_m6= 0, next_m7= 0, next_m8= 0, next_m9= 0, next_m10= 0, next_m11= 0, next_m12 = 0;
 
+for(var i=0; i<shukko_data.length; i++){
+	var row2 = shukko_data[i];
+	var row_date = row2.deadline;
+	var row_num = row2.num;
+	var row_year = parseInt(row_date.slice(0,4)); //年
+	var row_month = parseInt(row_date.slice(5,7)); //月
 
+	if(row_year >= last3_year){ //3年前より古いデータ域に突入でbreak
+		if(row_year == this_year){  //今年分
+			if(row_month == 1){this_m1 = this_m1 + row_num}
+			else if(row_month == 2){this_m2 = this_m2 + row_num}
+			else if(row_month == 3){this_m3 = this_m3 + row_num}
+			else if(row_month == 4){this_m4 = this_m4 + row_num}
+			else if(row_month == 5){this_m5 = this_m5 + row_num}
+			else if(row_month == 6){this_m6 = this_m6 + row_num}
+			else if(row_month == 7){this_m7 = this_m7 + row_num}
+			else if(row_month == 8){this_m8 = this_m8 + row_num}
+			else if(row_month == 9){this_m9 = this_m9 + row_num}
+			else if(row_month == 10){this_m10 = this_m10 + row_num}
+			else if(row_month == 11){this_m11 = this_m11 + row_num}
+			else if(row_month == 12){this_m12 = this_m12 + row_num}
+		}
+		else if(row_year == last1_year){  //1年前
+			if(row_month == 1){last1_m1 = last1_m1 + row_num}
+			else if(row_month == 2){last1_m2 = last1_m2 + row_num}
+			else if(row_month == 3){last1_m3 = last1_m3 + row_num}
+			else if(row_month == 4){last1_m4 = last1_m4 + row_num}
+			else if(row_month == 5){last1_m5 = last1_m5 + row_num}
+			else if(row_month == 6){last1_m6 = last1_m6 + row_num}
+			else if(row_month == 7){last1_m7 = last1_m7 + row_num}
+			else if(row_month == 8){last1_m8 = last1_m8 + row_num}
+			else if(row_month == 9){last1_m9 = last1_m9 + row_num}
+			else if(row_month == 10){last1_m10 = last1_m10 + row_num}
+			else if(row_month == 11){last1_m11 = last1_m11 + row_num}
+			else if(row_month == 12){last1_m12 = last1_m12 + row_num}
+		}
+		else if(row_year == last2_year){  //2年前
+			if(row_month == 1){last2_m1 = last2_m1 + row_num}
+			else if(row_month == 2){last2_m2 = last2_m2 + row_num}
+			else if(row_month == 3){last2_m3 = last2_m3 + row_num}
+			else if(row_month == 4){last2_m4 = last2_m4 + row_num}
+			else if(row_month == 5){last2_m5 = last2_m5 + row_num}
+			else if(row_month == 6){last2_m6 = last2_m6 + row_num}
+			else if(row_month == 7){last2_m7 = last2_m7 + row_num}
+			else if(row_month == 8){last2_m8 = last2_m8 + row_num}
+			else if(row_month == 9){last2_m9 = last2_m9 + row_num}
+			else if(row_month == 10){last2_m10 = last2_m10 + row_num}
+			else if(row_month == 11){last2_m11 = last2_m11 + row_num}
+			else if(row_month == 12){last2_m12 = last2_m12 + row_num}
+		}
+		else if(row_year == last3_year){  //3年前
+			if(row_month == 1){last3_m1 = last3_m1 + row_num}
+			else if(row_month == 2){last3_m2 = last3_m2 + row_num}
+			else if(row_month == 3){last3_m3 = last3_m3 + row_num}
+			else if(row_month == 4){last3_m4 = last3_m4 + row_num}
+			else if(row_month == 5){last3_m5 = last3_m5 + row_num}
+			else if(row_month == 6){last3_m6 = last3_m6 + row_num}
+			else if(row_month == 7){last3_m7 = last3_m7 + row_num}
+			else if(row_month == 8){last3_m8 = last3_m8 + row_num}
+			else if(row_month == 9){last3_m9 = last3_m9 + row_num}
+			else if(row_month == 10){last3_m10 = last3_m10 + row_num}
+			else if(row_month == 11){last3_m11 = last3_m11 + row_num}
+			else if(row_month == 12){last3_m12 = last3_m12 + row_num}
+		}
+	}
+	else{
+		break;
+	}
+}//for end
 
+var all_data = [];
 
+//履歴データ挿入(3年前)：時間あればfor使う
+for (var i=1; i<=12; i++){
+	var the_month = eval("last3_m" + i);
+	$('#last3_year_m'+i).replaceWith('<td id="last3_year_m' + i + '">' + the_month + '</td>');
+	all_data.push(the_month);
+}
+//履歴データ挿入(2年前)
+for (var i=1; i<=12; i++){
+	var the_month = eval("last2_m" + i);
+	$('#last2_year_m'+i).replaceWith('<td id="last2_year_m' + i + '">' + the_month + '</td>');
+	all_data.push(the_month);
+}
+//履歴データ挿入(1年前)
+for (var i=1; i<=12; i++){
+	var the_month = eval("last1_m" + i);
+	$('#last1_year_m'+i).replaceWith('<td id="last1_year_m' + i + '">' + the_month + '</td>');
+	all_data.push(the_month);
+}
+//履歴データ挿入(今年)
+for (var i=1; i<=12; i++){
+	if(i < this_month){
+		var the_month = eval("this_m" + i);
+		$('#this_year_m'+i).replaceWith('<td id="this_year_m' + i + '">' + the_month + '</td>');
+		all_data.push(the_month);
+	}
+	else{
+		break;
+	}
+}
+
+//標準偏差
 var hensa_box = [];
+if(this_month == 1){ //1月の場合：10-12月分代入
+	hensa_box.push(last1_m10, last1_m11, last1_m12);
+}
+else if(this_month == 2){ //2月の場合：11-1月分代入
+	hensa_box.push(last1_m11, last1_m12, this_m1);
+}
+else if(this_month == 3){ //3月の場合：1-2月分代入
+	hensa_box.push(last1_m12, this_m1, this_m2);
+}
+else{ //4月以降は直近3ヶ月分
+	for(i=1; i<=3; i++){
+	var last_month = this_month - i;
+	var this_month_num = eval("this_m" + last_month);
+	hensa_box.push(this_month_num);
+	}
+}
 
-
-
-
+var hensa_float = 0; 
 $(function(){
 //標準偏差：平均
 function getAverage(hensa_box){
@@ -120,9 +228,83 @@ function floatFormat(number){
 	var _pow = Math.pow(10, 2);
 	return Math.round(number * _pow) / _pow;
 }
-var hensa_float = floatFormat(hensa);
+hensa_float = floatFormat(hensa);
 $("#hensa").append(hensa_float);
 })
+
+$(function(){//適正在庫算出
+var just_leadtime_data = row.item.leadtime;
+var just_lack_data = row.item.lack;
+if(just_lack_data == 0.01){
+	var just_lack = 3.62;
+}
+else if(just_lack_data == 0.1){
+	var just_lack = 3.08;
+}
+else if(just_lack_data == 0.1){
+	var just_lack = 3.08;
+}
+else if(just_lack_data == 0.5){
+	var just_lack = 2.58;
+}
+else if(just_lack_data == 1){
+	var just_lack = 2.33;
+}
+else if(just_lack_data == 2.5){
+	var just_lack = 1.96;
+}
+else if(just_lack_data == 5){
+	var just_lack = 1.65;
+}
+else if(just_lack_data == 10){
+	var just_lack = 1.28;
+}
+$('#lack').text(row.item.lack + "% (安全係数:" + just_lack + ")");
+
+//四捨五入
+function floatFormat(number){ //四捨五入2桁
+	var _pow = Math.pow(10, 2);
+	return Math.round(number * _pow) / _pow;
+}
+function floatFormatZero(number){  //四捨五入0桁
+	var _pow = Math.pow(10, 0);
+	return Math.round(number * _pow) / _pow;
+}
+var ave_3month =  (hensa_box[0] + hensa_box[1] + hensa_box[2]) / 3; //直近3ヶ月の平均出庫数
+var just_leadtime = Math.sqrt(just_leadtime_data); //リードタイムの平方根
+var just_leadtime_float = floatFormat(just_leadtime); //四捨五入
+var just_stock_num = just_lack * hensa_float * just_leadtime_float + ave_3month * 1.5;
+var just_stock_num_float = floatFormatZero(just_stock_num); //適正在庫 四捨五入
+$("#just_stock_data").append(numberWithCommas(just_stock_num_float));
+})
+
+//季節係数
+var ki_this_m1= 0, ki_this_m2= 0, ki_this_m3= 0, ki_this_m4= 0, ki_this_m5= 0, ki_this_m6= 0, ki_this_m7= 0, ki_this_m8= 0, ki_this_m9= 0, ki_this_m10= 0, ki_this_m11= 0, ki_this_m12 = 0;
+var ki_last1_m1= 0, ki_last1_m2= 0, ki_last1_m3= 0, ki_last1_m4= 0, ki_last1_m5= 0, ki_last1_m6= 0, ki_last1_m7= 0, ki_last1_m8= 0, ki_last1_m9= 0, ki_last1_m10= 0, ki_last1_m11= 0, ki_last1_m12 = 0;
+var ki_last2_m1= 0, ki_last2_m2= 0, ki_last2_m3= 0, ki_last2_m4= 0, ki_last2_m5= 0, ki_last2_m6= 0, ki_last2_m7= 0, ki_last2_m8= 0, ki_last2_m9= 0, ki_last2_m10= 0, ki_last2_m11= 0, ki_last2_m12 = 0;
+console.log(all_data);
+
+
+for (var a=1; a<=12; a++){
+	ki_last2_m1 = ki_last2_m1 + eval("last3_m" + a);
+}
+for (var a=1; a<=12; a++){
+	ki_last2_m1 = ki_last2_m1 + eval("last3_m" + a);
+}
+
+
+
+
+//タブhover
+$(function(){
+	$("ul.dropdown-menu").hide();
+	$("li.dropdown").hover(function(){
+		$("ul:not(:animated)",this).slideDown("fast");
+	},
+	function(){
+		$("ul",this).slideUp("fast");
+	});
+});
 
 
 //ここから未編集

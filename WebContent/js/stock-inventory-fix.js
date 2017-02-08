@@ -224,3 +224,14 @@ $('#update_data').on('click', function() {
 $(function () {
 	$('[data-toggle="tooltip"]').tooltip();
 });
+
+//タブhover
+$(function(){
+	$("ul.dropdown-menu").hide();
+	$("li.dropdown").hover(function(){
+		$("ul:not(:animated)",this).slideDown("fast");
+	},
+	function(){
+		$("ul",this).slideUp("fast");
+	});
+});

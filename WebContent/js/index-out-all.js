@@ -98,3 +98,14 @@ if (table_length == 1){
 $('tbody > tr').css('cursor', 'pointer').on('click', function() {
 	window.location = $(this).attr('data-href');
 });
+
+//タブhover
+$(function(){
+	$("ul.dropdown-menu").hide();
+	$("li.dropdown").hover(function(){
+		$("ul:not(:animated)",this).slideDown("fast");
+	},
+	function(){
+		$("ul",this).slideUp("fast");
+	});
+});

@@ -508,3 +508,14 @@ for (var i = 0; i < shop_rows.length; i++) {
 $(function () {
 	$('[data-toggle="tooltip"]').tooltip();
 })
+
+// タブhover
+$(function(){
+	$("ul.dropdown-menu").hide();
+	$("li.dropdown").hover(function(){
+		$("ul:not(:animated)",this).slideDown("fast");
+	},
+	function(){
+		$("ul",this).slideUp("fast");
+	});
+});

@@ -281,3 +281,14 @@ $(function(){ //SQL内のデータを削除し、結果的にテーブルから�
 		window.location.assign('stock-return.html?id=' + id);
 	});
 });
+
+//タブhover
+$(function(){
+	$("ul.dropdown-menu").hide();
+	$("li.dropdown").hover(function(){
+		$("ul:not(:animated)",this).slideDown("fast");
+	},
+	function(){
+		$("ul",this).slideUp("fast");
+	});
+});
