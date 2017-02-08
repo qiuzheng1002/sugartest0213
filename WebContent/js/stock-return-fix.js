@@ -194,10 +194,13 @@ $('#update_data').on('click', function() {
 	var shop_out_total_sql = alasql("SELECT SUM(num) FROM trans WHERE stock =" + trans_stock_id + "AND purpose = 2 AND state = 6 AND shop = '" + shop + "'")[0];
 	var shop_out_total = shop_out_total_sql["SUM(num)"]; //選択された取引先の出庫数合計
 	var shop_return_total_past_sql = alasql("SELECT SUM(num) FROM trans WHERE stock =" + trans_stock_id + "AND purpose = 2 AND state = 7 AND shop = '" + shop + "'")[0];
-	var shop_return_total_past = shop_return_total_past_sql["SUM(num)"]; //選択された取引先の返品数合計	
-	var shop_return_total = num + shop_return_total_past //今回返品数 + これまでの返品数合計
-	var shop_out_num = shop_out_total - shop_return_total_past; //出庫数 - 返品数 
-	if (shop_out_total < shop_return_total ){ //出庫数 < 返品数合計は登録不可
+	var shop_return_total_past = shop_return_total_past_sql["SUM(num)"]; //選択された取引先の返品数合計
+	var num_before = rows.trans.num; //変更前データ
+	var shop_return_total = shop_return_total_past - num_before + num; //これまでの返品数合計 - 変更前数 + 変更後数
+	var shop_out_num = shop_out_total - shop_return_total; //総出庫数 - 総返品数 
+	if (shop_out_num < 0){ //ショップ単位での返品数が出庫数を上回る場合アウト
+		$("#selected_num1").css("color","red");
+		$("#order-form_number_span").css("color","red");
 		$("#selected_shop1").css("color","red");
 		$("#order-form_shop_span").css("color","red");
 		$("#order-form_shop_span").animate({opacity: 0.4},50);
@@ -205,16 +208,18 @@ $('#update_data').on('click', function() {
 		$("#order-form_shop_span").animate({opacity: 0.4},50);
 		$("#order-form_shop_span").animate({opacity: 1.0},50);
 		$("#too_much").empty();
-		if (shop_out_num <= 0){ //出庫数 - 返品数がゼロの場合
-			var too_much_text = '(' + shop + 'の累計出庫済み数は 0 のため、登録できません。 )';
+		if (shop_out_total == 0){ //出庫履歴がない場合(念のため)
+			var too_much_text = '(' + shop + ' への出庫履歴がないため、登録できません。 )';
 		}
-		else {
-			var too_much_text = '(' + shop + 'の累計出庫済み数 ' + shop_out_num +' 以下で登録してください。)';
+		else { //出庫履歴はあるが、マイナスになる場合
+			var too_much_text = '(データ変更により ' + shop + ' への累計出庫済み数が ' + shop_out_num +' となります。先に入庫・出庫・棚卸調整データを修正してください。)';
 		}
 		$("#too_much").append(too_much_text);
 		shop_ok = 0;
 	}
 	else{
+		$("#selected_num1").css("color","black");
+		$("#order-form_number_span").css("color","black");
 		$("#selected_shop1").css("color","black");
 		$("#order-form_shop_span").css("color","black");
 		$("#too_much").empty();

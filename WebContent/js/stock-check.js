@@ -41,18 +41,11 @@ var warehouse_stock = in_13 - in_19 - out_26 + out_27 - out_28; //在庫数(倉�
 $("#current_stock_data").append(numberWithCommas(warehouse_stock));
 
 //日付を取得
-var y = 0;
-var this_month = "";
-var three_months_ago = "";
-$(function(){
-	var time = $.now();
-	var dateObj = new Date(time);
-		y = dateObj.getFullYear();
-	var m = dateObj.getMonth() + 1;
-		if(m<10){m = "0" + m}
-	this_month = y + '-' + m + '-01 00:00';
-	
-	if (m<=3){
+var time = $.now();
+var dateObj = new Date(time);
+var	this_year = dateObj.getFullYear();
+var this_month = dateObj.getMonth() + 1;
+/*	if (m<=3){
 		var y3 = parseInt(y) - 1;
 		var m3 = parseInt(m) + 9;
 	}
@@ -60,15 +53,30 @@ $(function(){
 		y3 = y;
 		m3 = m -3;
 	}
-	three_months_ago = y3 + '-' + m3 + '-01 00:00';
-})
+	*/
+
+var next_year = parseInt(this_year) + 1;
+var last1_year = parseInt(this_year) - 1;
+var last2_year = parseInt(this_year) - 2;
+var last3_year = parseInt(this_year) - 3;
+
+console.log(this_year);
+console.log(this_month);
+
+//テーブルに年度設定
+$('#this_year').append(this_year);
+$('#next_year').append(next_year);
+$('#last1_year').append(last1_year);
+$('#last2_year').append(last2_year);
+$('#last3_year').append(last3_year);
 
 //標準偏差
-var hensa_data_test = alasql("SELECT * FROM trans WHERE stock = " + id + " AND purpose = 2 AND state = 6");
-console.table(hensa_data_test)
+var shukko_data = alasql("SELECT id, stock, purpose, state, deadline, num FROM trans WHERE stock = " + id + " AND purpose = 2 AND state = 6 ORDER BY deadline");
+console.table(shukko_data);
 
 
-//SQL 日付の取り出し調べる
+
+
 
 var hensa_box = [];
 

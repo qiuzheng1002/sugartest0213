@@ -3,6 +3,10 @@
 .index-out_css{
 	background-color: #acffff;
 }
+#panel_head_span{
+	float: right;
+	font-size: 12px;
+}
 
 #order-form_date{
 	float: left;
