@@ -98,7 +98,7 @@ for(var i=0; i<shukko_data.length; i++){
 	}
 	else{
 		break;
-	}
+	}	
 }//for end
 
 //履歴データ挿入(1年前)
@@ -226,8 +226,15 @@ var mikomi_stock = warehouse_stock + in_12 - out_24 - out_25; //理論在庫
 var safe_stock = just_stock_num_float; //安全在庫数
 var diff_stock_warehouse = warehouse_stock - safe_stock; //倉庫在庫 - 安全在庫
 var diff_stock_mikomi = mikomi_stock - safe_stock; //理論在庫 - 安全在庫
-var percent_stock_warehouse = warehouse_stock / safe_stock * 100; //倉庫在庫ステータス(%)
-var percent_stock_mikomi = mikomi_stock / safe_stock * 100; //理論在庫ステータス(%)
+if(safe_stock == 0){
+	var percent_stock_warehouse = 0; //倉庫在庫ステータス(%)
+	var percent_stock_mikomi = 0; //理論在庫ステータス(%)
+}
+else{
+	var percent_stock_warehouse = warehouse_stock / safe_stock * 100; //倉庫在庫ステータス(%)
+	var percent_stock_mikomi = mikomi_stock / safe_stock * 100; //理論在庫ステータス(%)
+}
+
 function floatFormat(number){
 	var _pow = Math.pow(10, 0);
 	return Math.round(number * _pow) / _pow;
