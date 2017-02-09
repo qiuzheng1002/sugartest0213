@@ -83,37 +83,15 @@
 		</nav>
 
 		<div class="container">
-			<!-- Bread crumbs -->
+		<!-- パンくずリスト -->
 			<ol class="breadcrumb">
-				<li><a href="index.html">在庫情報 portal</a></li>
+				<li><a href="index.html">在庫情報&nbsp;portal</a></li>
 				<li class="active" id="this_bread"></li>
 			</ol>
 
-			<!-- Abstract -->
-			<table class="table table-hover">
-				<tbody>
-					<tr>
-						<th>コード</th><td id="code"></td>
-					</tr>
-					<tr>
-						<th>価格</th><td id="price"></td>
-					</tr>
-					<tr>
-						<th>リードタイム</th><td id="leadtime"></td>
-					</tr>
-					<tr>
-						<th>許容欠品率</th><td id="lack"></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-
-<!-- 在庫関連 -->
-		<div class="container">
 <!-- 在庫状況 -->
 			<div class="panel panel-default">
-				<div class="panel-heading" id="zaiko_shosai">在庫状況
-				</div>
+				<div class="panel-heading" id="zaiko_shosai">在庫状況</div>
 				<table class="table table-hover" id="zaiko_state_table">
 					<thead>
 						<tr>
@@ -152,12 +130,28 @@
 				<table class="table" id="shukko_table">
 					<thead>
 						<tr>
-							<th style="font-size:16px;">total</th>
-							<th style="font-size:12px; color:gray;">(受注済み)</th>
-							<th style="font-size:12px; color:gray;">(納期確定済み)</th>
+							<th style="font-size:16px; padding:0px;">total</th>
+							<th style="font-size:12px; padding:0px; color:gray;">(受注済み)</th>
+							<th style="font-size:12px; padding:0px; color:gray;">(納期確定済み)</th>
 						</tr>
 					</thead>
 					<tbody id="tbody-shukko_state"></tbody>
+				</table>
+			</div>
+			
+		<!-- 基礎情報 -->
+			<div class="panel panel-default" id="zaiko_info_box">
+				<div class="panel-heading" id="zaiko_shosai">基礎情報</div>
+				<table class="table table-hover" id="zaiko_info_table">
+					<thead>
+						<tr>
+							<th>コード</th>
+							<th>価格</th>
+							<th>リードタイム</th>
+							<th>許容欠品率</th>
+						</tr>
+					</thead>
+					<tbody id="tbody-zaiko_info_table_body"></tbody>
 				</table>
 			</div>
 		</div><!-- container -->

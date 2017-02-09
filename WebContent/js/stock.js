@@ -5,18 +5,47 @@ $("#zaiko_shosai").append("<a href = stock-check.html?id=" + id + " style='float
 $("#nyuuko_shosai").append("<a href = stock-in.html?id=" + id + " style='float:right;'>データの登録・詳細はこちら</a>");
 $("#shukko_shosai").append("<a href = stock-out.html?id=" + id + " style='float:right;'>データの登録・詳細はこちら</a>");
 
-// 商品情報読み込み
+//商品情報読み込み
 var sql = 'SELECT * FROM stock \
 	JOIN whouse ON whouse.id = stock.whouse \
 	JOIN item ON item.id = stock.item \
 	JOIN kind ON kind.id = item.kind \
 	WHERE stock.id = ?';
-
 var row = alasql(sql, [ id ])[0];
-$('#image').attr('src', 'img/' + row.item.id + '.jpg');
-$('#code').text(row.item.code);
-$('#price').text(numberWithCommas(row.item.price) + ' 円');
-$('#leadtime').text(row.item.leadtime + ' 日');
+//適正在庫算出
+var just_leadtime_data = row.item.leadtime;
+var just_lack_data = row.item.lack;
+if(just_lack_data == 0.01){
+	var just_lack = 3.62;
+}
+else if(just_lack_data == 0.1){
+	var just_lack = 3.08;
+}
+else if(just_lack_data == 0.1){
+	var just_lack = 3.08;
+}
+else if(just_lack_data == 0.5){
+	var just_lack = 2.58;
+}
+else if(just_lack_data == 1){
+	var just_lack = 2.33;
+}
+else if(just_lack_data == 2.5){
+	var just_lack = 1.96;
+}
+else if(just_lack_data == 5){
+	var just_lack = 1.65;
+}
+else if(just_lack_data == 10){
+	var just_lack = 1.28;
+}
+
+var tbody_zaiko_info = $('#tbody-zaiko_info_table_body');
+var tr = $('<tr>').appendTo(tbody_zaiko_info);
+	tr.append('<td>' + row.item.code + '</td>');
+	tr.append('<td>' + numberWithCommas(row.item.price) + ' 円' + '</td>');
+	tr.append('<td>' + row.item.leadtime + ' 日' + '</td>');
+	tr.append('<td>' + row.item.lack + '% (安全係数:' + just_lack + ')' + '</td>');
 
 //入庫数読み込み
 var in_12_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 1 AND state = 2', [ id ])[0];
@@ -37,8 +66,6 @@ var out_27_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose 
 var out_27 = out_27_sql["SUM(num)"]; //返品数
 var out_28_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 2 AND state = 8', [ id ])[0];
 var out_28 = out_28_sql["SUM(num)"]; //棚卸(不足)数
-
-
 
 //適正在庫算出ここから
 //日付を取得
@@ -136,7 +163,6 @@ else{ //4月以降は直近3ヶ月分
 	}
 }
 
-
 //標準偏差：平均
 function getAverage(hensa_box){
 	var sum = 0;
@@ -174,35 +200,6 @@ function floatFormat22(number){
 	return Math.round(number * _pow) / _pow;
 }
 var hensa_float = floatFormat22(hensa);
-
-//適正在庫算出
-var just_leadtime_data = row.item.leadtime;
-var just_lack_data = row.item.lack;
-if(just_lack_data == 0.01){
-	var just_lack = 3.62;
-}
-else if(just_lack_data == 0.1){
-	var just_lack = 3.08;
-}
-else if(just_lack_data == 0.1){
-	var just_lack = 3.08;
-}
-else if(just_lack_data == 0.5){
-	var just_lack = 2.58;
-}
-else if(just_lack_data == 1){
-	var just_lack = 2.33;
-}
-else if(just_lack_data == 2.5){
-	var just_lack = 1.96;
-}
-else if(just_lack_data == 5){
-	var just_lack = 1.65;
-}
-else if(just_lack_data == 10){
-	var just_lack = 1.28;
-}
-$('#lack').text(row.item.lack + "% (安全係数:" + just_lack + ")");
 
 //四捨五入
 function floatFormat2(number){ //四捨五入2桁

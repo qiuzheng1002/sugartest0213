@@ -17,7 +17,11 @@
 	text-align: center;
 	border-left: 1px solid rgba(255, 255, 255, .75);
 	border-right: 1px solid rgba(0, 0, 0, .1);
-}	
+}
+
+.input-group span{
+	width: 90px;
+}
 
 #order-form_date{
 	width: 97%;
@@ -35,10 +39,8 @@
 	width: 97%;
 }
 
-#order-form_update{
+#update_data{
 	float: right;
-	margin-right: 3%;
-	width: 15%;
 }
 
 #too_much{

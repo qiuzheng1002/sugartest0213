@@ -94,7 +94,11 @@
 			</div>
 
 			<div class="panel panel-default">
-				<div class="panel-heading">発注データ編集</div>
+				<div class="panel-heading">発注データ編集
+					<button type="submit" class="btn btn-primary btn-xs" id="update_data">
+						<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;&nbsp;更新
+					</button>
+				</div>
 				<div class="container">
 					<input type="hidden" name="id">
 					<br><!-- 発注日入力フォーム -->
@@ -122,12 +126,7 @@
 							<input type="text" class="form-control" name="deadline1" id="selected_deadline1" value="" placeholder="yyyy-mm-dd hh:mm (半角英数字)"  data-toggle="tooltip" data-placement="top" title="2010～2018年の範囲で入力可">
 						</div>
 					</div>
-					<br><!-- データ登録ボタン -->
-					<div class="input-group" id="order-form_update">
-						<button type="submit" class="btn btn-primary btn-block" id="update_data">
-						<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;&nbsp;更新
-						</button>
-					</div>
+					<br>
 						<!-- ステータス　ラジオボタン -->
 					<div class="input-group" id="order-form_state">
 						<span class="input-group-addon" id="order-form_state_span">ステータス</span>

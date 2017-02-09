@@ -51,6 +51,10 @@
 	width: 49%;
 }
 
+#zaiko_info_box{
+	clear: both;
+}
+
 #nyuuko_total{
 	padding: 10px;
 	text-align: center;
@@ -62,10 +66,14 @@
 }
 
 #nyuuko_state_total{
-	padding: 28px;
+	padding: 20px;
 	text-align: center;
 }
 
 #shukko_table th, td{
+	text-align: center;
+}
+
+#zaiko_info_table th, td{
 	text-align: center;
 }

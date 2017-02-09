@@ -17,4 +17,16 @@
 	text-align: center;
 	border-left: 1px solid rgba(255, 255, 255, .75);
 	border-right: 1px solid rgba(0, 0, 0, .1);
-}	
+}
+
+#index_whouse_table tr th{
+	padding-left: 5%
+}
+
+#index_whouse_table tr td{
+	padding-left: 5%
+}
+
+#index_whouse_table tr td:first-child{
+	padding-left: 7%
+}

@@ -19,7 +19,14 @@
 	border-right: 1px solid rgba(0, 0, 0, .1);
 }	
 
-/*動かない*/
-.table-data{
-	padding-left: 10px;
+#index_kind_table tr th:first-child{
+	padding-left: 20%;
+}
+
+#index_kind_table tr th:last-child{
+	padding-left: 21%;
+}
+
+#index_kind_table tr td{
+	padding-left: 22%;
 }
