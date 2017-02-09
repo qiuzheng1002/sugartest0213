@@ -278,20 +278,91 @@ var just_stock_num_float = floatFormatZero(just_stock_num); //適正在庫 四�
 $("#just_stock_data").append(numberWithCommas(just_stock_num_float));
 })
 
-//季節係数
+//季節係数(変更)
 var ki_this_m1= 0, ki_this_m2= 0, ki_this_m3= 0, ki_this_m4= 0, ki_this_m5= 0, ki_this_m6= 0, ki_this_m7= 0, ki_this_m8= 0, ki_this_m9= 0, ki_this_m10= 0, ki_this_m11= 0, ki_this_m12 = 0;
 var ki_last1_m1= 0, ki_last1_m2= 0, ki_last1_m3= 0, ki_last1_m4= 0, ki_last1_m5= 0, ki_last1_m6= 0, ki_last1_m7= 0, ki_last1_m8= 0, ki_last1_m9= 0, ki_last1_m10= 0, ki_last1_m11= 0, ki_last1_m12 = 0;
 var ki_last2_m1= 0, ki_last2_m2= 0, ki_last2_m3= 0, ki_last2_m4= 0, ki_last2_m5= 0, ki_last2_m6= 0, ki_last2_m7= 0, ki_last2_m8= 0, ki_last2_m9= 0, ki_last2_m10= 0, ki_last2_m11= 0, ki_last2_m12 = 0;
-console.log(all_data);
 
 
+var test1 = last3_m1 + last2_m1 + last1_m1;
+var test2 = last3_m2 + last2_m2 + last1_m2;
+var test3 = last3_m3 + last2_m3 + last1_m3;
+var test4 = last3_m4 + last2_m4 + last1_m4;
+var test5 = last3_m5 + last2_m5 + last1_m5;
+var test6 = last3_m6 + last2_m6 + last1_m6;
+var test7 = last3_m7 + last2_m7 + last1_m7;
+var test8 = last3_m8 + last2_m8 + last1_m8;
+var test9 = last3_m9 + last2_m9 + last1_m9;
+var test10 = last3_m10 + last2_m10 + last1_m10;
+var test11 = last3_m11 + last2_m11 + last1_m11;
+var test12 = last3_m12 + last2_m12 + last1_m12;
 
-for (var a=1; a<=12; a++){
-	ki_last2_m1 = ki_last2_m1 + eval("last3_m" + a);
+var test_total = test1 + test2 + test3 + test4 + test5 + test6 + test7 + test8 + test9 + test10 + test11 + test12;
+var test_ave = test_total /12;
+
+function floatFormat(number){ //四捨五入2桁
+	var _pow = Math.pow(10, 2);
+	return Math.round(number * _pow) / _pow;
 }
-for (var a=1; a<=12; a++){
-	ki_last2_m1 = ki_last2_m1 + eval("last3_m" + a);
+var test1_point = floatFormat(test1 / test_total *10);
+var test2_point = floatFormat(test2 / test_total *10);
+var test3_point = floatFormat(test3 / test_total *10);
+var test4_point = floatFormat(test4 / test_total *10);
+var test5_point = floatFormat(test5 / test_total *10);
+var test6_point = floatFormat(test6 / test_total *10);
+var test7_point = floatFormat(test7 / test_total *10);
+var test8_point = floatFormat(test8 / test_total *10);
+var test9_point = floatFormat(test9 / test_total *10);
+var test10_point = floatFormat(test10 / test_total *10);
+var test11_point = floatFormat(test11 / test_total *10);
+var test12_point = floatFormat(test12 / test_total *10);
+
+$('#season1').replaceWith('<td id="season1">' + test1_point + '</td>');
+$('#season2').replaceWith('<td id="season2">' + test2_point + '</td>');
+$('#season3').replaceWith('<td id="season3">' + test3_point + '</td>');
+$('#season4').replaceWith('<td id="season4">' + test4_point + '</td>');
+$('#season5').replaceWith('<td id="season5">' + test5_point + '</td>');
+$('#season6').replaceWith('<td id="season6">' + test6_point + '</td>');
+$('#season7').replaceWith('<td id="season7">' + test7_point + '</td>');
+$('#season8').replaceWith('<td id="season8">' + test8_point + '</td>');
+$('#season9').replaceWith('<td id="season9">' + test9_point + '</td>');
+$('#season10').replaceWith('<td id="season10">' + test10_point + '</td>');
+$('#season11').replaceWith('<td id="season11">' + test11_point + '</td>');
+$('#season12').replaceWith('<td id="season12">' + test12_point + '</td>');
+
+var test_ave1 = (last1_m1 +last1_m2+ last1_m3+ last1_m4+ last1_m5+ last1_m6+ last1_m7+ last1_m8+ last1_m9+ last1_m10+ last1_m11+ last1_m12)/12;
+function floatFormatZero(number){  //四捨五入0桁
+	var _pow = Math.pow(10, 0);
+	return Math.round(number * _pow) / _pow;
 }
+
+
+var next_test1 = floatFormatZero(test_ave1 * test1_point);
+var next_test2 = floatFormatZero(test_ave1 * test2_point);
+var next_test3 = floatFormatZero(test_ave1 * test3_point);
+var next_test4 = floatFormatZero(test_ave1 * test4_point);
+var next_test5 = floatFormatZero(test_ave1 * test5_point);
+var next_test6 = floatFormatZero(test_ave1 * test6_point);
+var next_test7 = floatFormatZero(test_ave1 * test7_point);
+var next_test8 = floatFormatZero(test_ave1 * test8_point);
+var next_test9 = floatFormatZero(test_ave1 * test9_point);
+var next_test10 = floatFormatZero(test_ave1 * test10_point);
+var next_test11 = floatFormatZero(test_ave1 * test11_point);
+var next_test12 = floatFormatZero(test_ave1 * test12_point);
+
+$('#next_year_m1').replaceWith('<td id="#next_year_m1" style="color:red;">' + next_test1 + '</td>');
+$('#this_year_m2').replaceWith('<td id="#this_year_m2" style="color:red;">' + next_test2 + '</td>');
+$('#this_year_m3').replaceWith('<td id="#this_year_m3" style="color:red;">' + next_test3 + '</td>');
+$('#this_year_m4').replaceWith('<td id="#this_year_m4" style="color:red;">' + next_test4 + '</td>');
+$('#this_year_m5').replaceWith('<td id="#this_year_m5" style="color:red;">' + next_test5 + '</td>');
+$('#this_year_m6').replaceWith('<td id="#this_year_m6" style="color:red;">' + next_test6 + '</td>');
+$('#this_year_m7').replaceWith('<td id="#this_year_m7" style="color:red;">' + next_test7 + '</td>');
+$('#this_year_m8').replaceWith('<td id="#this_year_m8" style="color:red;">' + next_test8 + '</td>');
+$('#this_year_m9').replaceWith('<td id="#this_year_m9" style="color:red;">' + next_test9 + '</td>');
+$('#this_year_m10').replaceWith('<td id="#this_year_m10" style="color:red;">' + next_test10 + '</td>');
+$('#this_year_m11').replaceWith('<td id="#this_year_m11" style="color:red;">' + next_test11 + '</td>');
+$('#this_year_m12').replaceWith('<td id="#this_year_m12" style="color:red;">' + next_test12 + '</td>');
+
 
 
 
