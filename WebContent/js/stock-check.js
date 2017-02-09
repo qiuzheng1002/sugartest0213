@@ -28,7 +28,7 @@ var out_27 = out_27_sql["SUM(num)"]; //返品数
 var out_28_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 2 AND state = 8', [ id ])[0];
 var out_28 = out_28_sql["SUM(num)"]; //棚卸(不足)数
 
-//パンくずリスト商品名追加
+//パンくずリスト商品名追加 
 var bread_rows = alasql('SELECT * FROM stock \
 		JOIN whouse ON whouse.id = stock.whouse \
 		JOIN item ON item.id = stock.item \
