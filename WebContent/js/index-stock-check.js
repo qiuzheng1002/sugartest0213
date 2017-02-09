@@ -39,6 +39,14 @@ sql += q2 ? 'AND kind.id = ' + q2 + ' ' : '';
 // SQL実行
 var stocks = alasql(sql, [ q3 + '%' ]);
 
+//本日の日付を取得
+var time = $.now();
+var dateObj = new Date(time);
+var	y = dateObj.getFullYear();
+var	m = dateObj.getMonth();
+var	d = dateObj.getDate();
+var date1 = new Date(y, m, d);
+
 // HTML作成
 var tbody = $('#tbody-stocks');
 for (var i = 0; i < stocks.length; i++) {
@@ -49,6 +57,22 @@ for (var i = 0; i < stocks.length; i++) {
 	tr.append('<td>' + stock.item.code + '</td>');
 	tr.append('<td>' + stock.item.maker + '</td>');
 	tr.append('<td>' + stock.item.detail + '</td>');
+	var date_sql = alasql("SELECT date FROM trans WHERE stock = " + stock.stock.id + " ORDER BY date DESC")[0];
+	var date = $(date_sql).attr("date");
+	var year_check = parseInt(date.slice(0,4));
+	var month_check = parseInt(date.slice(5,7)) - 1;
+	var date_check = parseInt(date.slice(8,10));
+	var date2 = new Date(year_check, month_check, date_check);
+	var diff = (date1.getTime() - date2.getTime()) / (1000 * 60 * 60 * 24);
+	if(diff <= 7){//new
+		tr.append('<td><span class="label label-warning">New!</span></td>');
+	}
+	else if(diff >= 28){ //old
+		tr.append('<td><span class="label label-default">Old</span></td>');
+	}
+	else{
+		tr.append('<td></td>');
+	}
 	tr.appendTo(tbody);
 }
 
