@@ -21,106 +21,14 @@
 		    <a href="index.html">COMPANY&nbsp;在庫管理</a>
 		  </div>
 		</div>
-		<nav class="navbar navbar-default">
-			<div class="container">
-				<!-- Brand and toggle get grouped for better mobile display -->
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-				</div>
 
-				<!-- Collect the nav links, forms, and other content for toggling -->
-				<div class="collapse navbar-collapse" id="navbar-collapse">
-					<ul class="nav navbar-nav">
-						<li><a href="index.html" class="index_css">在庫情報&nbsp;portal</a></li>
-						<li><a href="index-stock-check.html" class="stock-check_css">在庫状況分析</a></li>
-						<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">発注・入庫&nbsp;<span class="caret"></span></a>
-							<ul class="dropdown-menu" role="menu">
-								<li><a href="index-in.html">[商品別]&nbsp;進捗管理・データ登録</a></li>
-								<li><a href="index-in-all.html">[受注案件別]&nbsp;進捗管理</a></li>
-							</ul>
-						</li>
-						<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">受注・出庫&nbsp;<span class="caret"></span></a>
-							<ul class="dropdown-menu" role="menu">
-								<li><a href="index-out.html" class="index-out_css">[商品別]&nbsp;進捗管理・データ登録</a></li>
-								<li><a href="index-out-all.html" class="index-out-all_css">[受注案件別]&nbsp;進捗管理</a></li>
-							</ul>
-						</li>
-						<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">返品・棚卸&nbsp;<span class="caret"></span></a>
-							<ul class="dropdown-menu" role="menu">
-								<li><a href="index-return.html" class="index-return_css">返品データ&nbsp;登録</a></li>
-								<li><a href="index-inventory.html" class="index-inventory_css">棚卸データ&nbsp;登録</a></li>
-							</ul>
-						</li>
-						<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">メンテナンス&nbsp;<span class="caret"></span></a>
-							<ul class="dropdown-menu" role="menu">
-								<li><a href="index-item-info.html" class="index-item-info_css">商品データ</a></li>
-								<li><a href="index-whouse-info.html" class="index-whouse-info_css">倉庫データ</a></li>
-								<li><a href="index-kind-info.html" class="index-kind-info_css">商品区分データ</a></li>
-							</ul>
-						</li>
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">システム <span class="caret"></span></a>
-							<ul class="dropdown-menu">
-								<li>
-									<a onclick="window.location.reload(true);"><span class="glyphicon glyphicon-refresh"></span> リロード</a>
-								</li>
-								<li>
-									<a onclick="DB.init();"><span class="glyphicon glyphicon-repeat"></span> DB初期化</a>
-								</li>
-								<li role="separator" class="divider"></li>
-								<li>
-									<a onclick="DB.remove();"><span class="glyphicon glyphicon-trash"></span> DB削除</a>
-								</li>
-							</ul>
-						</li>
-					</ul>
-				</div><!-- /.navbar-collapse -->
-			</div><!-- /.container-fluid -->
-		</nav>
 
 		<div class="container">
-			<form action="index.html" class="form-inline text-center">
-				<div class="form-group">
-					<label>倉庫</label>
-					<select name="q1" class="form-control">
-						<option value="0">すべて</option>
-					</select>
-				</div>
-				<div class="form-group">
-					<label>商品区分</label>
-					<select name="q2" class="form-control">
-						<option value="0">すべて</option>
-					</select>
-				</div>
-				<div class="form-group">
-					<label>コード</label>
-					<input name="q3" type="text" class="form-control" placeholder="前方一致">
-				</div>
-				<button type="submit" class="btn btn-primary">
-					<span class="glyphicon glyphicon-search"></span> 検索
-				</button>
-			</form>
-			<hr>
+		
+		<a href="index-stock.html" class="index_css">在庫情報&nbsp;portal</a>
 
-			<table class="table table-hover table-condensed">
-				<thead>
-					<tr>
-						<th>倉庫</th>
-						<th>商品区分</th>
-						<th>コード</th>
-						<th>メーカー</th>
-						<th>品番</th>
-						<th>更新状況</th>
-					</tr>
-				</thead>
-				<tbody id="tbody-stocks"></tbody>
-			</table>
-		</div>
+
+		</div><!-- container -->
 		
 		<script src="js/index.js"></script>
 	</body>

@@ -3,7 +3,7 @@
 	<head>
 		<script src="lib/jquery.min.js"></script>
 		<link href="css/bootstrap.min.css" rel="stylesheet" />
-		<link rel="stylesheet" href="css/stock.css">
+		<link rel="stylesheet" href="css/index-stock.css">
 		<script src="lib/bootstrap.min.js"></script>
 		<script src="lib/alasql.min.js"></script>
 		<script src="lib/purl.js"></script>
@@ -14,6 +14,7 @@
 		<meta name="viewport" content="width=device-width">
 		<title>COMPANY</title>
 	</head>
+	
 	<body>
 		<div class="sitename">
 		  <div class="container">
@@ -39,8 +40,8 @@
 						<li><a href="index-stock-check.html" class="stock-check_css">在庫状況分析</a></li>
 						<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">発注・入庫&nbsp;<span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
-								<li><a href="index-in.html" class="index-in_css">[商品別]&nbsp;進捗管理・データ登録</a></li>
-								<li><a href="index-in-all.html" class="index-in-all_css">[受注案件別]&nbsp;進捗管理</a></li>
+								<li><a href="index-in.html">[商品別]&nbsp;進捗管理・データ登録</a></li>
+								<li><a href="index-in-all.html">[受注案件別]&nbsp;進捗管理</a></li>
 							</ul>
 						</li>
 						<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">受注・出庫&nbsp;<span class="caret"></span></a>
@@ -83,95 +84,44 @@
 		</nav>
 
 		<div class="container">
-		<!-- パンくずリスト -->
-			<ol class="breadcrumb">
-				<li><a href="index.html">在庫情報&nbsp;portal</a></li>
-				<li class="active" id="this_bread"></li>
-			</ol>
-
-<!-- 在庫状況 -->
-			<div class="panel panel-default">
-				<div class="panel-heading" id="zaiko_shosai">在庫状況</div>
-				<table class="table table-hover" id="zaiko_state_table">
-					<thead>
-						<tr>
-							<th class="zaiko_table_head"></th>
-							<th>在庫数</th>
-							<th>適正在庫数</th>
-							<th>過不足</th>
-							<th>ステータス</th>
-						</tr>
-					</thead>
-					<tbody id="tbody-zaiko_state"></tbody>
-				</table>
-			</div>
-
-<!-- 入庫済み累計 -->
-			<div class="panel panel-default" id="nyuuko_box">
-				<div class="panel-heading" >(1)&nbsp;入庫済み累計</div>
-				<div id="nyuuko_total"></div>
-			</div>
-			
-<!-- 出庫済み累計 -->
-			<div class="panel panel-default" id="shukko_box">
-				<div class="panel-heading">(2)&nbsp;出庫済み累計</div>
-				<div id="shukko_total"></div>
-			</div>
-
-<!-- 発注・入庫状況 -->
-			<div class="panel panel-default" id="order_box">
-				<div class="panel-heading" id="nyuuko_shosai">(3)&nbsp;入庫予定数</div>
-				<div id="nyuuko_state_total"></div>
-			</div>
-
-<!-- 受注・出庫状況 -->
-			<div class="panel panel-default" id="order_in_box">
-				<div class="panel-heading" id="shukko_shosai">(4)&nbsp;出庫予定数</div>
-				<table class="table" id="shukko_table">
-					<thead>
-						<tr>
-							<th style="font-size:16px; padding:0px;">total</th>
-							<th style="font-size:12px; padding:0px; color:gray;">(受注済み)</th>
-							<th style="font-size:12px; padding:0px; color:gray;">(納期確定済み)</th>
-						</tr>
-					</thead>
-					<tbody id="tbody-shukko_state"></tbody>
-				</table>
-			</div>
-			
-		<!-- 基礎情報 -->
-			<div class="panel panel-default" id="zaiko_info_box">
-				<div class="panel-heading" id="zaiko_shosai">基礎情報</div>
-				<table class="table table-hover" id="zaiko_info_table">
-					<thead>
-						<tr>
-							<th>コード</th>
-							<th>価格</th>
-							<th>リードタイム</th>
-							<th>許容欠品率</th>
-							<th>適正在庫数</th>
-						</tr>
-					</thead>
-					<tbody id="tbody-zaiko_info_table_body"></tbody>
-				</table>
-			</div>
-		</div><!-- container -->
-<!-- モーダル・ダイアログ -->
-		<div class="modal fade" id="delete_data" tabindex="-1">
-			<div class="modal-dialog modal-sm">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h3 id="modal-title">警告</h3>
-					</div>
-					<div class="modal-body">データを削除すると在庫管理業務に<br>重大な影響を及ぼす可能性があります。<br>(削除ボタンを押すと削除が完了します。)</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-primary btm-sm" id="destroy_data" data-dismiss="modal">削除</button>
-						<button type="button" class="btn btn-default btm-sm" data-dismiss="modal">キャンセル</button>
-					</div>
+			<form action="index.html" class="form-inline text-center">
+				<div class="form-group">
+					<label>倉庫</label>
+					<select name="q1" class="form-control">
+						<option value="0">すべて</option>
+					</select>
 				</div>
-			</div>
+				<div class="form-group">
+					<label>商品区分</label>
+					<select name="q2" class="form-control">
+						<option value="0">すべて</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label>コード</label>
+					<input name="q3" type="text" class="form-control" placeholder="前方一致">
+				</div>
+				<button type="submit" class="btn btn-primary">
+					<span class="glyphicon glyphicon-search"></span> 検索
+				</button>
+			</form>
+			<hr>
+
+			<table class="table table-hover table-condensed">
+				<thead>
+					<tr>
+						<th>倉庫</th>
+						<th>商品区分</th>
+						<th>コード</th>
+						<th>メーカー</th>
+						<th>品番</th>
+						<th>更新状況</th>
+					</tr>
+				</thead>
+				<tbody id="tbody-stocks"></tbody>
+			</table>
 		</div>
 		
-		<script src="js/stock.js"></script>
+		<script src="js/index-stock.js"></script>
 	</body>
 </html>

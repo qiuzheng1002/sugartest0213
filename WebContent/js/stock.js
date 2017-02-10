@@ -40,12 +40,14 @@ else if(just_lack_data == 10){
 	var just_lack = 1.28;
 }
 
+//基礎情報入力
 var tbody_zaiko_info = $('#tbody-zaiko_info_table_body');
 var tr = $('<tr>').appendTo(tbody_zaiko_info);
 	tr.append('<td>' + row.item.code + '</td>');
 	tr.append('<td>' + numberWithCommas(row.item.price) + ' 円' + '</td>');
 	tr.append('<td>' + row.item.leadtime + ' 日' + '</td>');
 	tr.append('<td>' + row.item.lack + '% (安全係数:' + just_lack + ')' + '</td>');
+	tr.append('<td id="just_stock_id"></td>');
 
 //入庫数読み込み
 var in_12_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 1 AND state = 2', [ id ])[0];
@@ -194,12 +196,7 @@ function getStandardDeviation(hensa_box){
 }
 
 var hensa = getStandardDeviation(hensa_box);
-//四捨五入
-function floatFormat22(number){
-	var _pow = Math.pow(10, 2);
-	return Math.round(number * _pow) / _pow;
-}
-var hensa_float = floatFormat22(hensa);
+var hensa_float = floatFormat2(hensa);
 
 //四捨五入
 function floatFormat2(number){ //四捨五入2桁
@@ -215,6 +212,7 @@ var just_leadtime = Math.sqrt(just_leadtime_data); //リードタイムの平方
 var just_leadtime_float = floatFormat2(just_leadtime); //四捨五入
 var just_stock_num = just_lack * hensa_float * just_leadtime_float + ave_3month * 1.5;
 var just_stock_num_float = floatFormatZero(just_stock_num); //適正在庫 四捨五入
+$('#just_stock_id').replaceWith('<td id="just_stock_id">' + numberWithCommas(just_stock_num_float) + '</td>');
 //適正在庫算出ここまで
 
 //在庫数吐き出し
@@ -232,12 +230,8 @@ else{
 	var percent_stock_mikomi = mikomi_stock / safe_stock * 100; //理論在庫ステータス(%)
 }
 
-function floatFormat(number){
-	var _pow = Math.pow(10, 0);
-	return Math.round(number * _pow) / _pow;
-}
-var percent_stock_float_warehouse = floatFormat(percent_stock_warehouse); //倉庫在庫ステータス(%)四捨五入
-var percent_stock_float_mikomi = floatFormat(percent_stock_mikomi); //理論在庫ステータス(%)四捨五入
+var percent_stock_float_warehouse = floatFormatZero(percent_stock_warehouse); //倉庫在庫ステータス(%)四捨五入
+var percent_stock_float_mikomi = floatFormatZero(percent_stock_mikomi); //理論在庫ステータス(%)四捨五入
 var tbody_zaiko_state = $('#tbody-zaiko_state');
 
 //1段目(倉庫在庫)

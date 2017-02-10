@@ -91,39 +91,24 @@
 				</ol>
 			</div>
 		
-
-			<div class="panel panel-default">
-				<div class="panel-heading">安全在庫数 設定条件</div>
-				<table class="table table-hover">
-					<tbody>
+		<!-- 基礎情報 -->
+			<div class="panel panel-default" id="zaiko_info_box">
+				<div class="panel-heading" id="zaiko_shosai">基礎情報</div>
+				<table class="table" id="zaiko_info_table">
+					<thead>
 						<tr>
-							<th>リードタイム</th><td id="leadtime"></td>
+							<th>リードタイム</th>
+							<th>許容欠品率</th>
+							<th>標準偏差(直近3ヶ月出荷実績)</th>
 						</tr>
-						<tr>
-							<th>許容欠品率</th><td id="lack"></td>
-						</tr>
-						<tr>
-							<th>標準偏差(直近3ヶ月出荷実績)</th><td id="hensa"></td>
-						</tr>
-					</tbody>
+					</thead>
+					<tbody id="tbody-zaiko_info_table_body"></tbody>
 				</table>
-			</div>	
-
-<!-- 適正在庫数 -->
-			<div class="panel panel-default" id="just_stock">
-				<div class="panel-heading">適正在庫数</div>
-					<div id="just_stock_data"></div>
-			</div>
-
-<!-- 現在の在庫数 -->
-			<div class="panel panel-default" id="current_stock">
-				<div class="panel-heading">現在の在庫数</div>
-					<div id="current_stock_data"></div>
 			</div>
 
 <!-- 回帰分析 -->
 			<div class="panel panel-default" id="analysis">
-				<div class="panel-heading" id="ana_title">販売予測データ</div>
+				<div class="panel-heading" id="ana_title">販売実績データ</div>
 				<table id="analysis_table">
 					<thead>
 						<tr>
@@ -239,7 +224,7 @@
 				
 				</table>
 			</div>
-		</div>
+		</div><!-- container -->
 		<script src="js/stock-check.js"></script>
 	</body>
 </html>

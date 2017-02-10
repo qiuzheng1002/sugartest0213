@@ -17,16 +17,6 @@
 	text-align: center;
 	border-left: 1px solid rgba(255, 255, 255, .75);
 	border-right: 1px solid rgba(0, 0, 0, .1);
-}	
-
-#just_stock{
-	float: left;
-	width: 49%;
-}
-
-#current_stock{
-	float: right;
-	width: 49%;
 }
 
 #analysis{
@@ -49,4 +39,8 @@
 
 #analysis_table th, td{
 	padding: 5px;
+}
+
+#zaiko_info_table th, td{
+	text-align: center;
 }
