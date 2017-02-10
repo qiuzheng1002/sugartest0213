@@ -1,5 +1,7 @@
 @charset "UTF-8";
-
+body{
+	font-family: "ヒラギノ角ゴ ProN", "Hiragino Kaku Gothic ProN", "メイリオ", "Meiryo", sans-serif;
+}
 #index-inventory_css{
 	background-color: #fdebf8;
 }

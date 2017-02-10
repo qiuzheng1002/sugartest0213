@@ -1,3 +1,14 @@
+//プルダウン(商品区分)
+var rows = alasql('SELECT * FROM whouse;');
+for (var i = 0; i < rows.length; i++) {
+	var row = rows[i];
+	var option = $('<option>');
+	option.attr('value', row.whouse.id);
+	option.text(row.whouse.name);
+	$('select[name="whouse_name"]').append(option);
+}
+
+
 // 検索ボックス作成
 var rows = alasql('SELECT * FROM whouse;');
 for (var i = 0; i < rows.length; i++) {

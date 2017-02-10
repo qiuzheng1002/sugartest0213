@@ -1,24 +1,14 @@
 @charset "UTF-8";
-
-.index_css{
-	background-color: #fdebf8;
+body{
+	font-family: "ヒラギノ角ゴ ProN", "Hiragino Kaku Gothic ProN", "メイリオ", "Meiryo", sans-serif;
 }
-
 .sitename{
-	margin:5px 0 5px;
+	background-color: #f0fdff;
+}
+.sitename{
+	padding:5px 0 5px;
 }
 .sitename a{
 	font-size: 1.1em;
 	color: inherit;
-}
-
-.navbar .nav li a {
-	font-weight: bold;
-	text-align: center;
-	border-left: 1px solid rgba(255, 255, 255, .75);
-	border-right: 1px solid rgba(0, 0, 0, .1);
-}	
-
-.progress{
-	margin: 0px;
 }
