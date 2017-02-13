@@ -532,7 +532,7 @@ function floatFormatZero(number){  //四捨五入0桁
 $(function () {
 	$('[data-toggle="tooltip"]').tooltip();
 });
-
+ 
 //タブhover
 $(function(){
 	$("ul.dropdown-menu").hide();
