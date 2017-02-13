@@ -343,6 +343,7 @@ var s_last2_m1 = 0, s_last2_m2 = 0, s_last2_m3 = 0, s_last2_m4 = 0, s_last2_m5 =
 
 
 
+
 var test1 = last3_m1 + last2_m1 + last1_m1;
 var test2 = last3_m2 + last2_m2 + last1_m2;
 var test3 = last3_m3 + last2_m3 + last1_m3;

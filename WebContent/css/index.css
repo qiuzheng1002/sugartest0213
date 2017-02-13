@@ -3,7 +3,7 @@ body{
 	font-family: "ヒラギノ角ゴ ProN", "Hiragino Kaku Gothic ProN", "メイリオ", "Meiryo", sans-serif;
 }
 .sitename{
-	background-color: #f0fdff;
+	background-color: #e2fff3;
 }
 .sitename{
 	padding:5px 0 5px;
@@ -11,4 +11,151 @@ body{
 .sitename a{
 	font-size: 1.1em;
 	color: inherit;
+}
+#footer{
+	position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 20px;
+	background-color: #e2fff3;
+   	padding: 5px;
+}
+#stock_box{
+	width: 100%;
+	height: 90px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: #fdebf8;
+	border-radius: 15px;
+	margin-bottom: 15px;
+}
+#in_box{
+	width: 100%;
+	height: 90px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: #f7f7c3;
+	border-radius: 15px;
+	margin-bottom: 15px;
+}
+#out_box{
+	width: 100%;
+	height: 90px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: #dbfdd1;
+	border-radius: 15px;
+	margin-bottom: 15px;
+}
+#other_box{
+	width: 100%;
+	height: 90px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: #cef7f3;
+	border-radius: 15px;
+	margin-bottom: 15px;
+}
+#mente_box{
+	width: 100%;
+	height: 90px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: #dfe0f7;
+	border-radius: 15px;
+	margin-bottom: 15px;
+}
+.stock_box0{
+	width: 100%;
+	font-size: 12px;
+	height: 15px;
+	text-align: center;
+	border-radius: 10px;
+	display: block;
+	background-color: #fdebf8;
+	margin: 5px 0;
+}
+.in_box0{
+	width: 100%;
+	font-size: 12px;
+	height: 15px;
+	text-align: center;
+	border-radius: 10px;
+	display: block;
+	background-color: #f7f7c3;
+	margin: 5px 0;
+}
+.out_box0{
+	width: 100%;
+	font-size: 12px;
+	height: 15px;
+	text-align: center;
+	border-radius: 10px;
+	display: block;
+	background-color: #dbfdd1;
+	margin: 5px 0;
+}
+.other_box0{
+	width: 100%;
+	font-size: 12px;
+	height: 15px;
+	text-align: center;
+	border-radius: 10px;
+	display: block;
+	background-color: #cef7f3;
+	margin: 5px 0;
+}
+.mente_box0{
+	width: 100%;
+	font-size: 12px;
+	height: 15px;
+	text-align: center;
+	border-radius: 10px;
+	display: block;
+	background-color: #dfe0f7;
+	margin: 5px 0;
+}
+.stock_box1{
+	width: 95%;
+	padding: 12px 0;
+	margin: 2px 2.5%;
+}
+.in_box1{
+	width: 28%;
+	padding: 12px 0;
+	margin: 2px 2.5%;
+}
+.out_box1{
+	width: 28%;
+	padding: 12px 0;
+	margin: 2px 2.5%;
+}
+.other_box1{
+	width: 20.5%;
+	padding: 12px 0;
+	margin: 2px 2%;
+}
+.mente_box1{
+	width: 28%;
+	padding: 12px 0;
+	margin: 2px 2.5%;
+}
+.stock_box1:hover {
+	background-color: #fdebf8;
+}
+.in_box1:hover {
+	background-color: #f7f7c3;
+}
+.out_box1:hover {
+	background-color: #dbfdd1;
+}
+.other_box1:hover {
+	background-color: #cef7f3;
+}
+.mente_box1:hover {
+	background-color: #dfe0f7;
+}
+
+#in_box1id, #out_box1id, #other_box1id, #mente_box1id{
+	float: left;
 }

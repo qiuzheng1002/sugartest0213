@@ -35,31 +35,34 @@
 				<!-- Collect the nav links, forms, and other content for toggling -->
 				<div class="collapse navbar-collapse" id="navbar-collapse">
 					<ul class="nav navbar-nav">
-						<li><a href="index.html" class="index_css">在庫情報&nbsp;portal</a></li>
-						<li><a href="index-stock-check.html" class="stock-check_css">在庫状況分析</a></li>
-						<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">発注・入庫&nbsp;<span class="caret"></span></a>
+						<li><a href="index-stock.html" id="index-stock_css">在庫情報</a></li>
+						<li class="dropdown"><a href="#" id="stock-in_css" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">発注・入庫&nbsp;<span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
-								<li><a href="index-in.html" class="index-in_css">[商品別]&nbsp;進捗管理・データ登録</a></li>
-								<li><a href="index-in-all.html" class="index-in-all_css">[受注案件別]&nbsp;進捗管理</a></li>
+								<li><a href="stock-in-register.html">新規登録</a></li>
+								<li><a href="index-in.html">進捗管理&nbsp;(商品別)</a></li>
+								<li><a href="index-in-all.html">進捗管理&nbsp;(案件別)</a></li>
 							</ul>
 						</li>
-						<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">受注・出庫&nbsp;<span class="caret"></span></a>
+						<li class="dropdown"><a href="#" id="stock-out_css" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">受注・出庫&nbsp;<span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
-								<li><a href="index-out.html" class="index-out_css">[商品別]&nbsp;進捗管理・データ登録</a></li>
-								<li><a href="index-out-all.html" class="index-out-all_css">[受注案件別]&nbsp;進捗管理</a></li>
+								<li><a href="stock-out-register.html">新規登録</a></li>
+								<li><a href="index-out.html">進捗管理&nbsp;(商品別)</a></li>
+								<li><a href="index-out-all.html">進捗管理&nbsp;(案件別)</a></li>
 							</ul>
 						</li>
-						<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">返品・棚卸&nbsp;<span class="caret"></span></a>
+						<li class="dropdown"><a href="#" id="stock-other_css" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">返品・棚卸&nbsp;<span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
-								<li><a href="index-return.html" class="index-return_css">返品データ&nbsp;登録</a></li>
-								<li><a href="index-inventory.html" class="index-inventory_css">棚卸データ&nbsp;登録</a></li>
+								<li><a href="stock-return-fix.html">返品データ&nbsp;新規登録</a></li>
+								<li><a href="index-return.html">返品履歴</a></li>
+								<li><a href="stock-inventory-register.html">棚卸データ&nbsp;新規登録</a></li>
+								<li><a href="index-inventory.html">棚卸履歴</a></li>
 							</ul>
 						</li>
-						<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">メンテナンス&nbsp;<span class="caret"></span></a>
+						<li class="dropdown"><a href="#" id="stock-mente_css" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">メンテナンス&nbsp;<span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
-								<li><a href="index-item-info.html" class="index-item-info_css">商品データ</a></li>
-								<li><a href="index-whouse-info.html" class="index-whouse-info_css">倉庫データ</a></li>
-								<li><a href="index-kind-info.html" class="index-kind-info_css">商品区分データ</a></li>
+								<li><a href="index-item-info.html">商品データ</a></li>
+								<li><a href="index-whouse-info.html">倉庫データ</a></li>
+								<li><a href="index-kind-info.html">商品区分データ</a></li>
 							</ul>
 						</li>
 						<li class="dropdown">
@@ -142,17 +145,137 @@
 		<!-- 基礎情報 -->
 			<div class="panel panel-default" id="zaiko_info_box">
 				<div class="panel-heading" id="zaiko_shosai">基礎情報</div>
-				<table class="table table-hover" id="zaiko_info_table">
+				<table class="table" id="zaiko_info_table">
 					<thead>
 						<tr>
 							<th>コード</th>
 							<th>価格</th>
 							<th>リードタイム</th>
 							<th>許容欠品率</th>
+							<th>標準偏差(直近3ヶ月出荷実績)</th>
 							<th>適正在庫数</th>
 						</tr>
 					</thead>
 					<tbody id="tbody-zaiko_info_table_body"></tbody>
+				</table>
+			</div>
+
+<!-- 回帰分析 -->
+			<div class="panel panel-default" id="analysis">
+				<div class="panel-heading" id="ana_title">販売実績データ</div>
+				<table id="analysis_table">
+					<thead>
+						<tr>
+							<th>月</th>
+							<th>1</th>
+							<th>2</th>
+							<th>3</th>
+							<th>4</th>
+							<th>5</th>
+							<th>6</th>
+							<th>7</th>
+							<th>8</th>
+							<th>9</th>
+							<th>10</th>
+							<th>11</th>
+							<th>12</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th>季節指数</th>
+							<td id="season1">*</td>
+							<td id="season2">*</td>
+							<td id="season3">*</td>
+							<td id="season4">*</td>
+							<td id="season5">*</td>
+							<td id="season6">*</td>
+							<td id="season7">*</td>
+							<td id="season8">*</td>
+							<td id="season9">*</td>
+							<td id="season10">*</td>
+							<td id="season11">*</td>
+							<td id="season12">*</td>
+						</tr>
+						<tr>
+							<th id="last3_year"></th><!-- 3年前 -->
+							<td id="last3_year_m1">*</td>
+							<td id="last3_year_m2">*</td>
+							<td id="last3_year_m3">*</td>
+							<td id="last3_year_m4">*</td>
+							<td id="last3_year_m5">*</td>
+							<td id="last3_year_m6">*</td>
+							<td id="last3_year_m7">*</td>
+							<td id="last3_year_m8">*</td>
+							<td id="last3_year_m9">*</td>
+							<td id="last3_year_m10">*</td>
+							<td id="last3_year_m11">*</td>
+							<td id="last3_year_m12">*</td>
+						</tr>				
+						<tr>
+							<th id="last2_year"></th><!-- 2年前 -->
+							<td id="last2_year_m1">*</td>
+							<td id="last2_year_m2">*</td>
+							<td id="last2_year_m3">*</td>
+							<td id="last2_year_m4">*</td>
+							<td id="last2_year_m5">*</td>
+							<td id="last2_year_m6">*</td>
+							<td id="last2_year_m7">*</td>
+							<td id="last2_year_m8">*</td>
+							<td id="last2_year_m9">*</td>
+							<td id="last2_year_m10">*</td>
+							<td id="last2_year_m11">*</td>
+							<td id="last2_year_m12">*</td>
+						</tr>
+						<tr>
+							<th id="last1_year"></th><!-- 1年前 -->
+							<td id="last1_year_m1">*</td>
+							<td id="last1_year_m2">*</td>
+							<td id="last1_year_m3">*</td>
+							<td id="last1_year_m4">*</td>
+							<td id="last1_year_m5">*</td>
+							<td id="last1_year_m6">*</td>
+							<td id="last1_year_m7">*</td>
+							<td id="last1_year_m8">*</td>
+							<td id="last1_year_m9">*</td>
+							<td id="last1_year_m10">*</td>
+							<td id="last1_year_m11">*</td>
+							<td id="last1_year_m12">*</td>
+						</tr>	
+						<tr>
+							<th id="this_year"></th><!-- 今年分 -->
+							<td id="this_year_m1">*</td>
+							<td id="this_year_m2">*</td>
+							<td id="this_year_m3">*</td>
+							<td id="this_year_m4">*</td>
+							<td id="this_year_m5">*</td>
+							<td id="this_year_m6">*</td>
+							<td id="this_year_m7">*</td>
+							<td id="this_year_m8">*</td>
+							<td id="this_year_m9">*</td>
+							<td id="this_year_m10">*</td>
+							<td id="this_year_m11">*</td>
+							<td id="this_year_m12">*</td>
+						</tr>	
+						<tr>
+							<th id="next_year"></th><!-- 来年分 -->
+							<td id="next_year_m1">*</td>
+							<td id="next_year_m2">*</td>
+							<td id="next_year_m3">*</td>
+							<td id="next_year_m4">*</td>
+							<td id="next_year_m5">*</td>
+							<td id="next_year_m6">*</td>
+							<td id="next_year_m7">*</td>
+							<td id="next_year_m8">*</td>
+							<td id="next_year_m9">*</td>
+							<td id="next_year_m10">*</td>
+							<td id="next_year_m11">*</td>
+							<td id="next_year_m12">*</td>
+						</tr>	
+				
+					
+					</tbody>
+				
 				</table>
 			</div>
 		</div><!-- container -->

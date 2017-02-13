@@ -1,17 +1,32 @@
 @charset "UTF-8";
-body{
-	font-family: "ヒラギノ角ゴ ProN", "Hiragino Kaku Gothic ProN", "メイリオ", "Meiryo", sans-serif;
-}
-#index-out_css{
-	background-color: #fdebf8;
+
+body {
+	font-family: "ヒラギノ角ゴ ProN", "Hiragino Kaku Gothic ProN", "メイリオ",
+		"Meiryo", sans-serif;
 }
 
-.sitename{
-	margin:5px 0 5px;
+.sitename {
+	padding: 5px 0 5px;
 }
-.sitename a{
+
+.sitename a {
 	font-size: 1.1em;
 	color: inherit;
+}
+
+.navbar .navbar-inner {
+	padding: 0;
+}
+
+.navbar .nav {
+	margin: 0;
+	display: table;
+	width: 100%;
+}
+
+.navbar .nav li {
+	display: table-cell;
+	float: none;
 }
 
 .navbar .nav li a {
@@ -19,6 +34,23 @@ body{
 	text-align: center;
 	border-left: 1px solid rgba(255, 255, 255, .75);
 	border-right: 1px solid rgba(0, 0, 0, .1);
+}
+
+.navbar .nav .dropdown .dropdown-menu li {
+	display: block;
+}
+
+.navbar .nav .dropdown .dropdown-menu li a {
+	text-align: left;
+}
+
+.navbar .nav li:last-child a {
+	border-right: 0;
+	border-radius: 0 3px 3px 0;
+}
+
+#stock-out_css{
+	background-color: #dbfdd1;
 }
 
 .input-group span{

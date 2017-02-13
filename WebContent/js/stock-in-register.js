@@ -2,64 +2,8 @@
 var id = parseInt($.url().param('id'));
 $("input[name=id]").val(id);
 
-//パンくずリスト：商品名(取引先名)
-var bread_rows = alasql('SELECT * FROM trans \
-		JOIN stock ON stock.id = trans.stock \
-		JOIN whouse ON whouse.id = stock.whouse \
-		JOIN item ON item.id = stock.item \
-		WHERE trans.id = ?', [ id ])[0];
-
-var url = document.referrer; //直前のページ調査
-var url_last18 = url.substr(url.length - 17);
-if (url_last18 == "index-in-all.html"){
-	var last_url = "index-in-all.html"
-	$('#this_bread_tab').append('<a href="index-in-all.html">発注・入庫&nbsp;&ndash;&nbsp;[受注案件別]&nbsp;進捗管理</a>');
-	$('#this_bread_detail').replaceWith('<li id="this_bread_detail" class="hidden"></li>');
-	$('#this_bread_shop').append("発注データ編集 ( [倉庫] " + bread_rows.whouse.name + "　[品番] " + bread_rows.item.maker + " : " + bread_rows.item.detail+ " )");
-}
-else{
-	var last_url = "stock-in.html?id=" + bread_rows.trans.stock;
-	$('#this_bread_tab').append('<a href="index-in.html">発注・入庫&nbsp;&ndash;&nbsp;[商品別]&nbsp;進捗管理・データ登録</a>');
-	$('#this_bread_detail').replaceWith("<li id='this_bread_detail'><a href='stock-in.html?id=" + bread_rows.trans.stock + "'>[倉庫] " + bread_rows.whouse.name + "　[品番] " + bread_rows.item.maker + " : " + bread_rows.item.detail + "</a></li>");
-	$('#this_bread_shop').append("発注データ編集 (" + bread_rows.trans.shop + ")");
-}
-
-// 受注・出庫データ読み込み
-var rows = alasql('SELECT * FROM trans WHERE id = ?', [ id ])[0];
-$("#selected_date1").attr("value", rows.trans.date);
-$("#selected_shop1").attr("value", rows.trans.shop);
-$("#selected_num1").attr("value", rows.trans.num);
-$("#selected_deadline1").attr("value", rows.trans.deadline);
-var state_check = rows.trans.state;
-if (state_check == 2){
-	$('<label class="btn btn-warning active" id="btn_state2"><input type="radio" name="radio_state_check2" autocomplete="off" checked> 発注済み</label>').appendTo("#selected_state");
-	$('<label class="btn btn-default" id="btn_state3"><input type="radio" name="radio_state_check3" autocomplete="off"> 入庫済み</label>').appendTo("#selected_state");
-}
-else if (state_check == 3){
-	$('<label class="btn btn-default" id="btn_state2"><input type="radio" name="radio_state_check2" autocomplete="off"> 発注済み</label>').appendTo("#selected_state");
-	$('<label class="btn btn-success active" id="btn_state3"><input type="radio" name="radio_state_check3" autocomplete="off" checked> 入庫済み</label>').appendTo("#selected_state");
-}
-
-//入庫数読み込み
-var in_13_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 1 AND state = 3', [ bread_rows.trans.stock ])[0];
-var in_13 = in_13_sql["SUM(num)"]; //入庫済み
-var in_19_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 1 AND state = 9', [ bread_rows.trans.stock ])[0];
-var in_19 = in_19_sql["SUM(num)"]; //棚卸(過剰)数：値はマイナスで保持
-
-//出庫数読み込み
-var out_26_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 2 AND state = 6', [ bread_rows.trans.stock ])[0];
-var out_26 = out_26_sql["SUM(num)"]; //出庫済み
-var out_27_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 2 AND state = 7', [ bread_rows.trans.stock ])[0];
-var out_27 = out_27_sql["SUM(num)"]; //返品数
-var out_28_sql = alasql('SELECT SUM(num) FROM trans WHERE stock = ? AND purpose = 2 AND state = 8', [ bread_rows.trans.stock ])[0];
-var out_28 = out_28_sql["SUM(num)"]; //棚卸(不足)数
-
-//在庫数吐き出し
-var warehouse_stock = in_13 - in_19 - out_26 + out_27 - out_28; //在庫数(倉庫内在庫)
-
-//本日の日付を取得
+//本日の日付を自動入力
 var y = 0;
-var date_today = "";
 $(function(){
 	var time = $.now();
 	var dateObj = new Date(time);
@@ -68,8 +12,45 @@ $(function(){
 		if(m<10){m = "0" + m}
 	var d = dateObj.getDate();
 		if(d<10){d = "0" + d}
-	date_today = y + '-' + m + '-' + d + ' 00:00';
-})
+	var h = dateObj.getHours();
+		if(h<10){h = "0" + h}
+	var min = dateObj.getMinutes();
+		if(min<10){min = "0" + min}
+	var selected_date = y + '-' + m + '-' + d + ' ' + h + ':' + min;
+	$("#selected_date1").attr("value", selected_date);
+	var selected_deadline = y + '-' + m + '-' + d + ' 00:00';
+	$("#selected_deadline1").attr("value", selected_deadline);
+});
+
+//倉庫プルダウン
+var whouse_rows = alasql('SELECT * FROM whouse');
+for (var i = 0; i < whouse_rows.length; i++) {
+	var whouse_row = whouse_rows[i];
+	var option = $('<option>');
+	option.attr('value', whouse_row.whouse.id);
+	option.text(whouse_row.whouse.name);
+	$('select[name="whouse1"]').append(option);
+}
+
+
+
+//取引先入力補助
+var shop_rows = alasql('SELECT DISTINCT shop FROM trans WHERE purpose = 1 AND state = 2 OR state = 3');
+for (var i = 0; i < shop_rows.length; i++) {
+	var shop_row = shop_rows[i];
+	$('<option value = "' + shop_row.shop + '">').appendTo('#shops');
+}
+
+//パンくずリスト：商品名(取引先名)
+var bread_rows = alasql('SELECT * FROM trans \
+		JOIN stock ON stock.id = trans.stock \
+		JOIN whouse ON whouse.id = stock.whouse \
+		JOIN item ON item.id = stock.item \
+		WHERE trans.id = ?', [ id ])[0];
+
+
+
+
 
 // 入力禁止フォーム用
 var input_field = document.getElementById("selected_deadline1"); //納期入力欄
@@ -497,12 +478,7 @@ $('#update_data').on('click', function() {
 	}
 });
 
-// 取引先入力補助
-var shop_rows = alasql('SELECT DISTINCT shop FROM trans WHERE purpose = 1 AND state = 2 OR state = 3');
-for (var i = 0; i < shop_rows.length; i++) {
-	var shop_row = shop_rows[i];
-	$('<option value = "' + shop_row.shop + '">').appendTo('#shops');
-}
+
 
 // ツールチップ
 $(function () {

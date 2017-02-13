@@ -18,17 +18,46 @@
 <body>
 	<div class="sitename">
 		<div class="container">
-			<a href="index.html">COMPANY&nbsp;在庫管理</a>
+			<a href="index.html">COMPANY&nbsp;在庫管理&nbsp;Menu</a>
 		</div>
 	</div>
 
 	<!--	tr.append('<td><img height=40 class="img-circle" src="img/' + emp.id + '.jpg"></td>');-->
+	<a href="index-stock-check.html" class="index-stock-check_css">在庫状況分析</a>
 
 	<div class="container">
-		<a href="index-stock.html" class="index_css">在庫情報&nbsp;portal</a>
-		<a href="index-stock-check.html" class="stock-check_css">在庫状況分析</a>
+		<div id="stock_box" class="container">
+			<span class="stock_box0">在庫情報</span>
+			<a href="index-stock.html" class="stock_box1 btn btn-default" role="button">在庫情報</a>
+		</div>
+		<div id="in_box" class="container">
+			<span class="in_box0">発注・入庫</span>
+			<a href="stock-in-register.html" class="in_box1 btn btn-default" id="in_box1id" role="button">新規登録</a>
+			<a href="index-in.html" class="in_box1 btn btn-default" role="button">進捗管理&nbsp;(商品別)</a>
+			<a href="index-in-all.html" class="in_box1 btn btn-default" role="button">進捗管理&nbsp;(案件別)</a>
+		</div>
+		<div id="out_box" class="container">
+			<span class="out_box0">受注・出庫</span>
+			<a href="stock-out-register.html" class="out_box1 btn btn-default" id="out_box1id" role="button">新規登録</a>
+			<a href="index-out.html" class="out_box1 btn btn-default" role="button">進捗管理&nbsp;(商品別)</a>
+			<a href="index-out-all.html" class="out_box1 btn btn-default" role="button">進捗管理&nbsp;(案件別)</a>
+		</div>
+		<div id="other_box" class="container">
+		<span class="other_box0">返品・棚卸</span>
+			<a href="stock-return-fix.html" class="other_box1 btn btn-default" id="other_box1id" role="button">返品データ&nbsp;新規登録</a>
+			<a href="index-return.html" class="other_box1 btn btn-default" role="button">返品履歴</a>
+			<a href="stock-inventory-register.html" class="other_box1 btn btn-default" role="button">棚卸データ&nbsp;新規登録</a>
+			<a href="index-inventory.html" class="other_box1 btn btn-default" role="button">棚卸履歴</a>
+		</div>
+		<div id="mente_box" class="container">
+			<span class="mente_box0">メンテナンス</span>
+			<a href="index-item-info.html" class="mente_box1 btn btn-default" id="mente_box1id" role="button">商品データ</a>
+			<a href="index-whouse-info.html" class="mente_box1 btn btn-default" role="button">倉庫データ</a>
+			<a href="index-kind-info.html" class="mente_box1 btn btn-default" role="button">商品区分データ</a>
+		</div>
 	</div>
 	<!-- container -->
+	<div id="footer"></div>
 	<script src="js/index.js"></script>
 </body>
 </html>

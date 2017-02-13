@@ -1,4 +1,4 @@
-//プルダウン(商品区分)
+//プルダウン(倉庫)
 var rows = alasql('SELECT * FROM whouse;');
 for (var i = 0; i < rows.length; i++) {
 	var row = rows[i];
@@ -8,6 +8,25 @@ for (var i = 0; i < rows.length; i++) {
 	$('select[name="whouse_name"]').append(option);
 }
 
+//プルダウン(商品区分)
+var rows = alasql('SELECT * FROM kind;');
+for (var i = 0; i < rows.length; i++) {
+	var row = rows[i];
+	var option = $('<option>');
+	option.attr('value', row.kind.id);
+	option.text(row.kind.text);
+	$('select[name="kind_name"]').append(option);
+}
+
+//プルダウン(メーカー)未編集
+var rows = alasql('SELECT * FROM kind;');
+for (var i = 0; i < rows.length; i++) {
+	var row = rows[i];
+	var option = $('<option>');
+	option.attr('value', row.kind.id);
+	option.text(row.kind.text);
+	$('select[name="kind_name"]').append(option);
+}
 
 // 検索ボックス作成
 var rows = alasql('SELECT * FROM whouse;');
@@ -68,6 +87,7 @@ for (var i = 0; i < stocks_wh.length; i++) {
 	tr.append('<td>' + stock.item.code + '</td>');
 	tr.append('<td>' + stock.item.maker + '</td>');
 	tr.append('<td>' + stock.item.detail + '</td>');
+	/*
 	var date_sql = alasql("SELECT date FROM trans WHERE stock = " + stock.stock.id + " ORDER BY date DESC")[0];
 	var date = $(date_sql).attr("date");
 	var year_check = parseInt(date.slice(0,4));
@@ -75,15 +95,15 @@ for (var i = 0; i < stocks_wh.length; i++) {
 	var date_check = parseInt(date.slice(8,10));
 	var date2 = new Date(year_check, month_check, date_check);
 	var diff = (date1.getTime() - date2.getTime()) / (1000 * 60 * 60 * 24);
-	if(diff <= 7){//new
+	if(diff <= 7){
 		tr.append('<td><span class="label label-warning">New!</span></td>');
 	}
-	else if(diff >= 28){ //old
+	else if(diff >= 28){
 		tr.append('<td><span class="label label-default">Old</span></td>');
 	}
 	else{
 		tr.append('<td></td>');
-	}
+	}*/
 	tr.appendTo(tbody);
 }
 

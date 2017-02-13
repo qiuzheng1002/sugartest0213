@@ -91,21 +91,33 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">絞り込み条件</div>
 				<!-- 倉庫 -->
-					<span></span>
 					<div class="input-group" id="select_whouse">
 						<span class="input-group-addon">倉庫</span>
 						<select class="form-control" name="whouse_name">
 							<option value="0">すべて</option>
 						</select>
-					</div>
-
-					<br><!-- 受注日入力フォーム -->
-					<div class="input-group" id="order-form_date">
-						<span class="input-group-addon" id="order-form_date_span">受注日</span>
-						<input type="text" class="form-control" name="date1" id="selected_date1" value="" placeholder="yyyy-mm-dd hh:mm (半角英数字)" data-toggle="tooltip" data-placement="top" title="2010～2018年の範囲で入力可">
-					</div>
-
-
+					</div><br>
+				<!-- 商品区分 -->
+					<div class="input-group" id="select_kind">
+						<span class="input-group-addon">商品区分</span>
+						<select class="form-control" name="kind_name">
+							<option value="0">すべて</option>
+						</select>
+					</div><br>
+				<!-- メーカー -->
+					<div class="input-group" id="select_maker">
+						<span class="input-group-addon">メーカー</span>
+						<select class="form-control" name="maker_name">
+							<option value="0">すべて</option>
+						</select>
+					</div><br>
+				<!-- 品番 -->
+					<div class="input-group" id="select_detail">
+						<span class="input-group-addon">品番</span>
+						<select class="form-control" name="detail_name">
+							<option value="0">すべて</option>
+						</select>
+					</div><br>
 
 			</div>
 		

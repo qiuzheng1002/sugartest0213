@@ -47,6 +47,7 @@ var tr = $('<tr>').appendTo(tbody_zaiko_info);
 	tr.append('<td>' + numberWithCommas(row.item.price) + ' 円' + '</td>');
 	tr.append('<td>' + row.item.leadtime + ' 日' + '</td>');
 	tr.append('<td>' + row.item.lack + '% (安全係数:' + just_lack + ')' + '</td>');
+	tr.append('<td id="hensa_id"></td>');
 	tr.append('<td id="just_stock_id"></td>');
 
 //入庫数読み込み
@@ -73,75 +74,183 @@ var out_28 = out_28_sql["SUM(num)"]; //棚卸(不足)数
 //日付を取得
 var time = $.now();
 var dateObj = new Date(time);
-var	this_year = dateObj.getFullYear();
+var this_year = dateObj.getFullYear();
 var this_month = dateObj.getMonth() + 1;
+this_month = 4;
 
 var next_year = parseInt(this_year) + 1;
 var last1_year = parseInt(this_year) - 1;
 var last2_year = parseInt(this_year) - 2;
 var last3_year = parseInt(this_year) - 3;
 
-//標準偏差
-var shukko_data = alasql("SELECT id, stock, purpose, state, deadline, num FROM trans WHERE stock = " + id + " AND purpose = 2 AND state = 6 ORDER BY deadline DESC");
+// テーブルに年度設定
+$('#this_year').append(this_year);
+$('#next_year').append(next_year);
+$('#last1_year').append(last1_year);
+$('#last2_year').append(last2_year);
+$('#last3_year').append(last3_year);
+$('#ana_title').append(' (' + this_year + '年' + this_month + '月現在)');
 
-//データ入力
-var this_m1= 0, this_m2= 0, this_m3= 0, this_m4= 0, this_m5= 0, this_m6= 0, this_m7= 0, this_m8= 0, this_m9= 0, this_m10= 0, this_m11= 0, this_m12 = 0;
-var last1_m1= 0, last1_m2= 0, last1_m3= 0, last1_m4= 0, last1_m5= 0, last1_m6= 0, last1_m7= 0, last1_m8= 0, last1_m9= 0, last1_m10= 0, last1_m11= 0, last1_m12 = 0;
+// 標準偏差(日付新しい順)
+var shukko_data = alasql("SELECT id, stock, purpose, state, deadline, num FROM trans WHERE stock = "
+		+ id + " AND purpose = 2 AND state = 6 ORDER BY deadline DESC");
 
-for(var i=0; i<shukko_data.length; i++){
+// データ入力
+var this_m1 = 0, this_m2 = 0, this_m3 = 0, this_m4 = 0, this_m5 = 0, this_m6 = 0, this_m7 = 0, this_m8 = 0, this_m9 = 0, this_m10 = 0, this_m11 = 0, this_m12 = 0;
+var last1_m1 = 0, last1_m2 = 0, last1_m3 = 0, last1_m4 = 0, last1_m5 = 0, last1_m6 = 0, last1_m7 = 0, last1_m8 = 0, last1_m9 = 0, last1_m10 = 0, last1_m11 = 0, last1_m12 = 0;
+var last2_m1 = 0, last2_m2 = 0, last2_m3 = 0, last2_m4 = 0, last2_m5 = 0, last2_m6 = 0, last2_m7 = 0, last2_m8 = 0, last2_m9 = 0, last2_m10 = 0, last2_m11 = 0, last2_m12 = 0;
+var last3_m1 = 0, last3_m2 = 0, last3_m3 = 0, last3_m4 = 0, last3_m5 = 0, last3_m6 = 0, last3_m7 = 0, last3_m8 = 0, last3_m9 = 0, last3_m10 = 0, last3_m11 = 0, last3_m12 = 0;
+var next_m1 = 0, next_m2 = 0, next_m3 = 0, next_m4 = 0, next_m5 = 0, next_m6 = 0, next_m7 = 0, next_m8 = 0, next_m9 = 0, next_m10 = 0, next_m11 = 0, next_m12 = 0;
+
+for (var i = 0; i < shukko_data.length; i++) {
 	var row2 = shukko_data[i];
 	var row_date = row2.deadline;
 	var row_num = row2.num;
-	var row_year = parseInt(row_date.slice(0,4)); //年
-	var row_month = parseInt(row_date.slice(5,7)); //月
+	var row_year = parseInt(row_date.slice(0, 4)); // 年
+	var row_month = parseInt(row_date.slice(5, 7)); // 月
 
-	if(row_year >= last1_year){ //3年前より古いデータ域に突入でbreak
-		if(row_year == this_year){  //今年分
-			if(row_month == 1){this_m1 = this_m1 + row_num}
-			else if(row_month == 2){this_m2 = this_m2 + row_num}
-			else if(row_month == 3){this_m3 = this_m3 + row_num}
-			else if(row_month == 4){this_m4 = this_m4 + row_num}
-			else if(row_month == 5){this_m5 = this_m5 + row_num}
-			else if(row_month == 6){this_m6 = this_m6 + row_num}
-			else if(row_month == 7){this_m7 = this_m7 + row_num}
-			else if(row_month == 8){this_m8 = this_m8 + row_num}
-			else if(row_month == 9){this_m9 = this_m9 + row_num}
-			else if(row_month == 10){this_m10 = this_m10 + row_num}
-			else if(row_month == 11){this_m11 = this_m11 + row_num}
-			else if(row_month == 12){this_m12 = this_m12 + row_num}
+	if (row_year >= last3_year) { // 3年前より古いデータ域に突入でbreak
+		if (row_year == this_year) { // 今年分
+			if (row_month == 1) {
+				this_m1 = this_m1 + row_num
+			} else if (row_month == 2) {
+				this_m2 = this_m2 + row_num
+			} else if (row_month == 3) {
+				this_m3 = this_m3 + row_num
+			} else if (row_month == 4) {
+				this_m4 = this_m4 + row_num
+			} else if (row_month == 5) {
+				this_m5 = this_m5 + row_num
+			} else if (row_month == 6) {
+				this_m6 = this_m6 + row_num
+			} else if (row_month == 7) {
+				this_m7 = this_m7 + row_num
+			} else if (row_month == 8) {
+				this_m8 = this_m8 + row_num
+			} else if (row_month == 9) {
+				this_m9 = this_m9 + row_num
+			} else if (row_month == 10) {
+				this_m10 = this_m10 + row_num
+			} else if (row_month == 11) {
+				this_m11 = this_m11 + row_num
+			} else if (row_month == 12) {
+				this_m12 = this_m12 + row_num
+			}
+		} else if (row_year == last1_year) { // 1年前
+			if (row_month == 1) {
+				last1_m1 = last1_m1 + row_num
+			} else if (row_month == 2) {
+				last1_m2 = last1_m2 + row_num
+			} else if (row_month == 3) {
+				last1_m3 = last1_m3 + row_num
+			} else if (row_month == 4) {
+				last1_m4 = last1_m4 + row_num
+			} else if (row_month == 5) {
+				last1_m5 = last1_m5 + row_num
+			} else if (row_month == 6) {
+				last1_m6 = last1_m6 + row_num
+			} else if (row_month == 7) {
+				last1_m7 = last1_m7 + row_num
+			} else if (row_month == 8) {
+				last1_m8 = last1_m8 + row_num
+			} else if (row_month == 9) {
+				last1_m9 = last1_m9 + row_num
+			} else if (row_month == 10) {
+				last1_m10 = last1_m10 + row_num
+			} else if (row_month == 11) {
+				last1_m11 = last1_m11 + row_num
+			} else if (row_month == 12) {
+				last1_m12 = last1_m12 + row_num
+			}
+		} else if (row_year == last2_year) { // 2年前
+			if (row_month == 1) {
+				last2_m1 = last2_m1 + row_num
+			} else if (row_month == 2) {
+				last2_m2 = last2_m2 + row_num
+			} else if (row_month == 3) {
+				last2_m3 = last2_m3 + row_num
+			} else if (row_month == 4) {
+				last2_m4 = last2_m4 + row_num
+			} else if (row_month == 5) {
+				last2_m5 = last2_m5 + row_num
+			} else if (row_month == 6) {
+				last2_m6 = last2_m6 + row_num
+			} else if (row_month == 7) {
+				last2_m7 = last2_m7 + row_num
+			} else if (row_month == 8) {
+				last2_m8 = last2_m8 + row_num
+			} else if (row_month == 9) {
+				last2_m9 = last2_m9 + row_num
+			} else if (row_month == 10) {
+				last2_m10 = last2_m10 + row_num
+			} else if (row_month == 11) {
+				last2_m11 = last2_m11 + row_num
+			} else if (row_month == 12) {
+				last2_m12 = last2_m12 + row_num
+			}
+		} else if (row_year == last3_year) { // 3年前
+			if (row_month == 1) {
+				last3_m1 = last3_m1 + row_num
+			} else if (row_month == 2) {
+				last3_m2 = last3_m2 + row_num
+			} else if (row_month == 3) {
+				last3_m3 = last3_m3 + row_num
+			} else if (row_month == 4) {
+				last3_m4 = last3_m4 + row_num
+			} else if (row_month == 5) {
+				last3_m5 = last3_m5 + row_num
+			} else if (row_month == 6) {
+				last3_m6 = last3_m6 + row_num
+			} else if (row_month == 7) {
+				last3_m7 = last3_m7 + row_num
+			} else if (row_month == 8) {
+				last3_m8 = last3_m8 + row_num
+			} else if (row_month == 9) {
+				last3_m9 = last3_m9 + row_num
+			} else if (row_month == 10) {
+				last3_m10 = last3_m10 + row_num
+			} else if (row_month == 11) {
+				last3_m11 = last3_m11 + row_num
+			} else if (row_month == 12) {
+				last3_m12 = last3_m12 + row_num
+			}
 		}
-		else if(row_year == last1_year){  //1年前
-			if(row_month == 1){last1_m1 = last1_m1 + row_num}
-			else if(row_month == 2){last1_m2 = last1_m2 + row_num}
-			else if(row_month == 3){last1_m3 = last1_m3 + row_num}
-			else if(row_month == 4){last1_m4 = last1_m4 + row_num}
-			else if(row_month == 5){last1_m5 = last1_m5 + row_num}
-			else if(row_month == 6){last1_m6 = last1_m6 + row_num}
-			else if(row_month == 7){last1_m7 = last1_m7 + row_num}
-			else if(row_month == 8){last1_m8 = last1_m8 + row_num}
-			else if(row_month == 9){last1_m9 = last1_m9 + row_num}
-			else if(row_month == 10){last1_m10 = last1_m10 + row_num}
-			else if(row_month == 11){last1_m11 = last1_m11 + row_num}
-			else if(row_month == 12){last1_m12 = last1_m12 + row_num}
-		}
-	}
-	else{
+	} else {
 		break;
-	}	
-}//for end
-
-//履歴データ挿入(1年前)
-for (var i=1; i<=12; i++){
-	var the_month = eval("last1_m" + i);
-	$('#last1_year_m'+i).replaceWith('<td id="last1_year_m' + i + '">' + the_month + '</td>');
-}
-//履歴データ挿入(今年)
-for (var i=1; i<=12; i++){
-	if(i < this_month){
-		var the_month = eval("this_m" + i);
-		$('#this_year_m'+i).replaceWith('<td id="this_year_m' + i + '">' + the_month + '</td>');
 	}
-	else{
+}// for end
+
+var all_data = [];
+
+// 履歴データ挿入(3年前)
+for (var i = 1; i <= 12; i++) {
+	var the_month = eval("last3_m" + i);
+	$('#last3_year_m' + i).replaceWith(
+			'<td id="last3_year_m' + i + '">' + the_month + '</td>');
+	all_data.push(the_month);
+}
+// 履歴データ挿入(2年前)
+for (var i = 1; i <= 12; i++) {
+	var the_month = eval("last2_m" + i);
+	$('#last2_year_m' + i).replaceWith(
+			'<td id="last2_year_m' + i + '">' + the_month + '</td>');
+	all_data.push(the_month);
+}
+// 履歴データ挿入(1年前)
+for (var i = 1; i <= 12; i++) {
+	var the_month = eval("last1_m" + i);
+	$('#last1_year_m' + i).replaceWith(
+			'<td id="last1_year_m' + i + '">' + the_month + '</td>');
+	all_data.push(the_month);
+}
+// 履歴データ挿入(今年)
+for (var i = 1; i <= 12; i++) {
+	if (i < this_month) { // 先月分まで挿入
+		var the_month = eval("this_m" + i);
+		$('#this_year_m' + i).replaceWith(
+				'<td id="this_year_m' + i + '">' + the_month + '</td>');
+		all_data.push(the_month);
+	} else {
 		break;
 	}
 }
@@ -197,16 +306,8 @@ function getStandardDeviation(hensa_box){
 
 var hensa = getStandardDeviation(hensa_box);
 var hensa_float = floatFormat2(hensa);
+$('#hensa_id').replaceWith('<td id="hensa_id">' + numberWithCommas(hensa_float) + '</td>');
 
-//四捨五入
-function floatFormat2(number){ //四捨五入2桁
-	var _pow = Math.pow(10, 2);
-	return Math.round(number * _pow) / _pow;
-}
-function floatFormatZero(number){  //四捨五入0桁
-	var _pow = Math.pow(10, 0);
-	return Math.round(number * _pow) / _pow;
-}
 var ave_3month =  (hensa_box[0] + hensa_box[1] + hensa_box[2]) / 3; //直近3ヶ月の平均出庫数
 var just_leadtime = Math.sqrt(just_leadtime_data); //リードタイムの平方根
 var just_leadtime_float = floatFormat2(just_leadtime); //四捨五入
@@ -313,6 +414,119 @@ tr.append('<td>' + numberWithCommas(out_25) + '</td>');
 var bread_rows = alasql(sql, [ id ])[0];
 var this_bread_name = "(倉庫) " + bread_rows.whouse.name + "　(品番) " + bread_rows.item.maker + " : " + bread_rows.item.detail;
 $('#this_bread').text(this_bread_name);
+
+//季節指数
+var season_m1 = 0, season_m2 = 0, season_m3 = 0, season_m4 = 0, season_m5 = 0, season_m6 = 0, season_m7 = 0, season_m8 = 0, season_m9 = 0, season_m10 = 0, season_m11 = 0, season_m12 = 0;
+var all_data_ave12 = []; //移動平均
+for (var a=0; a < all_data.length - 11; a++){
+	var kari_num = 0;
+	for (var i=a; i< a + 12; i++){
+		kari_num = kari_num + all_data[i];
+	}
+	kari_num = kari_num / 12;
+	all_data_ave12.push(kari_num);
+}
+
+//1月
+if (all_data_ave12.length >= 26){
+	season_m1 = (last2_m1 / all_data_ave12[1] + last1_m1 / all_data_ave12[13] + this_m1 / all_data_ave12[25]) / 3;
+}
+else {
+	season_m1 = (last2_m1 / all_data_ave12[1] + last1_m1 / all_data_ave12[13]) / 2;
+}
+//2月
+if (all_data_ave12.length >= 27){
+	season_m2 = (last2_m2 / all_data_ave12[2] + last1_m2 / all_data_ave12[14] + this_m2 / all_data_ave12[26]) / 3;
+}
+else {
+	season_m2 = (last2_m2 / all_data_ave12[2] + last1_m2 / all_data_ave12[14]) / 2;
+}
+//3月
+if (all_data_ave12.length >= 28){
+	season_m3 = (last2_m3 / all_data_ave12[3] + last1_m3 / all_data_ave12[15] + this_m3 / all_data_ave12[26]) / 3;
+}
+else {
+	season_m3 = (last2_m3 / all_data_ave12[3] + last1_m3 / all_data_ave12[15]) / 2;
+}
+//4月
+if (all_data_ave12.length >= 29){
+	season_m4 = (last2_m4 / all_data_ave12[4] + last1_m4 / all_data_ave12[16] + this_m4 / all_data_ave12[27]) / 3;
+}
+else {
+	season_m4 = (last2_m4 / all_data_ave12[4] + last1_m4 / all_data_ave12[16]) / 2;
+}
+//5月
+if (all_data_ave12.length >= 30){
+	season_m5 = (last2_m5 / all_data_ave12[5] + last1_m5 / all_data_ave12[17] + this_m5 / all_data_ave12[28]) / 3;
+}
+else {
+	season_m5 = (last2_m5 / all_data_ave12[5] + last1_m5 / all_data_ave12[17]) / 2;
+}
+//6月
+if (all_data_ave12.length >= 31){
+	season_m6 = (last2_m6 / all_data_ave12[6] + last1_m6 / all_data_ave12[18] + this_m6 / all_data_ave12[29]) / 3;
+}
+else {
+	season_m6 = (last2_m6 / all_data_ave12[6] + last1_m6 / all_data_ave12[18]) / 2;
+}
+//7月
+if (all_data_ave12.length >= 32){
+	season_m7 = (last2_m7 / all_data_ave12[7] + last1_m7 / all_data_ave12[19] + this_m7 / all_data_ave12[30]) / 3;
+}
+else {
+	season_m7 = (last2_m7 / all_data_ave12[7] + last1_m7 / all_data_ave12[19]) / 2;
+}
+//8月
+if (all_data_ave12.length >= 33){
+	season_m8 = (last2_m8 / all_data_ave12[8] + last1_m8 / all_data_ave12[20] + this_m8 / all_data_ave12[31]) / 3;
+}
+else {
+	season_m8 = (last2_m8 / all_data_ave12[8] + last1_m8 / all_data_ave12[20]) / 2;
+}
+//9月
+if (all_data_ave12.length >= 34){
+	season_m9 = (last2_m9 / all_data_ave12[9] + last1_m9 / all_data_ave12[21] + this_m9 / all_data_ave12[32]) / 3;
+}
+else {
+	season_m9 = (last2_m9 / all_data_ave12[9] + last1_m9 / all_data_ave12[21]) / 2;
+}
+//10月
+if (all_data_ave12.length >= 35){
+	season_m10 = (last2_m10 / all_data_ave12[10] + last1_m10 / all_data_ave12[22] + this_m10 / all_data_ave12[33]) / 3;
+}
+else {
+	season_m10 = (last2_m10 / all_data_ave12[10] + last1_m10 / all_data_ave12[22]) / 2;
+}
+//11月
+if (all_data_ave12.length >= 36){
+	season_m11 = (last2_m11 / all_data_ave12[11] + last1_m11 / all_data_ave12[23] + this_m11 / all_data_ave12[34]) / 3;
+}
+else {
+	season_m11 = (last2_m11 / all_data_ave12[11] + last1_m11 / all_data_ave12[23]) / 2;
+}
+//12月
+if (all_data_ave12.length == 37){
+	season_m12 = (last3_m12 / all_data_ave12[0] + last2_m12 / all_data_ave12[12] + last1_m12 / all_data_ave12[24] + this_m12 / all_data_ave12[35]) / 4;
+}
+else {
+	season_m12 = (last3_m12 / all_data_ave12[0] + last2_m12 / all_data_ave12[12] + last1_m12 / all_data_ave12[24]) / 3;
+}
+
+//季節指数挿入
+for (var i = 1; i <= 12; i++) {
+	var the_month = floatFormat2(eval("season_m" + i));
+	$('#season' + i).replaceWith('<td id="season' + i + '">' + the_month + '</td>');
+}
+
+//四捨五入
+function floatFormat2(number){ //四捨五入2桁
+	var _pow = Math.pow(10, 2);
+	return Math.round(number * _pow) / _pow;
+}
+function floatFormatZero(number){  //四捨五入0桁
+	var _pow = Math.pow(10, 0);
+	return Math.round(number * _pow) / _pow;
+}
 
 //ツールチップ
 $(function () {
